@@ -28,25 +28,86 @@
         </div>
     </nav>
 
-    <!-- Login form -->
+    <!-- Product form -->
     <section class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h3 class="card-title text-center mb-3">Manage Product Details</h3>
-                        <form action="#" method="post">
+
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <!-- Product name -->
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                <label for="productName" class="form-label">Product name</label>
+                                <input type="name" class="form-control" id="productName" name="name" placeholder="Name" required>
                             </div>
 
+                            <!-- Product description -->
+                            <div class="mb-3">
+                                <label for="description">Description</label>
+                                <textarea class="form-control mt-1" id="description" name="description" placeholder="Description of the product" rows="8"></textarea>
+                            </div>
+
+                            <!-- Available colors -->
+                            <div class="mb-3">
+                                <label class="form-label">Available colors</label>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBrown" value="brown">
+                                        <label class="form-check-label" for="colorBrown">
+                                            Brown
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGrey" value="grey">
+                                        <label class="form-check-label" for="colorGrey">
+                                            Grey
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGreen" value="green">
+                                        <label class="form-check-label" for="colorGreen">
+                                            Green
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBlack" value="black">
+                                        <label class="form-check-label" for="colorBlack">
+                                            Black
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product specification -->
+                            <div class="mb-3">
+                                <label for="description">Specification</label>
+                                <textarea class="form-control mt-1" id="specification" name="specification" placeholder="Specification of the product" rows="8"></textarea>
+                            </div>
+
+                            <!-- Number of available products in stock -->
+                            <div class="mb-3">
+                                <label for="productStock" class="form-label">Available quantity</label>
+                                <input type="number" class="form-control" id="productStock" name="stock" placeholder="Quantity" min="0" step="1" required>
+                            </div>
+
+                            <!-- Product images -->
+                            <div class="mb-3">
+                                <label for="productImages" class="form-label">Product images</label>
+                                <input class="form-control" type="file" id="productImages" name="images[]" accept="image/*" multiple>
+                                <div class="form-text">
+                                    You can upload one or more images (JPG, PNG, WebP).
+                                </div>
+                            </div>
+
+
+
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-success">Log in</button>
+                                <button type="submit" class="btn btn-success">Upload</button>
                             </div>
                             <div class="d-grid mb-3">
                                 <a href="index.html" class="btn btn-secondary">Back</a>
