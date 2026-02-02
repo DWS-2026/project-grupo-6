@@ -1,3 +1,44 @@
 /*
 Custom Css
 */
+
+/* Accordion Filter Styles */
+.templatemo-accordion > li > a {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+}
+
+.templatemo-accordion > li > a:hover {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.templatemo-accordion > li > a i {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.templatemo-accordion > li > ul {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.templatemo-accordion > li > ul.active {
+    opacity: 1;
+}
+
+/* Smooth collapse animation */
+.templatemo-accordion > li > a.collapsed {
+    color: #666;
+}
+
+.templatemo-accordion > li > a:not(.collapsed) {
+    color: #28a745;
+}
+
+/* Icon rotation animation */
+.templatemo-accordion > li > a i {
+    will-change: transform;
+}

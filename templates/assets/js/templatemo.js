@@ -10,16 +10,40 @@ https://templatemo.com/tm-559-zay-shop
 $(document).ready(function() {
 
     // Accordion
-    var all_panels = $('.templatemo-accordion > li > ul').hide();
+    var all_panels = $('.templatemo-accordion > li > ul');
+    
+    // Initialize accordion - show first panel, hide others
+    all_panels.each(function(index) {
+        if(index === 0) {
+            $(this).addClass('active').slideDown(300);
+        } else {
+            $(this).slideUp(0);
+        }
+    });
 
     $('.templatemo-accordion > li > a').click(function() {
-        console.log('Hello world!');
-        var target =  $(this).next();
-        if(!target.hasClass('active')){
-            all_panels.removeClass('active').slideUp();
-            target.addClass('active').slideDown();
+        var target = $(this).next();
+        var icon = $(this).find('i');
+        
+        if(target.hasClass('active')){
+            // Close the section with smooth animation
+            target.removeClass('active').slideUp(300, function() {
+                // Rotate icon back
+                icon.css('transform', 'rotate(0deg)');
+            });
+        } else {
+            // Close all other sections
+            all_panels.not(target).removeClass('active').slideUp(300, function() {
+                $(this).prev('a').find('i').css('transform', 'rotate(0deg)');
+            });
+            
+            // Open the clicked section
+            target.addClass('active').slideDown(300, function() {
+                // Rotate icon down
+                icon.css('transform', 'rotate(180deg)');
+            });
         }
-      return false;
+        return false;
     });
     // End accordion
 
