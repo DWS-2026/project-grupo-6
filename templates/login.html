@@ -38,7 +38,7 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h3 class="card-title text-center mb-3">Sign in to your account</h3>
-                        <form action="#" method="post">
+                        <form id="loginForm" action="#" method="post">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
@@ -132,6 +132,27 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
+    
+    <!-- DELETE ME -->
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Evitamos que el formulario se envíe de verdad y recargue la página
+            event.preventDefault();
+
+            // Obtenemos los valores de los inputs
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value; // Por si quieres usarla luego
+
+            // Lógica de redirección temporal
+            if (email === 'admin@admin') {
+                window.location.href = 'admin.html';
+            } else if(email === 'user@user'){
+                window.location.href = 'profile.html';
+            }
+        });
+    </script>
+
 </body>
 
 </html>
