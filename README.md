@@ -62,8 +62,17 @@ Indicar qué entidades tendrán asociadas una o varias imágenes:
 Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicación:
 
 ![Diagrama de Navegación](images/DiagramaNavegacionCrossfire.png)
-
-> [Descripción opcional del flujo de navegación: Ej: "El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario."]
+**1-Public Flow (Non-Registered Users):**
+> Users can freely browse the homepage and the shop.
+> From any page, they can access register or login.
+> **2-Registered User Flow:**
+> After logging in, the user accesses their personal profile.
+> From their profile, they can view their purchase history and modify their data.
+> They can add products to the cart from shop pages and proceed to checkout.
+> **3-Administrator Flow:**
+> Administrators have access to an exclusive control panel.
+> From there they can manage users and manage products.
+> They also have access to the orders list for management.
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
