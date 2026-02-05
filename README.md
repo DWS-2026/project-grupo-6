@@ -153,31 +153,31 @@ Product creation/editing form for administrators with fields for product name, d
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - [Jorge Antonio Arjona Rico]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[ Worked on documenting the project and developing the shop section of the website, adding product images, prices, and descriptions, and ensuring correct visual presentation and consistency across pages.]
 
-| Nº    | Commits      | Files      |
-|:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+| Nº    |               Commits                |                                                           Files                                                           |
+|:------------: |:------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------:|
+|1|           [Update README.md](https://github.com/DWS-2026/dws-2026-project-base/commit/359ed00260e4d51dff03c4ccd03d9e26ec46732f)           |                       [README.md](https://github.com/DWS-2026/project-grupo-6/blob/main/README.md)                        |
+|2| [Added the images and prices and prices of the assault riffles in shop.html](https://github.com/DWS-2026/dws-2026-project-base/commit/5ad1777b55069d614c1328e749c44fba332226c0) | [shop.html and images in assets folder](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/shop-single.html) |
+|3| [Added images and description to shop-single.html](https://github.com/DWS-2026/dws-2026-project-base/commit/8f94eb169f99be8a2ba990b99be45e6f50c44c6b) | [shop.html and images in assets folder](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/shop-single.html) |
+|4| [Added the rest of the guns and correct image dimensions](https://github.com/DWS-2026/dws-2026-project-base/commit/2b6fdc901a401c75556ec3383d8449fe51e7c8db) | [shop.html and images in assets folder](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/shop-single.html) |
+|5| [Added a temporary shop-single3 and photos to shop-single2](https://github.com/DWS-2026/dws-2026-project-base/commit/7969b538e4c682ee9b817e757439d9ec772ccf3d) |                                 [shop-single2.html and shop-single3.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/shop-single3.html)                                  |
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - [Elena Arcaz Cejas]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Development and enhancement of the administrative interface of the project. Included integrating a Bootstrap template, creating product forms, completing the product carousel, fixing bugs and logic of redirection.]
 
-| Nº    | Commits      | Files      |
-|:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+| Nº    | Commits      |                                                                     Files                                                                     |
+|:------------: |:------------:|:---------------------------------------------------------------------------------------------------------------------------------------------:|
+|1| [Adding Bootstrap template](https://github.com/DWS-2026/dws-2026-project-base/commit/73712cc38d963f6de131ee60caf37d5c337c554d)  |                              [templates folder](https://github.com/DWS-2026/project-grupo-6/tree/main/templates)                              |
+|2| [Adding initial product form structure](https://github.com/DWS-2026/dws-2026-project-base/commit/de9a41c0eaa1d309b78e7f32edb29e5863d2c953)  |                    [product-form.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/product-form.html)                     |
+|3| [Completing admin product carousel, fixing redirect logic and clean up unused assets](https://github.com/DWS-2026/dws-2026-project-base/commit/2c3eca56369c58b5c9b679c3e6419ce6ce319627)  |              [admin-product-page.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/admin-product-page.html)               |
+|4| [Adding admin product templates, fixing redirection logic and minor bugs](https://github.com/DWS-2026/dws-2026-project-base/commit/40a9461b17160e595c68227ce727ebd225d65ee1)  | [admin-product-page.html, product(1,2,3)-details.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/product1-details.html) |
+|5| [Correcting user detail templates in admin panel](https://github.com/DWS-2026/dws-2026-project-base/commit/23676487f77c3e7f7e3667cbb23e63e0bc664448)  |                                           [admin-user-page.html, profile(2,3).html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/profile2.html)                                            |
 
 ---
 
