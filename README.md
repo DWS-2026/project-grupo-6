@@ -139,17 +139,17 @@ Product creation/editing form for administrators with fields for product name, d
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Aarón Alameda Alcaide]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Developed the front-end structure and documentation for a website, including key pages, forms, diagrams, and layout adjustments.]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Add shopping cart page](https://github.com/DWS-2026/dws-2026-project-base/commit/39502fb0e960c07d2762f1c36b0dab3bffd9e216)  | [Shopping-cart.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/shopping-cart.html)   |
+|2| [Added User Creation Form](https://github.com/DWS-2026/dws-2026-project-base/commit/85ab65b221308e5aebcf21904e543123ae3f7325)  | [User-form.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/user-form.html)   |
+|3| [Added Navigation Diagram](https://github.com/DWS-2026/dws-2026-project-base/commit/ca8cbf9b5c18a4dd7410c0c085cc07b9a12759cd)  | [DiagramaNavegacionCrossfire.png](https://github.com/DWS-2026/project-grupo-6/blob/main/images/DiagramaNavegacionCrossfire.png)   |
+|4| [Enhance README with page descriptions and images](https://github.com/DWS-2026/dws-2026-project-base/commit/2d226d94e99ae2b50e1f810d6a35170a1f2f7b1a)  | [README.md](https://github.com/DWS-2026/project-grupo-6/blob/main/README.md)   |
+|5| [Adjust index footer layout](https://github.com/DWS-2026/dws-2026-project-base/commit/c8b01e6e9bdbd1126ad5839e4cbcbc17d7856e56)  | [Index.html](https://github.com/DWS-2026/project-grupo-6/blob/main/templates/index.html)   |
 
 ---
 
