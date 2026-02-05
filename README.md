@@ -78,12 +78,50 @@ They also have access to the orders list for management.
 
 ### **Capturas de Pantalla y Descripción de Páginas**
 
-#### **1. Página Principal / Home**
-![Página Principal](images/home-page.png)
-
-> [Descripción breve: Ej: "Página de inicio que muestra los productos destacados, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados."]
-
-#### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
+#### **1. Main Page / Home**
+![Página Principal](images/index.png)
+Homepage displaying featured promotional banner, main product categories, and introductory content. Includes persistent navigation header with access to Shop and Account sections. Provides first impressions of the brand's tactical gear focus.
+#### **2. Login Page**
+![Login Page](images/login.png)
+User authentication page with email and password fields. Includes "Login" and "Back" buttons, plus a registration link for new users. Maintains site navigation and footer with contact information and product categories.
+#### **3. User Form Page / Register**
+![User Form Page](images/userForm.png)
+New user registration form collecting personal details: first name, last name, email address, username, password with confirmation. Features "Create Account" and "Back" navigation buttons.
+#### **4. Shop Page**
+![Shop Page](images/shop.png)
+Main product catalog with advanced filtering options (category, power source, color, product type). Displays six featured airsoft products with images and prices in a grid layout for easy browsing.
+#### **5.Shop Details Pages from 1 to 3**
+![Shop Details Page 1](images/shopDetail1.png)
+![Shop Details Page 2](images/shopDetail2.png)
+![Shop Details Page 3](images/shopDetail3.png)
+Detailed product pages for individual items (HX416 Assault AEG, Specter M4 CQB, AKR74 Tactical). Each includes product specifications, descriptions, available colors, pricing, quantity selector, and action buttons (Buy/Add to Cart). Shows related products section.
+#### **6. Shopping Cart Page**
+![Shopping Cart Page](images/shoppingCart.png)
+Shopping cart interface displaying selected items with descriptions, prices, and delete options. Shows order summary including subtotal, shipping costs, and total amount. Features "Complete purchase" button for checkout.
+#### **7. Profile 1 & Profile 2 Pages**
+![Profile 1 Page](images/profile1.png)
+![Profile 2 Page](images/profile2.png)
+User profile pages displaying personal information (Pandora James and Charlie Brown respectively). Shows user details: name, username, email, role (User). Includes account management options and delete profile functionality.
+#### **8. Orders Page**
+![Orders Page](images/orders.png)
+Purchase history page showing past orders with order numbers (#CF-1024, #CF-1023, #CF-1022). Each entry displays purchased items, totals, and "View Details" buttons. Accessible from user account menu.
+#### **9. Admin Page**
+![Admin Page](images/admin.png)
+Administrator dashboard showing Lily Rose's admin profile with elevated privileges. Displays admin-specific navigation options including Users List and Products Management alongside standard user features.
+#### **10. Admin User Panel Page**
+![Admin User Panel Page](images/adminPanel.png)
+Clean interface showing the administrator's view with user list (Lily Rose - Admin, Pandora James - User, Charlie Brown - User). Highlights the admin's expanded navigation options for user and product management.
+#### **11. Admin Product Panel Page**
+![Admin Product Panel Page](images/adminProduct.png)
+Admin product management page displaying the full product catalog with edit/delete controls for each item. Shows six products with prices and management options, accessible only to administrators.
+#### **12. Product Details Pages from 1 to 3**
+![Product Details Page 1](images/productDetail1.png)
+![Product Details Page 2](images/productDetail2.png)
+![Product Details Page 3](images/productDetail3.png)
+Administrator view of product detail pages showing additional Edit/Delete buttons not available to regular users. Allows direct product management from the detailed view.
+#### **13. Product Form Page**
+![Product Form Page](images/productForm.png)
+Product creation/editing form for administrators with fields for product name, description, available colors, specifications, quantity, and image upload. Used for adding new products or modifying existing ones.
 
 ### **Participación de Miembros en la Práctica 1**
 
