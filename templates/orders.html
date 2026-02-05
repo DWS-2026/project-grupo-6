@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>User Profile - Crossfire Shop</title>
+    <title>Purchase History - Crossfire Shop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,13 +16,6 @@
     <!-- Roboto + FontAwesome (project uses these) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-
-    <style>
-        .profile-photo { width: 160px; height: 160px; object-fit: cover; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; }
-        .profile-photo-container { display: inline-flex; align-items: center; justify-content: center; }
-        .profile-fallback { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #59ab6e 0%, #3f8d6e 100%); display: none; align-items: center; justify-content: center; color: white; font-size: 52px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; }
-        .list-label { width: 140px; }
-    </style>
 
 </head>
 
@@ -116,43 +109,118 @@
                 </div>
             </aside>
 
-            <!-- Main: Profile Dashboard -->
+
+            <!-- Main: Purchase History -->
             <main class="col-12 col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <div class="text-center mb-4">
-                            <div class="profile-photo-container" data-first="Lily" data-last="Rose">
-                                <img src="assets/img/pfp1.jpg" alt="Profile Photo" class="profile-photo" id="profile-img" onerror="this.style.display='none';document.querySelector('.profile-fallback').style.display='flex'">
-                                <div class="profile-fallback">JD</div>
+                        <h4 class="mb-4" style="color: #59ab6e;">
+                            <i class="fas fa-history me-2"></i> Purchase History
+                        </h4>
+
+                        <!-- Order 1 -->
+                        <div class="order-card mb-3">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-id">#CF-1024</span>
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-item">
+                                    <span class="order-item-label">HX416 Assault AEG</span>
+                                    <span class="order-item-value">$189.99</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="order-item-label">Tactical Vest</span>
+                                    <span class="order-item-value">$49.99</span>
+                                </div>
+                                <div class="order-item" style="border-top: 1px solid #e9ecef; padding-top: 1rem; margin-top: 0.5rem;">
+                                    <span class="order-item-label" style="font-weight: 600;">Total</span>
+                                    <span class="order-item-value" style="font-weight: 600; color: #59ab6e;">$239.98</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-success btn-sm">View Details</button>
+                                </div>
                             </div>
                         </div>
-                        <h4 class="text-center mb-3" style="text-align: center; width: 100%;">User Profile</h4>
 
-                        <div class="card mb-3">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span class="list-label text-muted">First Name</span>
-                                    <strong class="ms-3">Lily</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span class="list-label text-muted">Last Name</span>
-                                    <strong class="ms-3">Rose</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span class="list-label text-muted">Username</span>
-                                    <strong class="ms-3">lilyrose_xo</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span class="list-label text-muted">Email</span>
-                                    <strong class="ms-3">lily.rose@softmail.com</strong>
-                                </li>
-                            </ul>
+                        <!-- Order 2 -->
+                        <div class="order-card mb-3">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-id">#CF-1023</span>
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-item">
+                                    <span class="order-item-label">Specter M4 CQB</span>
+                                    <span class="order-item-value">$249.99</span>
+                                </div>
+                                <div class="order-item" style="border-top: 1px solid #e9ecef; padding-top: 1rem; margin-top: 0.5rem;">
+                                    <span class="order-item-label" style="font-weight: 600;">Total</span>
+                                    <span class="order-item-value" style="font-weight: 600; color: #59ab6e;">$249.99</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-success btn-sm">View Details</button>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Order 3 -->
+                        <div class="order-card mb-3">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-id">#CF-1022</span>
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-item">
+                                    <span class="order-item-label">Combat Boots (x2)</span>
+                                    <span class="order-item-value">$159.98</span>
+                                </div>
+                                <div class="order-item" style="border-top: 1px solid #e9ecef; padding-top: 1rem; margin-top: 0.5rem;">
+                                    <span class="order-item-label" style="font-weight: 600;">Total</span>
+                                    <span class="order-item-value" style="font-weight: 600; color: #59ab6e;">$159.98</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-success btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order 4 -->
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-id">#CF-1021</span>
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-item">
+                                    <span class="order-item-label">Airsoft Pistol (Spring)</span>
+                                    <span class="order-item-value">$79.99</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="order-item-label">Magazine Bundle</span>
+                                    <span class="order-item-value">$29.99</span>
+                                </div>
+                                <div class="order-item" style="border-top: 1px solid #e9ecef; padding-top: 1rem; margin-top: 0.5rem;">
+                                    <span class="order-item-label" style="font-weight: 600;">Total</span>
+                                    <span class="order-item-value" style="font-weight: 600; color: #59ab6e;">$109.98</span>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-success btn-sm">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </main>
         </div>
     </section>
+
+
 
     <!-- Scripts -->
     <script src="assets/js/jquery-1.11.0.min.js"></script>
@@ -160,22 +228,6 @@
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
-    <script>
-    (function(){
-        var container = document.querySelector('.profile-photo-container');
-        if(!container) return;
-        var first = (container.dataset.first||'').trim();
-        var last = (container.dataset.last||'').trim();
-        var initials = ((first.charAt(0)||'') + (last.charAt(0)||'')).toUpperCase() || 'U';
-        var fallback = container.querySelector('.profile-fallback');
-        if(fallback) fallback.textContent = initials;
-        var img = container.querySelector('#profile-img');
-        if(img && img.complete && img.naturalWidth === 0){
-            img.style.display = 'none';
-            if(fallback) fallback.style.display = 'flex';
-        }
-    })();
-    </script>
 
 </body>
 </html>

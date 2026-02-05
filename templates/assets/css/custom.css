@@ -42,3 +42,48 @@ Custom Css
 .templatemo-accordion > li > a i {
     will-change: transform;
 }
+
+/* Moved from templates/orders.html */
+.profile-photo { width: 160px; height: 160px; object-fit: cover; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; }
+.profile-photo-container { display: inline-flex; align-items: center; justify-content: center; }
+.profile-fallback { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #59ab6e 0%, #3f8d6e 100%); display: none; align-items: center; justify-content: center; color: white; font-size: 52px; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; }
+.list-label { width: 140px; }
+.order-card {
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    transition: box-shadow 0.3s ease;
+}
+.order-card:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+}
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+.order-body {
+    padding: 1rem;
+}
+.order-id {
+    font-weight: 600;
+    color: #59ab6e;
+    font-size: 1.1rem;
+}
+.status-badge {
+    font-size: 0.875rem;
+}
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+.order-item-label {
+    color: #6c757d;
+    flex: 1;
+}
+.order-item-value {
+    font-weight: 500;
+    text-align: right;
+}
