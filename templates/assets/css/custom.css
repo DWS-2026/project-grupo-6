@@ -87,3 +87,11 @@ Custom Css
     font-weight: 500;
     text-align: right;
 }
+
+/* Role display styling moved to a class for consistency */
+.user-role {
+    font-weight: 600;
+    color: #495057; /* slightly darker muted color */
+    font-size: 0.95rem;
+    text-transform: capitalize;
+}
