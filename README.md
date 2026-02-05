@@ -112,7 +112,7 @@ Administrator dashboard showing Lily Rose's admin profile with elevated privileg
 ![Admin User Panel Page](images/adminPanel.png)
 Clean interface showing the administrator's view with user list (Lily Rose - Admin, Pandora James - User, Charlie Brown - User). Highlights the admin's expanded navigation options for user and product management.
 #### **11. Admin Product Panel Page**
-![Admin Product Panel Page](images/adminProduct.png)
+![Admin Product Panel Page](images/adminProductBuena.png)
 Admin product management page displaying the full product catalog with edit/delete controls for each item. Shows six products with prices and management options, accessible only to administrators.
 #### **12. Product Details Pages from 1 to 3**
 ![Product Details Page 1](images/productDetail1.png)
