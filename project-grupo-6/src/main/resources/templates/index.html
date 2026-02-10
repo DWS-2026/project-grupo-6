@@ -1,100 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Crossfire Shop eCommerce HTML CSS Template</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
-
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/templatemo.css">
-    <link rel="stylesheet" href="/css/custom.css">
-
-    <!-- Load fonts style after rendering the layout styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <title>Crossfire Shop</title>
 </head>
-
 <body>
 
     {{>header}}
 
     <!-- Start Banner Hero -->
     <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+        
         <ol class="carousel-indicators">
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
-            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+            {{#restProducts}}
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li> 
+            {{/restProducts}}
         </ol>
+
         <div class="carousel-inner">
+            {{#firstProduct}}
             <div class="carousel-item active">
                 <div class="container">
                     <div class="row p-5">
                         <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <a href="shop-single.html">
-                                <img class="img-fluid" src="/css/img/HX416AssaultAEG.png" alt="">
+                            <a href="/shop-single/{{id}}">
+                                <img class="img-fluid" src="{{mainImage}}" alt="{{name}}">
                             </a>    
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Elite</b> Tactical Gear</h1>
-                                <h3 class="h2">Precision-engineered for the modern operator.</h3>
-                                <p>
-                                Explore our curated selection of high-performance equipment. From modular platforms to advanced optics, we provide the reliability and accuracy required for professional use and demanding environments.
-                                </p>
+                                <h1 class="h1 text-success"><b>{{brand}}</b> {{category}}</h1>
+                                <h3 class="h2">{{name}}</h3>
+                                <p>{{description}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {{/firstProduct}}
+
+            {{#restProducts}}
             <div class="carousel-item">
                 <div class="container">
                     <div class="row p-5">
                         <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <a href="shop-single2.html">
-                                <img class="img-fluid" src="/css/img/SpecterM4CQBpng.png" alt="">
-                            </a>
+                            <a href="/shop-single/{{id}}">
+                                <img class="img-fluid" src="{{mainImage}}" alt="{{name}}">
+                            </a>    
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h1 class="h1"><b>Precision</b>Rifles</h1>
-                                <h3 class="h2">Master the distance with accuracy</h3>
-                                <p>
-                                    Discover our selection of long-range platforms designed for absolute stability. 
-                                    Engineered for shooters who demand high-caliber performance and 
-                                    unmatched reliability in every shot.
-                                </p>
+                            <div class="text-align-left align-self-center">
+                                <h1 class="h1 text-success"><b>{{brand}}</b> {{category}}</h1>
+                                <h3 class="h2">{{name}}</h3>
+                                <p>{{description}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <a href="shop-single3.html">
-                                <img class="img-fluid" src="/css/img/AKR74Tactical.png" alt="">
-                            </a>
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h1 class="h1"><b>Innovative</b> Platforms</h1>
-                                <h3 class="h2">Redefining tactical performance.</h3>
-                                <p>
-                                    Experience the next evolution in weapon design. Explore systems 
-                                    featuring advanced ergonomics, lightweight materials, and modularity 
-                                    adapted for contemporary high-speed operations.    
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {{/restProducts}}
         </div>
+
         <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
         </a>
@@ -117,95 +83,66 @@
         </div>
         <div class="row">
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="/css/img/TacticalGear.jpg" class="rounded-circle img-fluid border"></a>
+                <<img src="/css/img/TacticalGear.jpg" class="rounded-circle img-fluid border"></a>
                 <h5 class="text-center mt-3 mb-3">Tactical Gear</h5>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="/css/img/AKR74Tactical.png" class="rounded-circle img-fluid border"></a>
+                <img src="/css/img/AKR74Tactical.png" class="rounded-circle img-fluid border"></a>
                 <h2 class="h5 text-center mt-3 mb-3">Airsoft Guns</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+
             </div>
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="#"><img src="/css/img/AirsoftSight.jpg" class="rounded-circle img-fluid border"></a>
+                <img src="/css/img/AirsoftSight.jpg" class="rounded-circle img-fluid border"></a>
                 <h2 class="h5 text-center mt-3 mb-3">Accessories</h2>
-                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+
             </div>
         </div>
+        <div>
+            <p class="text-center"><a href="/shop" class="btn btn-success">Go Shop</a></p>
+        </div>    
     </section>
     <!-- End Categories of The Month -->
 
 
     <!-- Start Featured Product -->
     <section class="bg-light">
-        <div class="container py-5">
-            <div class="row text-center py-3">
-                <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Featured Product</h1>
-                    <p>
-                        Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident.
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single.html">
-                            <img src="/css/img/HX416AssaultAEG.png" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li class="text-muted text-right">249,00€</li>
-                            </ul>
-                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">HX416 Assault AEG</a>
-                            <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt in culpa qui officia deserunt.
-                            </p>
-                            <p class="text-muted">Reviews (24)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single2.html">
-                            <img src="/css/img/SpecterM4CQBpng.png" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li class="text-muted text-right">190,99€</li>
-                            </ul>
-                            <a href="shop-single2.html" class="h2 text-decoration-none text-dark">Specter M4 CQB</a>
-                            <p class="card-text">
-                                Aenean gravida dignissim finibus. Nullam ipsum diam, posuere vitae pharetra sed, commodo ullamcorper.
-                            </p>
-                            <p class="text-muted">Reviews (48)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single3.html">
-                            <img src="/css/img/AKR74Tactical.png" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li class="text-muted text-right">229,99€</li>
-                            </ul>
-                            <a href="shop-single3.html" class="h2 text-decoration-none text-dark">AKR74 Tactical</a>
-                            <p class="card-text">
-                                Curabitur ac mi sit amet diam luctus porta. Phasellus pulvinar sagittis diam, et scelerisque ipsum lobortis nec.
-                            </p>
-                            <p class="text-muted">Reviews (74)</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="container py-5">
+        <div class="row text-center py-3">
+            <div class="col-lg-6 m-auto">
+                <h1 class="h1">Featured Product</h1>
+                <p>
+                    Descubre nuestra selección de réplicas de alta precisión, probadas por expertos para garantizar el mejor rendimiento en el campo.
+                </p>
             </div>
         </div>
-    </section>
+        <div class="row">
+            {{#featuredProducts}}
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="/shop-single/{{id}}">
+                        <img src="{{mainImage}}" class="card-img-top" alt="{{name}}">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li class="text-muted text-right">{{price}}€</li>
+                        </ul>
+                        <a href="/shop-single/{{id}}" class="h2 text-decoration-none text-dark">{{name}}</a>
+                        <p class="card-text">
+                            {{description}}
+                        </p>
+                        <p class="text-muted">Reviews ({{reviewCount}})</p>
+                    </div>
+                </div>
+            </div>
+            {{/featuredProducts}}
+        </div>
+    </div>
+</section>
     <!-- End Featured Product -->
 
     {{>footer}}
-
+<script src="/css/js/jquery-1.11.0.min.js"></script>
+<script src="/css/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
