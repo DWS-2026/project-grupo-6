@@ -20,4 +20,14 @@ public class WebController {
     public String showshoppingcart(Model model){
         return "shopping-cart";
     }
+
+    @GetMapping("/user-form") 
+    public String showuserform(Model model){
+        return "user-form";
+    }
+
+    @GetMapping("/login") 
+    public String showlogin(Model model){
+        return "login";
+    }
 }
