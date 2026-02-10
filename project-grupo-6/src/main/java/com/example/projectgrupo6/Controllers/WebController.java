@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping("/index") public String greeting(Model model){
-        return "index.html";
+    @GetMapping("/") 
+    public String greeting(Model model){
+        return "index";
+    }
+    @GetMapping("/shop") 
+    public String showshop(Model model){
+        return "shop";
     }
 }
