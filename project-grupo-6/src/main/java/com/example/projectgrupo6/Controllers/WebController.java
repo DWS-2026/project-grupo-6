@@ -15,4 +15,9 @@ public class WebController {
     public String showshop(Model model){
         return "shop";
     }
+
+    @GetMapping("/shopping-cart") 
+    public String showshoppingcart(Model model){
+        return "shopping-cart";
+    }
 }
