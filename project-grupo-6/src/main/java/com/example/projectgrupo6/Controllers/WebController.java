@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 public class WebController {
 
@@ -15,9 +16,13 @@ public class WebController {
     public String showshop(Model model){
         return "shop";
     }
-
     @GetMapping("/shopping-cart") 
     public String showshoppingcart(Model model){
         return "shopping-cart";
     }
+    @GetMapping("/shop-single")
+    public String showProduct(Model model) {
+        return "shop-single";
+    }
+    
 }
