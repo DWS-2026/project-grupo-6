@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Administrator Control Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
+                Crossfire
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html">Shop</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <a class="nav-icon position-relative text-decoration-none" href="shopping-cart.html">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="login.html">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+
+    <!-- User list display -->
+    <div class="container py-5">
+        <div class="row">
+            <aside class="col-12 col-md-4 mb-4">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Account</h5>
+                        <div class="list-group list-group-flush">
+                            <a href="admin.html" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-user me-3"></i>
+                                <span>Profile</span>
+                            </a>
+                            <a href="orders.html" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-history me-3 "></i>
+                                <span>Purchase History</span>
+                            </a>
+                            <a href="user-form.html" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-user-cog me-3"></i>
+                                <span>Change Data</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Admin</h5>
+                        <div class="list-group list-group-flush">
+                            <a href="admin-user-page.html" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-users me-3"></i>
+                                <span>Users List</span>
+                            </a>
+                            <a href="admin-product-page.html" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-box-open me-3"></i>
+                                <span>Products Management</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col d-grid">
+                    <button class="btn btn-outline-danger btn-lg">
+                        Delete profile
+                    </button>
+                </div>
+                <div class="col d-grid mt-3">
+                    <button class="btn btn-outline-danger btn-lg">
+                        Log out
+                    </button>
+                </div>
+            </aside>
+
+            <main class="col-12 col-md-8">
+                <div class="row">
+
+                    <!-- Empty column (spacing only) -->
+                    <div class="col-lg-3 d-none d-lg-block"></div>
+
+                    <!-- Product 1 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/HX416AssaultAEG.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 1">
+                                </div>
+
+                                <!-- Product 1 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">HX-416 Assault AEG</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">249,00€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product1-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/SpecterM4CQBpng.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 2">
+                                </div>
+
+                                <!-- Product 2 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">Specter M4 CQB</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">190,99€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product2-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/AKR74Tactical.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 3">
+                                </div>
+
+                                <!-- Product 3 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">AKR74 Tactical</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">229,99€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product3-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/ShadowSniperL96.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 4">
+                                </div>
+
+                                <!-- Product 4 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">Shadow Sniper L96 Bolt Action</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">189,90€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product1-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/ViperSMG9.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 5">
+                                </div>
+
+                                <!-- Product 5 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">Viper SMG-9</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">179,90€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product2-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/RaptorG17GBB.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 6">
+                                </div>
+
+                                <!-- Product 6 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">Raptor G17 GBB</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">129,90€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product3-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 7 -->
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0">
+                            <div class="row g-0 align-items-center">
+
+                                <!-- Avatar -->
+                                <div class="col-md-2 text-center">
+                                    <img src="assets/img/NightHawk1911CO2.png"
+                                         class="img-fluid rounded-circle p-3"
+                                         alt="Product 7">
+                                </div>
+
+                                <!-- Product 7 info -->
+                                <div class="col-md-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-1">NightHawk 1911 CO2</h5>
+                                        <p class="card-text mb-1">
+                                            <small class="text-muted">139,00€</small>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="col-md-3">
+                                    <div class="card-body d-flex flex-column gap-2">
+                                        <a href="product1-details.html" class="btn btn-outline-success btn-sm">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="product-form.html" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="if(confirm('Delete this product?')) alert('Product deleted');">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create product link -->
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="product-form.html" class="btn btn-success">
+                        <i class="fas fa-user-plus me-1"></i> Create product
+                    </a>
+                </div>
+
+                <!-- Empty column (spacing only) -->
+                <div class="col-lg-3 d-none d-lg-block"></div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery-1.11.0.min.js"></script>
+    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/templatemo.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <!-- Footer -->
+    <footer class="bg-dark" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Crossfire</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            123 Consectetur at ligula 10660
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 offset-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Airsoft Guns</a></li>
+                        <li><a class="text-decoration-none" href="#">Magazine</a></li>
+                        <li><a class="text-decoration-none" href="#">Tactical Gear</a></li>
+                        <li><a class="text-decoration-none" href="#">Consumables and Ammo</a></li>
+                        <li><a class="text-decoration-none" href="#">Internal Parts</a></li>
+                        <li><a class="text-decoration-none" href="#">Accessories</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

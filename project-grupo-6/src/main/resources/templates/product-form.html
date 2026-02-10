@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Product Form For Admin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/templatemo.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
+                Crossfire
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="shop.html">Shop</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <a class="nav-icon position-relative text-decoration-none" href="shopping-cart.html">
+                        <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                    </a>
+                    <a class="nav-icon position-relative text-decoration-none" href="login.html">
+                        <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                        <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product form -->
+    <section class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center mb-3">Manage Product Details</h3>
+
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            <!-- Product name -->
+                            <div class="mb-3">
+                                <label for="productName" class="form-label">Product name</label>
+                                <input type="text" class="form-control" id="productName" name="productName" placeholder="Name" required>
+                            </div>
+
+                            <!-- Product description -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control mt-1" id="description" name="description" placeholder="Description of the product" rows="8"></textarea>
+                            </div>
+
+                            <!-- Available colors -->
+                            <div class="mb-3">
+                                <label class="form-label">Available colors</label>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBrown" value="brown">
+                                        <label class="form-check-label" for="colorBrown">
+                                            Brown
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGrey" value="grey">
+                                        <label class="form-check-label" for="colorGrey">
+                                            Grey
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGreen" value="green">
+                                        <label class="form-check-label" for="colorGreen">
+                                            Green
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBlack" value="black">
+                                        <label class="form-check-label" for="colorBlack">
+                                            Black
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product specification -->
+                            <div class="mb-3">
+                                <label for="specification" class="form-label">Specification</label>
+                                <textarea class="form-control mt-1" id="specification" name="specification" placeholder="Specification of the product" rows="8"></textarea>
+                            </div>
+
+                            <!-- Number of available products in stock -->
+                            <div class="mb-3">
+                                <label for="productStock" class="form-label">Available quantity</label>
+                                <input type="number" class="form-control" id="productStock" name="stock" placeholder="Quantity" min="0" step="1" required>
+                            </div>
+
+                            <!-- Product images -->
+                            <div class="mb-3">
+                                <label for="productImages" class="form-label">Product images</label>
+                                <input class="form-control" type="file" id="productImages" name="images[]" accept=".jpg,.jpeg,.png" multiple>
+                                <div class="form-text">
+                                    You can upload one or more images (JPG, JPEG, PNG).
+                                </div>
+                            </div>
+
+                            <!-- Product documentation (PDF) -->
+                            <div class="mb-3">
+                                <label for="documentation" class="form-label">Product Documentation (PDF)</label>
+                                <input class="form-control mt-1" type="file" id="documentation" name="documentation" accept="application/pdf">
+                                <div class="form-text">
+                                    Upload the official product documentation in PDF format.
+                                </div>
+                            </div>
+
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-dark" id="tempaltemo_footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4 pt-5">
+                    <h2 class="h2 text-success border-bottom pb-3 border-light logo">Crossfire</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li>
+                            <i class="fas fa-map-marker-alt fa-fw"></i>
+                            123 Consectetur at ligula 10660
+                        </li>
+                        <li>
+                            <i class="fa fa-phone fa-fw"></i>
+                            <a class="text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <a class="text-decoration-none" href="mailto:info@company.com">info@company.com</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 offset-md-4 pt-5">
+                    <h2 class="h2 text-light border-bottom pb-3 border-light">Products</h2>
+                    <ul class="list-unstyled text-light footer-link-list">
+                        <li><a class="text-decoration-none" href="#">Airsoft Guns</a></li>
+                        <li><a class="text-decoration-none" href="#">Magazine</a></li>
+                        <li><a class="text-decoration-none" href="#">Tactical Gear</a></li>
+                        <li><a class="text-decoration-none" href="#">Consumables and Ammo</a></li>
+                        <li><a class="text-decoration-none" href="#">Internal Parts</a></li>
+                        <li><a class="text-decoration-none" href="#">Accessories</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery-1.11.0.min.js"></script>
+    <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/templatemo.js"></script>
+    <script src="assets/js/custom.js"></script>
+</body>
+</html>
