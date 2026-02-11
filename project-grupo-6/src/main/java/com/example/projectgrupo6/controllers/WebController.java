@@ -33,19 +33,6 @@ public class WebController {
         return "index";
     }
 
-    @GetMapping("/shop") 
-    public String showshop(Model model){
-        return "shop";
-    }
-    @GetMapping("/shopping-cart") 
-    public String showshoppingcart(Model model){
-        return "shopping-cart";
-    }
-    @GetMapping("/shop-single")
-    public String showProduct(Model model) {
-        return "shop-single";
-    }
-    
     @GetMapping("/user-form") 
     public String showuserform(Model model){
         return "user-form";
