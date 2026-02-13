@@ -1,9 +1,14 @@
 package com.example.projectgrupo6.domain;
 
-import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 @Component
 @SessionScope
 public class User {
