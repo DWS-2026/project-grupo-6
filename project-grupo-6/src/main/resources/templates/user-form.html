@@ -29,30 +29,31 @@
                     <div class="card-body">
                         <h3 class="text-center mb-4">Create Account</h3>
 
-                        <form action="#" method="POST">
+                        <form action="#" method="POST" enctype="multipart/form-data">
+                        <!--form action="/user/new" method="post" enctype="multipart/form-data"-->
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="name" required>
+                                <input type="text" class="form-control" name="name" value="{{user.firstname}}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="lastname" required>
+                                <input type="text" class="form-control" name="lastname" value="{{user.lastname}}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
-                                <input type="email" class="form-control" name="email" required>
+                                <input type="email" class="form-control" name="email" value="{{user.email}}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Username</label>
-                                <input type="text" class="form-control" name="username" required>
+                                <input type="text" class="form-control" name="username" value="{{user.username}}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <input type="password" class="form-control" name="password" value="{{user.password}}" required>
                             </div>
 
                             <div class="mb-3">
@@ -60,8 +61,16 @@
                                 <input type="password" class="form-control" name="confirm_password" required>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="profileImage" class="form-label">Profile image</label>
+                                <input class="form-control" type="file" id="profileImage" name="image" value="{{user.profileImage}}" accept=".jpg,.jpeg,.png">
+                                <div class="form-text">
+                                    Upload your profile image (JPG, JPEG, PNG).
+                                </div>
+                            </div>
+
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-success btn-lg">
+                                <button type="submit" class="btn btn-success btn-lg" value="Save">
                                     Create Account
                                 </button>
                             </div>
