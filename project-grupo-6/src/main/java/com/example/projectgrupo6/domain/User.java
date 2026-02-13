@@ -1,10 +1,13 @@
 package com.example.projectgrupo6.domain;
 
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 
-@Entity
+@Component
+@SessionScope
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

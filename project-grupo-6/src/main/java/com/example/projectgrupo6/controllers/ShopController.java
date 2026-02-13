@@ -14,7 +14,8 @@ import com.example.projectgrupo6.services.ProductService;
 
 @Controller
 public class ShopController {
-    
+    //add HttpObject for sessions
+
     @Autowired
     private ProductService productService;
     
