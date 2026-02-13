@@ -34,13 +34,14 @@ public class WebController {
         return "index";
     }
 
-    @GetMapping("/user-form") 
-    public String showuserform(Model model){
-        return "user-form";
-    }
 
     @GetMapping("/login") 
     public String showlogin(Model model){
         return "login";
+    }
+
+    @GetMapping("/user-form") 
+    public String showuserform(Model model){
+        return "user-form";
     }
 }
