@@ -29,6 +29,7 @@ public class ShopController {
     
     @GetMapping("/shopping-cart") 
     public String showshoppingcart(Model model){
+
         return "shopping-cart";
     }
     

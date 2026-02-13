@@ -37,9 +37,11 @@ public class Product {
     private List<String> colors = new ArrayList<>();
 
     private int reviewCount; 
-    private int stock;       
+    private int stock;
 
-    // Constructores
+    //add documentation on .pdf file
+
+    // Constructors
     public Product() {}
 
     public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock) {
