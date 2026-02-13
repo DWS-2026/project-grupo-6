@@ -18,6 +18,7 @@ public class WebController {
 
     @GetMapping("/") 
     public String greeting(Model model){
+        
         List<Product> products = productService.getAllProducts();
         
         if (!products.isEmpty()) {
