@@ -1,9 +1,8 @@
 package com.example.projectgrupo6.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class User {
@@ -17,6 +16,13 @@ public class User {
     private String email;
     private String password;
 
+    /*
+    @OneToMany
+    private List<Order> order;
+
+    @OneToMany
+    private List<Review> review;
+    */
 
     //Constructor
     public User(Long id, String firtsname, String lastname, String username, String email, String password) {
