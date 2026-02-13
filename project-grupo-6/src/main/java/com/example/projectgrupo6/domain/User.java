@@ -33,13 +33,16 @@ public class User {
     */
 
     //Constructor
-    public User(Long id, String firtsname, String lastname, String username, String email, String password) {
+
+
+    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage) {
         Id = id;
-        this.firstname = firtsname;
+        this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.profileImage = profileImage;
     }
 
     public User(){}
@@ -91,5 +94,19 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    //To String:
+    @Override
+    public String toString() {
+        return "User{" +
+                "Id=" + Id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                '}';
     }
 }
