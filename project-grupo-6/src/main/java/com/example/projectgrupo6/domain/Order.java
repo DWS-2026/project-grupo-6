@@ -12,10 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "orders") // "order" es palabra reservada en SQL, mejor usar "orders"
+@Table(name = "orders") 
 public class Order {
 
     @Id
@@ -26,12 +27,12 @@ public class Order {
 
     private Double totalAmount;
 
-    private String status; // Ejemplo: "PENDING", "SHIPPED", "DELIVERED"
+    private String status; // "PENDING", "SHIPPED", "DELIVERED"
 
-    // Relación con el usuario (asumiendo que crearás una clase User)
-    // Many Orders to One User
-    //@ManyToOne
-    //private User user;
+    // Relación Many-To-One: Muchos pedidos pertenecen a un Usuario
+    @ManyToOne
+    @JoinColumn(name = "user_id") // Crea una columna user_id en la tabla orders
+    private User user;
 
     // Relación con los productos
     // En una versión simple, usamos ManyToMany
@@ -48,10 +49,11 @@ public class Order {
         this.orderDate = LocalDateTime.now();
     }
 
-    public Order(Double totalAmount, String status, List<Product> products) {
+    public Order(Double totalAmount, String status, User user, List<Product> products) {
         this();
         this.totalAmount = totalAmount;
         this.status = status;
+        this.user = user;   
         this.products = products;
     }
 
@@ -86,6 +88,14 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Product> getProducts() {

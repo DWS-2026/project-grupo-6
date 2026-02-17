@@ -37,6 +37,8 @@ public class User {
     @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
     private List<Comment> review;
     
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
     //Constructor
 
