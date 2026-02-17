@@ -30,6 +30,7 @@ public class User {
     private String profileImage;
 
     //add rol
+    //private String rol;
     /*
     @OneToMany
     private List<Order> order;
@@ -103,6 +104,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addReview(Comment comment) {
+        this.review.add(comment);
+    }
+
+    public void removeReview(Comment comment) {
+        this.review.remove(comment);
     }
 
     //To String:

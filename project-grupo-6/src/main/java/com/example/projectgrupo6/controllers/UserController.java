@@ -2,6 +2,7 @@ package com.example.projectgrupo6.controllers;
 
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,28 @@ public class UserController {
             return "login";
         }
 
+        @GetMapping ("/user/profile")
+        public String profile(HttpSession session, Model model){
+            User user = (User) session.getAttribute("user");
+
+            //Change to redirect to error
+            if (user == null) {
+                return "redirect:/user/login";
+            }
+
+            model.addAttribute("user", user);
+
+            // Initials for fallback image
+            String initials =
+                    user.getFirstname().substring(0, 1).toUpperCase() +
+                            user.getLastname().substring(0, 1).toUpperCase();
+
+            model.addAttribute("initials", initials);
+            return "profile";
+        }
+
+
+
         @PostMapping ("/user/login")
         public String loginSubmit(@ModelAttribute("user") User user, Model model){
             /// ///////////////////////////////////////
@@ -45,6 +68,12 @@ public class UserController {
                 }
             }
             return "redirect:/user/profile";
+        }
+
+        @PostMapping
+        public String deleteUser (){
+
+            return "redirect:index";
         }
 
     //}
