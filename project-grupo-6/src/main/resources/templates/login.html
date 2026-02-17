@@ -28,14 +28,14 @@
                 <div class="card shadow">
                     <div class="card-body p-4">
                         <h3 class="card-title text-center mb-3">Sign in to your account</h3>
-                        <form id="loginForm" action="#" method="post">
+                        <form id="loginForm" action="/user/login" method="post">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                                <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" placeholder="name@example.com" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control" id="password" name="password" value="{{user.password}}" placeholder="Password" required>
                             </div>
                             
                             <div class="d-grid mb-3">
@@ -56,14 +56,14 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
-            // Evitamos que el formulario se envíe de verdad y recargue la página
+            // Reloads the page
             event.preventDefault();
 
-            // Obtenemos los valores de los inputs
+            // Values of input
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value; // Por si quieres usarla luego
 
-            // Lógica de redirección temporal
+            // Redirection logic
             if (email === 'admin@admin') {
                 window.location.href = 'admin.html';
             } else{

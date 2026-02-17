@@ -28,4 +28,12 @@ public class UserService {
     public void deleteById (Long id){
         userRepository.deleteById(id);
     }
+
+    public User findByEmail (String email){
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean logincheck (User user, String password){
+        return user.getPassword().equals(password);
+    }
 }

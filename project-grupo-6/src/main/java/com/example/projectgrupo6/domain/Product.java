@@ -3,6 +3,7 @@ package com.example.projectgrupo6.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Product {
@@ -39,12 +41,15 @@ public class Product {
     private int reviewCount; 
     private int stock;
 
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     //add documentation on .pdf file
 
     // Constructors
     public Product() {}
 
-    public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock) {
+    public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock, List<Comment> comments) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -55,6 +60,7 @@ public class Product {
         this.colors = colors;
         this.reviewCount = reviewCount;
         this.stock = stock;
+        this.comments = comments;
     }
 
     public Long getId() {
