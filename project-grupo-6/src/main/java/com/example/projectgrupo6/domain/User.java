@@ -103,6 +103,14 @@ public class User {
         this.password = password;
     }
 
+    public void addReview(Comment comment) {
+        this.review.add(comment);
+    }
+
+    public void removeReview(Comment comment) {
+        this.review.remove(comment);
+    }
+
     //To String:
     @Override
     public String toString() {
