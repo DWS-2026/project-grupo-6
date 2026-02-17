@@ -54,16 +54,26 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col d-grid">
-                    <button class="btn btn-outline-danger btn-lg">
-                        Delete profile
-                    </button>
+                    <form action="/user/delete" method="post">
+                        <button type="submit" class="btn btn-outline-danger btn-lg">
+                            Delete profile
+                        </button>
+                    </form>
                 </div>
+
+                <!-- -->
+                <!-- -->
+                <!-- -->
                 <div class="col d-grid mt-3">
                     <button class="btn btn-outline-danger btn-lg">
                         Log out
                     </button>
                 </div>
+                <!-- -->
+                <!-- -->
+                <!-- -->
             </aside>
 
             <!-- Main: Profile Dashboard -->
@@ -71,34 +81,45 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="text-center mb-4">
-                            <div class="profile-photo-container" data-first="Pandora" data-last="James">
-                                <img src="../static/css/img/pfp2.jpg" alt="Profile Photo" class="profile-photo" id="profile-img" onerror="this.style.display='none';document.querySelector('.profile-fallback').style.display='flex'">
-                                <div class="profile-fallback">JD</div>
+                            <!-- Profile picture -->
+                            <div class="profile-photo-container" data-first="{{user.firstname}}" data-last="{{user.lastname}}">
+                                <!-- Change -->
+                                <!--img src="{{user.image}}" alt="Profile Photo" class="profile-photo" id="profile-img" onerror="this.style.display='none';document.querySelector('.profile-fallback').style.display='flex'"-->
+
+                                <img src="../static/css/img/pfp1.jpg" alt="Profile Photo" class="profile-photo" id="profile-img" onerror="this.style.display='none';document.querySelector('.profile-fallback').style.display='flex'">
+                                <div class="profile-fallback">
+                                    {{user.firstname.[0]}}{{user.lastname.[0]}}
+                                </div>
                             </div>
                         </div>
                         <h4 class="text-center mb-3" style="text-align: center; width: 100%;">User Profile</h4>
 
                         <div class="card mb-3">
                             <ul class="list-group list-group-flush">
+                                <!-- User Details -->
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">First Name</span>
-                                    <strong class="ms-3">Pandora</strong>
+                                    <strong class="ms-3">{{user.firstname}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Last Name</span>
-                                    <strong class="ms-3">James</strong>
+                                    <strong class="ms-3">{{user.lastname}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Username</span>
-                                    <strong class="ms-3">pandy_j</strong>
+                                    <strong class="ms-3">{{user.username}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Email</span>
-                                    <strong class="ms-3">pan.james@cozymail.com</strong>
+                                    <strong class="ms-3">{{user.email}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Rol</span>
                                     <strong class="ms-3">User</strong>
+
+                                    <!-- strong class="ms-3">{{user.rol}}</strong -->
+                                    <!-- Change -->
+
                                 </li>
                             </ul>
                         </div>

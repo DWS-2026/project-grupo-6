@@ -30,6 +30,7 @@ public class User {
     private String profileImage;
 
     //add rol
+    //private String rol;
     /*
     @OneToMany
     private List<Order> order;
