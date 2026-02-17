@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.projectgrupo6.domain.Product;
+import com.example.projectgrupo6.domain.User;
 
 import jakarta.annotation.PostConstruct;
 
@@ -14,6 +15,12 @@ public class SampleDataInitializer {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @PostConstruct
     public void initData() {
@@ -67,5 +74,15 @@ public class SampleDataInitializer {
         p4.addColor("Black");
         p4.setImages(Arrays.asList("/css/img/RaptorG17GBB.png"));
         productService.save(p4);
+    
+        // 2. CREAR USUARIOS
+        User u1 = new User();
+        u1.setFirstname("Alex Murphy");
+        userService.save(u1);
+
+        User u2 = new User();
+        u2.setFirstname("John Wick");
+        userService.save(u2);
+    
     }
 }

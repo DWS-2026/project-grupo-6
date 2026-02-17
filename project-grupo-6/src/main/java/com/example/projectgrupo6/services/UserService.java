@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,6 +24,10 @@ public class UserService {
 
     public void delete(User user){
         userRepository.delete(user);
+    }
+
+    public Optional <User> getById (Long id){
+        return userRepository.findById(id);
     }
 
     public void deleteById (Long id){
