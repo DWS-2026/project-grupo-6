@@ -24,14 +24,14 @@ public class Comment {
     private String author;
 
     @ManyToOne
-    private Product owner;
+    private User owner;
     @ManyToOne
     private Product product;
 
     // Constructors
     public Comment() {} 
 
-    public Comment(String content, String author, Product owner, Product product) {
+    public Comment(String content, String author, User owner, Product product) {
         this.content = content;
         this.author = author;
         this.owner = owner;
@@ -63,17 +63,17 @@ public class Comment {
         this.author = author;
     }
 
-    public Product getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(Product owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
     public Product getProduct() {
         return product;
     }
-    
+
 
 }
