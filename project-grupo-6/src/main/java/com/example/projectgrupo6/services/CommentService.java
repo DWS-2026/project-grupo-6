@@ -26,6 +26,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void addComment(Long user)
+    public void addComment(Long user){
+        
+    }
 
 }
