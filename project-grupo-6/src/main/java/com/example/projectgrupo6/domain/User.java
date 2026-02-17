@@ -1,12 +1,16 @@
 package com.example.projectgrupo6.domain;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Component
@@ -27,15 +31,15 @@ public class User {
     /*
     @OneToMany
     private List<Order> order;
-
-    @OneToMany
-    private List<Review> review;
     */
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
+    private List<Comment> review;
+    
 
     //Constructor
 
 
-    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage) {
+    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage, List<Comment> review) {
         Id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -43,6 +47,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.profileImage = profileImage;
+        this.review = review;
     }
 
     public User(){}
