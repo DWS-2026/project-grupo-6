@@ -6,28 +6,31 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    //@RequestMapping("/user"){
-
-        @GetMapping ("/user/login")
+        //GET
+        @GetMapping ("/login")
         public String login(Model model) {
             model.addAttribute("user", new User());
             return "login";
         }
 
-        @GetMapping ("/user/profile")
+        @GetMapping ("/new")
+        public String register (Model model){
+            model.addAttribute("user", new User());
+            return "user-form";
+        }
+
+        @GetMapping ("/profile")
         public String profile(HttpSession session, Model model){
             User user = (User) session.getAttribute("user");
 
@@ -49,13 +52,14 @@ public class UserController {
 
 
 
-        @PostMapping ("/user/login")
+        // POST
+        @PostMapping ("/login")
         public String loginSubmit(@ModelAttribute("user") User user, Model model){
             /// ///////////////////////////////////////
             //Change redirection logic to error template
             /// ////////////////////////////////////////
 
-            if(!user.getEmail().isEmpty() && !user.getPassword().isEmpty()){
+            if(userService.correctLoginInput(user.getEmail(), user.getPassword())){
                 User findUser = userService.findByEmail(user.getEmail());
                 if(findUser == null){
                     model.addAttribute("error", "You're not registered");
@@ -70,11 +74,35 @@ public class UserController {
             return "redirect:/user/profile";
         }
 
-        @PostMapping
-        public String deleteUser (){
+        @PostMapping ("/new")
+        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, Model model){
+            //Search email & username doesn´t already exist
+            if (userService.findByEmail(user.getEmail()) != null
+                    || userService.findByUsername(user.getUsername()) != null) {
+
+                //Then check correct password twice:
+                if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
+                    model.addAttribute("error", "Passwords don't match");
+                    return "user-form";
+                }
+
+                //Then save:
+                userService.save(user);
+
+                return "redirect:profile";
+            }
+
+            //error
+            model.addAttribute("error", "User with those credentials already exists");
+            return "user-form";
+        }
+
+        @PostMapping ("/delete")
+        public String deleteUser (Model model){
+            //Add logic
 
             return "redirect:index";
         }
 
-    //}
+
 }

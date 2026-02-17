@@ -38,7 +38,22 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public User findByUsername (String username){
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean correctLoginInput (String email, String password){
+        return email.isEmpty()&&password.isEmpty();
+    }
+
+
     public boolean logincheck (User user, String password){
         return user.getPassword().equals(password);
     }
+
+    public boolean checkCreatePassword (String password, String confirmPassword){
+        return password.equals(confirmPassword);
+    }
+
+
 }
