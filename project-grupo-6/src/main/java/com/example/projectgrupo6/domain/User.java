@@ -38,6 +38,8 @@ public class User {
     @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
     private List<Comment> review;
     
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Order> orders;
 
     //Constructor
 
@@ -102,6 +104,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void addReview(Comment comment) {
+        this.review.add(comment);
+    }
+
+    public void removeReview(Comment comment) {
+        this.review.remove(comment);
     }
 
     //To String:
