@@ -34,7 +34,7 @@ public class SampleDataInitializer {
         p1.setPowerSource("AEG");
         p1.setBrand("Specna Arms");
         p1.addColor("Black");
-        p1.setReviewCount(24);
+        p1.setReviewCount(0);
         p1.setImages(Arrays.asList("/css/img/HX416AssaultAEG.png", "/css/img/HX416AssaultAEG_2.png", "/css/img/HX416AssaultAEG_3.png", "/css/img/HX416AssaultAEG_4.png")); // Varias imágenes
         productService.save(p1);
 
@@ -47,7 +47,7 @@ public class SampleDataInitializer {
         p2.setPowerSource("AEG");
         p2.setBrand("G&G Armament");
         p2.addColor("Tan / Coyote");
-        p2.setReviewCount(48);
+        p2.setReviewCount(0);
         p2.setImages(Arrays.asList("/css/img/SpecterM4CQBpng.png","/css/img/SpecterM4CQBpng_2.png","/css/img/SpecterM4CQBpng_3.png","/css/img/SpecterM4CQBpng_4.png"));
         productService.save(p2);
 
@@ -60,7 +60,7 @@ public class SampleDataInitializer {
         p3.setPowerSource("AEG");
         p3.setBrand("Cyma");
         p3.addColor("Black");
-        p3.setReviewCount(74);
+        p3.setReviewCount(0);
         p3.setImages(Arrays.asList("/css/img/AKR74Tactical.png","/css/img/AKR74Tactical_2.png","/css/img/AKR74Tactical_3.png","/css/img/AKR74Tactical_4.png"));
         productService.save(p3);
 

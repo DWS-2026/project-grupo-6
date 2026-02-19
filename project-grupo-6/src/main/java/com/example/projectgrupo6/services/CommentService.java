@@ -38,7 +38,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void addComment(Long userid,Long productid, String content) {
+    public void addComment(Long userid, Long productid, String content) {
         
         Optional <Product> productOpt = productService.getById(productid);
         Optional <User> userOpt = userService.getById(userid);
