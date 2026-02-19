@@ -29,8 +29,8 @@ public class User {
     private String password;
     private String profileImage;
 
-    //add rol
-    //private String rol;
+    //Change when ready
+    private String rol;
     /*
     @OneToMany
     private List<Order> order;
@@ -42,9 +42,7 @@ public class User {
     private List<Order> orders;
 
     //Constructor
-
-
-    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage, List<Comment> review) {
+    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage, String rol, List<Comment> review) {
         Id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -52,6 +50,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.profileImage = profileImage;
+        this.rol = rol;
         this.review = review;
     }
 
@@ -104,6 +103,30 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public void addReview(Comment comment) {

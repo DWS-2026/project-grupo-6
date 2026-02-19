@@ -74,15 +74,41 @@ public class SampleDataInitializer {
         p4.addColor("Black");
         p4.setImages(Arrays.asList("/css/img/RaptorG17GBB.png"));
         productService.save(p4);
-    
-        // 2. CREAR USUARIOS
+
+
+        //CREATE USERS
         User u1 = new User();
-        u1.setFirstname("Alex Murphy");
+        u1.setFirstname("Alex");
+        u1.setLastname("Murphy");
+        u1.setUsername("a.murph$");
+        u1.setEmail("lex_murph@airsoft.com");
+        u1.setProfileImage("pfp1.jpg");
+        //Encode when ready
+        u1.setPassword("1234");
+        u1.setRol("Admin");
         userService.save(u1);
 
         User u2 = new User();
-        u2.setFirstname("John Wick");
+        u2.setFirstname("Charlie");
+        u2.setLastname("Brown");
+        u2.setUsername("puppycharlie");
+        u2.setEmail("charlie.brown@mailcute.com");
+        u2.setProfileImage("pfp2.jpg");
+        //Encode when ready
+        u2.setPassword("5678");
+        u2.setRol("User");
         userService.save(u2);
-    
+
+        User u3 = new User();
+        u3.setFirstname("Pandora");
+        u3.setLastname("James");
+        u3.setUsername("pandyJames");
+        u3.setEmail("pan.james@cozymail.com");
+        u3.setProfileImage("pfp3.jpg");
+        //Encode when ready
+        u3.setPassword("134340");
+        u3.setRol("User");
+        userService.save(u3);
+
     }
 }
