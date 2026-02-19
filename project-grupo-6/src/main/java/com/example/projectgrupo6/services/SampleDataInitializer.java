@@ -75,34 +75,41 @@ public class SampleDataInitializer {
         p4.addColor("Black");
         p4.setImages(Arrays.asList("/css/img/RaptorG17GBB.png","/css/img/RaptorG17GBB_2.png","/css/img/RaptorG17GBB_3.png","/css/img/RaptorG17GBB_4.png"));
         productService.save(p4);
-    
-        // 2. CREAR USUARIOS
+
+
+        //CREATE USERS
         User u1 = new User();
-        u1.setFirstname("Alex Murphy");
-        u1.setLastname("Robocop");
-        u1.setUsername("robocop");
-        u1.setEmail("alex.murphy@robocop.com");
+        u1.setFirstname("Alex");
+        u1.setLastname("Murphy");
+        u1.setUsername("a.murph$");
+        u1.setEmail("lex_murph@airsoft.com");
+        u1.setProfileImage("pfp1.jpg");
+        //Encode when ready
+        u1.setPassword("1234");
+        u1.setRol("Admin");
         userService.save(u1);
 
         User u2 = new User();
-        u2.setFirstname("John Wick");
-        u2.setLastname("Baba Yaga");
-        u2.setUsername("johnwick");
-        u2.setEmail("john.wick@matrix.com");
+        u2.setFirstname("Charlie");
+        u2.setLastname("Brown");
+        u2.setUsername("puppycharlie");
+        u2.setEmail("charlie.brown@mailcute.com");
+        u2.setProfileImage("pfp2.jpg");
+        //Encode when ready
+        u2.setPassword("5678");
+        u2.setRol("User");
         userService.save(u2);
-    
-        // 3. AÑADIR COMENTARIOS (Nueva sección)
-        // Comentario de Robocop en el Fusil HX416
-        Comment c1 = new Comment("Highly accurate, feels just like the real thing.", u1.getUsername(), u1, p1);
-        commentService.save(c1);
 
-        // Comentario de John Wick en la Pistola G17
-        Comment c2 = new Comment("Reliable sidearm. The blowback is very crisp.", u2.getUsername(), u2, p4);
-        commentService.save(c2);
-
-        // Otro comentario para el mismo producto
-        Comment c3 = new Comment("I prefer pencils, but this gun is a close second.", u2.getUsername(), u2, p1);
-        commentService.save(c3);
+        User u3 = new User();
+        u3.setFirstname("Pandora");
+        u3.setLastname("James");
+        u3.setUsername("pandyJames");
+        u3.setEmail("pan.james@cozymail.com");
+        u3.setProfileImage("pfp3.jpg");
+        //Encode when ready
+        u3.setPassword("134340");
+        u3.setRol("User");
+        userService.save(u3);
 
     }
 }
