@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 
@@ -47,7 +48,7 @@ public class SampleDataInitializer {
         p2.setBrand("G&G Armament");
         p2.addColor("Tan / Coyote");
         p2.setReviewCount(48);
-        p2.setImages(Arrays.asList("/css/img/SpecterM4CQBpng.png"));
+        p2.setImages(Arrays.asList("/css/img/SpecterM4CQBpng.png","/css/img/SpecterM4CQBpng_2.png","/css/img/SpecterM4CQBpng_3.png","/css/img/SpecterM4CQBpng_4.png"));
         productService.save(p2);
 
         // 3. AKR74 Tactical 
@@ -60,7 +61,7 @@ public class SampleDataInitializer {
         p3.setBrand("Cyma");
         p3.addColor("Black");
         p3.setReviewCount(74);
-        p3.setImages(Arrays.asList("/css/img/AKR74Tactical.png"));
+        p3.setImages(Arrays.asList("/css/img/AKR74Tactical.png","/css/img/AKR74Tactical_2.png","/css/img/AKR74Tactical_3.png","/css/img/AKR74Tactical_4.png"));
         productService.save(p3);
 
         // 4. Raptor G17 GBB 
@@ -72,7 +73,7 @@ public class SampleDataInitializer {
         p4.setPowerSource("GBB");
         p4.setBrand("Umarex");
         p4.addColor("Black");
-        p4.setImages(Arrays.asList("/css/img/RaptorG17GBB.png"));
+        p4.setImages(Arrays.asList("/css/img/RaptorG17GBB.png","/css/img/RaptorG17GBB_2.png","/css/img/RaptorG17GBB_3.png","/css/img/RaptorG17GBB_4.png"));
         productService.save(p4);
 
 

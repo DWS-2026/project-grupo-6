@@ -16,6 +16,9 @@ public class CartItem {
 
     private int quantity;
     
+    public CartItem() {
+    }
+
     public CartItem(Product product) {
         this.product = product;
         this.quantity = 1;
