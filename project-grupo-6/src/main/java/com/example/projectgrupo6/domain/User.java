@@ -2,8 +2,6 @@ package com.example.projectgrupo6.domain;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -14,13 +12,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Component
-@SessionScope
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
 
     private String firstname;
     private String lastname;
@@ -43,7 +39,7 @@ public class User {
 
     //Constructor
     public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage, String rol, List<Comment> review) {
-        Id = id;
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -58,11 +54,11 @@ public class User {
 
     //Getters & Setters
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -141,7 +137,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", username='" + username + '\'' +

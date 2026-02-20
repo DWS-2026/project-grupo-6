@@ -31,21 +31,26 @@
                         <form id="loginForm" action="/user/login" method="post">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" placeholder="name@example.com" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" value="{{user.password}}" placeholder="Password" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                             </div>
                             
                             <div class="d-grid mb-3">
                                 <button type="submit" class="btn btn-success">Log in</button>
                             </div>
                             <div class="d-grid mb-3">
-                                <a href="index.html" class="btn btn-secondary">Back</a>
+                                <a href="/" class="btn btn-secondary">Back</a>
                             </div>
-                            <p class="text-center">Don't have an account? <a href="/user-form">Register</a></p>
+                            <p class="text-center">Don't have an account? <a href="/user/new">Register</a></p>
                         </form>
+                        {{#error}}
+                            <div class="alert alert-danger mt-3" role="alert">
+                                {{error}}
+                            </div>
+                        {{/error}}
                     </div>
                 </div>
             </div>
@@ -53,24 +58,6 @@
     </section>
 
     {{>footer}}
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            // Reloads the page
-            event.preventDefault();
-
-            // Values of input
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value; // Por si quieres usarla luego
-
-            // Redirection logic
-            if (email === 'admin@admin') {
-                window.location.href = 'admin.html';
-            } else{
-                window.location.href = 'profile.html';
-            }
-        });
-    </script>
 
 </body>
 
