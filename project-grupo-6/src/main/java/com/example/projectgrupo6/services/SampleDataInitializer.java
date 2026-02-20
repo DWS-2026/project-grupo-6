@@ -96,7 +96,7 @@ public class SampleDataInitializer {
             u1.setProfileImage(imageBlob1);
             //Encode when ready
             u1.setPassword("1234");
-            u1.setRol("Admin");
+            //u1.setRoles("Admin");
             userService.save(u1);
 
 
@@ -112,7 +112,7 @@ public class SampleDataInitializer {
             u2.setProfileImage(imageBlob2);
             //Encode when ready
             u2.setPassword("5678");
-            u2.setRol("User");
+            //u2.setRol("User");
             userService.save(u2);
 
 
@@ -128,7 +128,7 @@ public class SampleDataInitializer {
             u3.setProfileImage(imageBlob3);
             //Encode when ready
             u3.setPassword("134340");
-            u3.setRol("User");
+            //u3.setRol("User");
             userService.save(u3);
 
 
@@ -144,23 +144,20 @@ public class SampleDataInitializer {
             u4.setProfileImage(imageBlob4);
             //Encode when ready
             u4.setPassword("asd");
-            u4.setRol("User");
+            //u4.setRol("User");
             userService.save(u4);
 
-            // 3. CREATE SAMPLE COMMENTS
-            // Comentario de Alex (Admin) sobre el fusil HX416
+            // CREATE SAMPLE COMMENTS
+            // Comment of Alex (Admin) about HX416
             Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
-
             commentService.save(c1);
 
-            // Comentario de Charlie sobre la pistola G17
+            // Comment of Charlie about G17
             Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
-
             commentService.save(c2);
 
-            // Comentario de Pandora sobre el fusil HX416
+            // Comment of Pandora about HX416
             Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
-
             commentService.save(c3);
 
 
