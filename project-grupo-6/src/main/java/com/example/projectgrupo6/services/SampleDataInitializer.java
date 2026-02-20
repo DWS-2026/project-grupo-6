@@ -1,5 +1,9 @@
 package com.example.projectgrupo6.services;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Blob;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 
 import jakarta.annotation.PostConstruct;
+
 
 @Component
 public class SampleDataInitializer {
@@ -78,64 +83,91 @@ public class SampleDataInitializer {
 
 
         //CREATE USERS
-        User u1 = new User();
-        u1.setFirstname("Alex");
-        u1.setLastname("Murphy");
-        u1.setUsername("a.murph$");
-        u1.setEmail("lex_murph@airsoft.com");
-        u1.setProfileImage("pfp1.jpg");
-        //Encode when ready
-        u1.setPassword("1234");
-        u1.setRol("Admin");
-        userService.save(u1);
+        try {
+            Path imagePath1 = Path.of("src/main/resources/static/img/pfp1.jpg");
+            byte[] imageBytes1 = Files.readAllBytes(imagePath1);
+            Blob imageBlob1 = new SerialBlob(imageBytes1);
 
-        User u2 = new User();
-        u2.setFirstname("Charlie");
-        u2.setLastname("Brown");
-        u2.setUsername("puppycharlie");
-        u2.setEmail("charlie.brown@mailcute.com");
-        u2.setProfileImage("pfp2.jpg");
-        //Encode when ready
-        u2.setPassword("5678");
-        u2.setRol("User");
-        userService.save(u2);
+            User u1 = new User();
+            u1.setFirstname("Alex");
+            u1.setLastname("Murphy");
+            u1.setUsername("a.murph$");
+            u1.setEmail("lex_murph@airsoft.com");
+            u1.setProfileImage(imageBlob1);
+            //Encode when ready
+            u1.setPassword("1234");
+            u1.setRol("Admin");
+            userService.save(u1);
 
-        User u3 = new User();
-        u3.setFirstname("Pandora");
-        u3.setLastname("James");
-        u3.setUsername("pandyJames");
-        u3.setEmail("pan.james@cozymail.com");
-        u3.setProfileImage("pfp3.jpg");
-        //Encode when ready
-        u3.setPassword("134340");
-        u3.setRol("User");
-        userService.save(u3);
 
-        User u4 = new User();
-        u4.setFirstname("Riley");
-        u4.setLastname("Smith");
-        u4.setUsername("riley_smith");
-        u4.setEmail("asd@asd");
-        u4.setProfileImage("pfp4.jpg");
-        //Encode when ready
-        u4.setPassword("asd");
-        u4.setRol("User");
-        userService.save(u4);
+            Path imagePath2 = Path.of("src/main/resources/static/img/pfp2.jpg");
+            byte[] imageBytes2 = Files.readAllBytes(imagePath2);
+            Blob imageBlob2 = new SerialBlob(imageBytes2);
 
-        // 3. CREATE SAMPLE COMMENTS
-        // Comentario de Alex (Admin) sobre el fusil HX416
-        Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
+            User u2 = new User();
+            u2.setFirstname("Charlie");
+            u2.setLastname("Brown");
+            u2.setUsername("puppycharlie");
+            u2.setEmail("charlie.brown@mailcute.com");
+            u2.setProfileImage(imageBlob2);
+            //Encode when ready
+            u2.setPassword("5678");
+            u2.setRol("User");
+            userService.save(u2);
 
-        commentService.save(c1);
 
-        // Comentario de Charlie sobre la pistola G17
-        Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
+            Path imagePath3 = Path.of("src/main/resources/static/img/pfp3.jpg");
+            byte[] imageBytes3 = Files.readAllBytes(imagePath3);
+            Blob imageBlob3 = new SerialBlob(imageBytes3);
 
-        commentService.save(c2);
+            User u3 = new User();
+            u3.setFirstname("Pandora");
+            u3.setLastname("James");
+            u3.setUsername("pandyJames");
+            u3.setEmail("pan.james@cozymail.com");
+            u3.setProfileImage(imageBlob3);
+            //Encode when ready
+            u3.setPassword("134340");
+            u3.setRol("User");
+            userService.save(u3);
 
-        // Comentario de Pandora sobre el fusil HX416
-        Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
 
-        commentService.save(c3);
+            Path imagePath4 = Path.of("src/main/resources/static/img/pfp4.jpg");
+            byte[] imageBytes4 = Files.readAllBytes(imagePath4);
+            Blob imageBlob4 = new SerialBlob(imageBytes4);
+
+            User u4 = new User();
+            u4.setFirstname("Riley");
+            u4.setLastname("Smith");
+            u4.setUsername("riley_smith");
+            u4.setEmail("asd@asd");
+            u4.setProfileImage(imageBlob4);
+            //Encode when ready
+            u4.setPassword("asd");
+            u4.setRol("User");
+            userService.save(u4);
+
+            // 3. CREATE SAMPLE COMMENTS
+            // Comentario de Alex (Admin) sobre el fusil HX416
+            Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
+
+            commentService.save(c1);
+
+            // Comentario de Charlie sobre la pistola G17
+            Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
+
+            commentService.save(c2);
+
+            // Comentario de Pandora sobre el fusil HX416
+            Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
+
+            commentService.save(c3);
+
+
+        } catch (Exception e){
+            e.getCause();
+        }
+
+
     }
 }

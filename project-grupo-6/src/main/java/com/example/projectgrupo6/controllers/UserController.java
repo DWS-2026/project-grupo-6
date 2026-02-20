@@ -40,15 +40,15 @@ public class UserController {
             return "user-form";
         }
 
-        @GetMapping("/update")
-        public String update (Model model, HttpSession session){
+        @GetMapping("/update/{id}")
+        public String update (@PathVariable Long id, Model model, HttpSession session){
             User user = (User) session.getAttribute("user");
             model.addAttribute("user", user);
             return "user-form";
         }
 
-        @GetMapping ("/profile")
-        public String profile(HttpSession session, Model model){
+        @GetMapping ("/profile/{id}")
+        public String profile(@PathVariable Long id, HttpSession session, Model model){
             User user = (User) session.getAttribute("user");
 
             //Change to redirect to error
@@ -133,8 +133,8 @@ public class UserController {
             return "user-form";
         }
 
-        @PostMapping("/update")
-        public String updateSubmit (@ModelAttribute User formUser, HttpSession session){
+        @PostMapping("/update/{id}")
+        public String updateSubmit (@PathVariable Long id, @ModelAttribute User formUser, HttpSession session){
             User sessionUser = (User) session.getAttribute("user");
 
             /// ////////////////
@@ -146,8 +146,8 @@ public class UserController {
             return "user-form";
         }
 
-        @PostMapping ("/delete")
-        public String deleteUser (Model model, User user){
+        @PostMapping ("/delete/{id}")
+        public String deleteUser (@PathVariable Long id, Model model, User user){
             //Add logic
             userService.delete(user);
             return "redirect:index";
