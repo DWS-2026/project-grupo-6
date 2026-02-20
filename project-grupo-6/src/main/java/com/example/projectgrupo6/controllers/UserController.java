@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class UserController {
 
         @GetMapping("/login")
         public String login(Model model) {
-            // Cambiamos "user" por "loginForm" para evitar conflictos
+            // Change "user" to "loginForm" to avoid conflicts
             
             return "login";
         }
@@ -110,7 +111,7 @@ public class UserController {
         }
 
         @PostMapping ("/new")
-        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, Model model){
+        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model) throws Exception{
             //Search email & username doesn´t already exist
             if (userService.findByEmail(user.getEmail()) != null
                     || userService.findByUsername(user.getUsername()) != null) {
@@ -122,7 +123,7 @@ public class UserController {
                 }
 
                 //Then save:
-                userService.save(user);
+                userService.save(user, image);
 
                 return "redirect:profile";
             }

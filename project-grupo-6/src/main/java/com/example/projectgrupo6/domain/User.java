@@ -1,15 +1,10 @@
 package com.example.projectgrupo6.domain;
 
+import java.sql.Blob;
 import java.util.List;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -23,7 +18,8 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String profileImage;
+    @Lob
+    private Blob profileImage;
 
     //Change when ready
     private String rol;
@@ -38,7 +34,7 @@ public class User {
     private List<Order> orders;
 
     //Constructor
-    public User(Long id, String firstname, String lastname, String username, String email, String password, String profileImage, String rol, List<Comment> review) {
+    public User(Long id, String firstname, String lastname, String username, String email, String password, Blob profileImage, String rol, List<Comment> review) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -101,11 +97,11 @@ public class User {
         this.password = password;
     }
 
-    public String getProfileImage() {
+    public Blob getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(String profileImage) {
+    public void setProfileImage(Blob profileImage) {
         this.profileImage = profileImage;
     }
 
