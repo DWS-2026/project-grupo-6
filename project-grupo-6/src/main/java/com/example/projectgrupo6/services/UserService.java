@@ -55,5 +55,17 @@ public class UserService {
         return password.equals(confirmPassword);
     }
 
+    public void updateDataUser(User oldUser, User newUser){
+        oldUser.setFirstname(newUser.getFirstname());
+        oldUser.setLastname(newUser.getLastname());
+        oldUser.setUsername(newUser.getUsername());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setPassword(newUser.getPassword());
+        oldUser.setProfileImage(newUser.getProfileImage());
+        oldUser.setRol(newUser.getRol());
+
+        userRepository.save(oldUser);
+    }
+
 
 }
