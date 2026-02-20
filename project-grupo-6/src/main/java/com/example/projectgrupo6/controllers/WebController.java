@@ -2,7 +2,7 @@ package com.example.projectgrupo6.controllers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.h2.engine.User;
 import org.springframework.beans.factory.annotation.Autowired;
