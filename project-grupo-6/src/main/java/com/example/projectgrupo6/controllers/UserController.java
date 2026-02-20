@@ -16,13 +16,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private User sessionUser;
 
         @GetMapping("/login")
         public String login(Model model) {
             // Cambiamos "user" por "loginForm" para evitar conflictos
-            //model.addAttribute("loginForm", new User());
+            
             return "login";
         }
 
@@ -56,24 +54,22 @@ public class UserController {
 
         // POST
         @PostMapping ("/login")
-        public String loginSubmit(@ModelAttribute("user") User user, Model model){
+        public String loginSubmit(@RequestParam String email, 
+                           @RequestParam String password, 
+                           HttpSession session, Model model) {
             /// ///////////////////////////////////////
             //Change redirection logic to error template
             /// ////////////////////////////////////////
 
-            if(userService.correctLoginInput(user.getEmail(), user.getPassword())){
-                User findUser = userService.findByEmail(user.getEmail());
-                if(findUser == null){
-                    model.addAttribute("error", "You're not registered");
-                    return "login";
-                }
+            User userDb = userService.findByEmail(email);
 
-                if (!userService.logincheck(findUser, findUser.getPassword())){
-                    model.addAttribute("error", "Invalid credentials");
-                    return "login";
-                }
+            if (userDb != null && userService.logincheck(userDb, password)) {
+                // Guardamos al usuario directamente en la sesión de Jakarta
+                session.setAttribute("loggedUser", userDb);
+                return "redirect:/";
             }
-            return "redirect:/user/profile";
+            model.addAttribute("error", "Invalid email or password");
+            return "login";
         }
 
         @PostMapping ("/new")
