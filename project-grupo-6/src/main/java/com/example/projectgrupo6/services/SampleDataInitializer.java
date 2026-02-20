@@ -111,6 +111,17 @@ public class SampleDataInitializer {
         u3.setRol("User");
         userService.save(u3);
 
+        User u4 = new User();
+        u4.setFirstname("Riley");
+        u4.setLastname("Smith");
+        u4.setUsername("riley_smith");
+        u4.setEmail("asd@asd");
+        u4.setProfileImage("pfp4.jpg");
+        //Encode when ready
+        u4.setPassword("asd");
+        u4.setRol("User");
+        userService.save(u4);
+
         // 3. CREATE SAMPLE COMMENTS
         // Comentario de Alex (Admin) sobre el fusil HX416
         Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
