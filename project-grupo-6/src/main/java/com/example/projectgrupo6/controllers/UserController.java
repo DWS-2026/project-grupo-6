@@ -24,9 +24,25 @@ public class UserController {
             return "login";
         }
 
+        @GetMapping ("/logout")
+        public String logout(Model model) {
+            model.addAttribute("user", new User());
+            //add functionality
+
+
+            return "login";
+        }
+
         @GetMapping ("/new")
         public String register (Model model){
             model.addAttribute("user", new User());
+            return "user-form";
+        }
+
+        @GetMapping("/update")
+        public String update (Model model, HttpSession session){
+            User user = (User) session.getAttribute("user");
+            model.addAttribute("user", user);
             return "user-form";
         }
 
@@ -48,6 +64,17 @@ public class UserController {
 
             model.addAttribute("initials", initials);
             return "profile";
+        }
+
+        @GetMapping("/list")
+        public String userList (HttpSession session, Model model){
+            List<User> userList = userService.getAllUsers();
+            if(userList.isEmpty()){
+                //Add redirection to error or message of empty
+            }
+
+            model.addAttribute("users", userList);
+            return "admin-user-page";
         }
 
 
@@ -74,6 +101,16 @@ public class UserController {
             return "redirect:/user/profile";
         }
 
+        @PostMapping ("/logout")
+        public String logoutSubmit(@ModelAttribute("user") User user, HttpSession httpSession, Model model){
+            /// ///////////////////////////////////////
+            //Add logout logic
+            /// ////////////////////////////////////////
+            httpSession.invalidate();
+
+            return "redirect:/index";
+        }
+
         @PostMapping ("/new")
         public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, Model model){
             //Search email & username doesn´t already exist
@@ -97,10 +134,23 @@ public class UserController {
             return "user-form";
         }
 
-        @PostMapping ("/delete")
-        public String deleteUser (Model model){
-            //Add logic
+        @PostMapping("/update")
+        public String updateSubmit (@ModelAttribute User formUser, HttpSession session){
+            User sessionUser = (User) session.getAttribute("user");
 
+            /// ////////////////
+            //Clean input first then save
+            /// ///////////////
+
+            userService.updateDataUser(sessionUser, formUser);
+
+            return "user-form";
+        }
+
+        @PostMapping ("/delete")
+        public String deleteUser (Model model, User user){
+            //Add logic
+            userService.delete(user);
             return "redirect:index";
         }
 
