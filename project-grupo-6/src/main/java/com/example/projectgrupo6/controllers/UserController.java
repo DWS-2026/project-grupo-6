@@ -16,11 +16,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private User sessionUser;
 
-        //GET
-        @GetMapping ("/login")
+        @GetMapping("/login")
         public String login(Model model) {
-            model.addAttribute("user", new User());
+            // Cambiamos "user" por "loginForm" para evitar conflictos
+            //model.addAttribute("loginForm", new User());
             return "login";
         }
 
