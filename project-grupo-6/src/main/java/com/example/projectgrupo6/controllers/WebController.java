@@ -5,7 +5,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.ImageService;
-import org.h2.engine.User;
+import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
