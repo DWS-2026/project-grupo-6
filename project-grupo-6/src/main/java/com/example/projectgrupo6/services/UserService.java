@@ -76,7 +76,7 @@ public class UserService {
         oldUser.setEmail(newUser.getEmail());
         oldUser.setPassword(newUser.getPassword());
         oldUser.setProfileImage(newUser.getProfileImage());
-        oldUser.setRol(newUser.getRol());
+        oldUser.setRoles(newUser.getRoles());
 
         userRepository.save(oldUser);
     }
