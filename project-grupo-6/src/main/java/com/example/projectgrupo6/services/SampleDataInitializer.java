@@ -7,7 +7,6 @@ import java.sql.Blob;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.example.projectgrupo6.domain.Comment;
@@ -18,7 +17,6 @@ import jakarta.annotation.PostConstruct;
 
 
 @Component
-@DependsOn("entityManagerFactory")
 public class SampleDataInitializer {
 
     @Autowired
@@ -164,8 +162,7 @@ public class SampleDataInitializer {
 
 
         } catch (Exception e){
-            System.err.println("¡ERROR AL CREAR USUARIOS O COMENTARIOS!");
-            e.printStackTrace();
+            e.getCause();
         }
 
 

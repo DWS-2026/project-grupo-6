@@ -20,21 +20,8 @@ public class UserController {
 
         @GetMapping("/login")
         public String login(Model model) {
-            return "login";
-        }
-
-        @PostMapping ("/login")
-        public String loginSubmit(@RequestParam String email, 
-                           @RequestParam String password, 
-                           HttpSession session, Model model) {
-
-            User userDb = userService.findByEmail(email);
-
-            if (userDb != null && userService.logincheck(userDb, password)) {
-                session.setAttribute("user", userDb);
-                return "redirect:/";
-            }
-            model.addAttribute("error", "Invalid email or password");
+            // Change "user" to "loginForm" to avoid conflicts
+            
             return "login";
         }
 
@@ -93,7 +80,25 @@ public class UserController {
 
 
 
-        
+        // POST
+        @PostMapping ("/login")
+        public String loginSubmit(@RequestParam String email, 
+                           @RequestParam String password, 
+                           HttpSession session, Model model) {
+            /// ///////////////////////////////////////
+            //Change redirection logic to error template
+            /// ////////////////////////////////////////
+
+            User userDb = userService.findByEmail(email);
+
+            if (userDb != null && userService.logincheck(userDb, password)) {
+                // Guardamos al usuario directamente en la sesión de Jakarta
+                session.setAttribute("loggedUser", userDb);
+                return "redirect:/";
+            }
+            model.addAttribute("error", "Invalid email or password");
+            return "login";
+        }
 
         @PostMapping ("/logout")
         public String logoutSubmit(@ModelAttribute("user") User user, HttpSession httpSession, Model model){
