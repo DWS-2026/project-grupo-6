@@ -3,6 +3,7 @@ package com.example.projectgrupo6.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,6 @@ import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.repositories.CommentRepository;
-import com.example.projectgrupo6.repositories.ProductRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -24,7 +24,8 @@ public class CommentService {
     private ProductService productService;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
+
 
     public void save(Comment comment) {
         repository.save(comment);
@@ -42,7 +43,7 @@ public class CommentService {
     public void addComment(Long userid, Long productid, String content) {
         
         Optional <Product> productOpt = productService.getById(productid);
-        Optional <User> userOpt = userService.getById(userid);
+        Optional <User> userOpt = userRepository.findById(userid);
         
         if (productOpt.isPresent() && userOpt.isPresent()) {
             
@@ -56,14 +57,11 @@ public class CommentService {
             user.addReview(comment);
 
             repository.save(comment);
-        
-
-
         }
     }
 
     public List<Comment> findAllByUser (User user){
-        return repository.findAllofUser(user);
+        return repository.findByOwner(user);
     }
 
     public void deleteList (List<Comment> comments){

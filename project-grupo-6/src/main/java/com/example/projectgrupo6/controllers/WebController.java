@@ -2,6 +2,7 @@ package com.example.projectgrupo6.controllers;
 
 import java.util.List;
 
+import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.ImageService;
@@ -32,7 +33,11 @@ public class WebController {
     private ImageService imageService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CartService cartService;
+
     @GetMapping("/") 
     public String greeting(Model model,HttpSession session){
         
@@ -48,7 +53,7 @@ public class WebController {
         List<Product> randomFeatured = productService.getThreeRandomProducts();
         model.addAttribute("featuredProducts", randomFeatured);
         try {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         int cartCount = cartService.getCartTotalItems(userId);
         model.addAttribute("cartCount", cartCount);
         } catch (RuntimeException e) {
@@ -59,26 +64,21 @@ public class WebController {
         return "index";
     }
 
-
     @GetMapping("/login") 
     public String showlogin(Model model){
         return "login";
     }
 
+    //Already in User Controller:
     @GetMapping("/user-form") 
     public String showuserform(Model model){
         return "user-form";
     }
-    private Long getCurrentUserId(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if(user ==null){
-            throw new RuntimeException("Unaunthenticated user");
-        }
-        return (long) user.getId();
-    }
+
+
     @GetMapping("/cart")
     public String showCart(HttpSession session, Model model) {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         List<CartItem> cartItems = cartService.getCartItems(userId);
         double total = cartService.getCartTotal(userId);
         int totalItems = cartService.getCartTotalItems(userId);
@@ -87,27 +87,31 @@ public class WebController {
         model.addAttribute("totalItems", totalItems);
         return "cart";
     }
+
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         cartService.addProductToCart(userId, productId, quantity);
         return "redirect:/cart";
     }
+
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId, HttpSession session) {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         cartService.removeProductFromCart(userId, productId);
         return "redirect:/cart";
     }
+
     @PostMapping("/cart/update/{productId}")
     public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpSession session) {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         cartService.updateProductQuantity(userId, productId, quantity);
         return "redirect:/cart";
     }
+
     @PostMapping("/cart/clear")
     public String clearCart(HttpSession session) {
-        Long userId = getCurrentUserId(session);
+        Long userId = userService.getCurrentUserId(session);
         cartService.clearCart(userId);
         return "redirect:/cart";
     }

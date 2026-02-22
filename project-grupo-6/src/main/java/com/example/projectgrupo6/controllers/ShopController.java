@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.example.projectgrupo6.services.ImageService;
 import javax.servlet.http.HttpSession;
 
+import com.example.projectgrupo6.services.UserService;
 import org.h2.engine.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;

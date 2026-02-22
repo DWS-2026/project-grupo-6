@@ -5,6 +5,8 @@ import java.util.List;
 
 
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 @Entity
 @Table(name = "users")

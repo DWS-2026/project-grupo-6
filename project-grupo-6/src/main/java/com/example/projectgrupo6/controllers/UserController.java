@@ -2,6 +2,7 @@ package com.example.projectgrupo6.controllers;
 
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,20 +19,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-        @GetMapping("/login")
-        public String login(Model model) {
-            // Change "user" to "loginForm" to avoid conflicts
-            
-            return "login";
-        }
-
         @GetMapping ("/logout")
-        public String logout(Model model) {
-            model.addAttribute("user", new User());
-            //add functionality
-
-
-            return "login";
+        public String logout(HttpServletRequest request) {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            return "redirect:/login";
         }
 
         @GetMapping ("/new")
@@ -92,7 +86,7 @@ public class UserController {
             User userDb = userService.findByEmail(email);
 
             if (userDb != null && userService.logincheck(userDb, password)) {
-                // Guardamos al usuario directamente en la sesión de Jakarta
+                // Save user directly on Jakarta's session
                 session.setAttribute("loggedUser", userDb);
                 return "redirect:/";
             }
@@ -101,11 +95,16 @@ public class UserController {
         }
 
         @PostMapping ("/logout")
-        public String logoutSubmit(@ModelAttribute("user") User user, HttpSession httpSession, Model model){
-            /// ///////////////////////////////////////
-            //Add logout logic
-            /// ////////////////////////////////////////
-            httpSession.invalidate();
+        public String logoutSubmit(HttpSession session){
+            if (session != null) {
+                session.invalidate();
+            }
+
+            /*  //With Spring Security (?)
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null) {
+                new SecurityContextLogoutHandler().logout(request, response, auth);
+            }*/
 
             return "redirect:/index";
         }

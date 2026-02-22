@@ -4,6 +4,8 @@ import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.repositories.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,5 +110,24 @@ public class UserService {
         userRepository.save(oldUser);
     }
 
+    public Long getCurrentUserId(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            throw new RuntimeException("Unauthenticated user");
+        }
+        return user.getId();
+    }
+
+    /*  //With Spring Security (?)
+    private Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new RuntimeException("Unauthenticated user");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        return userDetails.getId();
+    }*/
 
 }
