@@ -1,5 +1,7 @@
 package com.example.projectgrupo6.services;
 
+import com.example.projectgrupo6.domain.Comment;
+import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private OrderService orderService;
+
 
     public List<User> getAllUsers (){
         return userRepository.findAll();
@@ -37,15 +45,34 @@ public class UserService {
     }
 
     public void delete(User user){
+        //Deletes comments and orders before deleting user
+        List<Comment> comments = commentService.findAllByUser(user);
+        commentService.deleteList(comments);
+
+        List<Order> orders = orderService.findAllByUser(user);
+        orderService.deleteList(orders);
+
         userRepository.delete(user);
+    }
+
+    public void deleteById (Long id){
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isPresent()) {
+            User userToDelete = optionalUser.get();
+
+            List<Comment> comments = commentService.findAllByUser(userToDelete);
+            commentService.deleteList(comments);
+
+            List<Order> orders = orderService.findAllByUser(userToDelete);
+            orderService.deleteList(orders);
+        }
+
+        userRepository.deleteById(id);
     }
 
     public Optional <User> getById (Long id){
         return userRepository.findById(id);
-    }
-
-    public void deleteById (Long id){
-        userRepository.deleteById(id);
     }
 
     public User findByEmail (String email){

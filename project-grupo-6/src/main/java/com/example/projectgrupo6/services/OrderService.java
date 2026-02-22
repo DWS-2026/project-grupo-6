@@ -3,6 +3,8 @@ package com.example.projectgrupo6.services;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.projectgrupo6.domain.Comment;
+import com.example.projectgrupo6.domain.User;
 import org.springframework.stereotype.Service;
 
 import com.example.projectgrupo6.domain.Order;
@@ -35,5 +37,13 @@ public class OrderService {
     // Borrar un pedido
     public void deleteById(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    public List<Order> findAllByUser (User user){
+        return orderRepository.findAllByUser(user);
+    }
+
+    public void deleteList (List<Order> orders){
+        orderRepository.deleteAll(orders);
     }
 }

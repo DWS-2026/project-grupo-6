@@ -1,5 +1,6 @@
 package com.example.projectgrupo6.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +62,11 @@ public class CommentService {
         }
     }
 
+    public List<Comment> findAllByUser (User user){
+        return repository.findAllofUser(user);
+    }
+
+    public void deleteList (List<Comment> comments){
+        repository.deleteAll(comments);
+    }
 }
