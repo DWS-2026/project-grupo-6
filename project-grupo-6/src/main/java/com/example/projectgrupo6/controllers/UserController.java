@@ -27,7 +27,7 @@ public class UserController {
             if (session != null) {
                 session.invalidate();
             }
-            return "redirect:/login";
+            return "redirect: /login";
         }
 
         @GetMapping ("/new")
@@ -70,20 +70,23 @@ public class UserController {
             return "profile";
         }
 
-
-        /// /////////////
         @GetMapping("/list")
         public String userList (HttpSession session, Model model){
+            //If admin: show list, otherwise redirect to profile
+            User sessionUser = (User) session.getAttribute("user");
+            if(!userService.checkIfAdmin(sessionUser)){
+                return "redirect: /user/profile/{id}";
+            }
+
             List<User> userList = userService.getAllUsers();
             if(userList.isEmpty()){
+                return "redirect: /";
                 //Add redirection to error or message of empty
             }
 
             model.addAttribute("users", userList);
             return "admin-user-page";
         }
-        ///   //////////////
-
 
 
         // POST
@@ -117,30 +120,33 @@ public class UserController {
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }*/
 
-            return "redirect:/index";
+            return "redirect: /index";
         }
 
         @PostMapping ("/new")
-        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model) throws Exception{
-            //Search email & username doesn´t already exist
+        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model, HttpSession session) throws Exception{
+
+            //Search email & username doesn't already exist
             if (userService.findByEmail(user.getEmail()) != null
                     || userService.findByUsername(user.getUsername()) != null) {
-
-                //Then check correct password twice:
-                if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
-                    model.addAttribute("error", "Passwords don't match");
-                    return "user-form";
-                }
-
-                //Then save:
-                userService.save(user, image);
-
-                return "profile";
+                //error
+                model.addAttribute("error", "User with those credentials already exists");
+                return "user-form";
             }
 
-            //error
-            model.addAttribute("error", "User with those credentials already exists");
-            return "user-form";
+            //Then check correct password twice:
+            if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
+                model.addAttribute("error", "Passwords don't match");
+                return "user-form";
+            }
+
+            //Then save:
+            userService.save(user, image);
+
+            //Automathic login
+            session.setAttribute("user", user);
+
+            return "profile";
         }
 
         @PostMapping("/update/{id}")
@@ -155,7 +161,6 @@ public class UserController {
 
             /// ////////////////
             //Clean input first then save
-            /// ///////////////
 
             //Update
             userService.updateDataUser(sessionUser, formUser);
@@ -168,9 +173,10 @@ public class UserController {
         }
 
         @PostMapping ("/delete/{id}")
-        public String deleteUser (@PathVariable Long id, Model model, User user){
+        public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
             //Add logic
             userService.delete(user);
+            redirectAttributes.addFlashAttribute("success", "Logged out successfully");
             return "redirect: /";
         }
 

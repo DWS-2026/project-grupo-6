@@ -124,6 +124,12 @@ public class UserService {
         return sessionUser.getId().equals(sessionId);
     }
 
+    public boolean checkIfAdmin (User sessionUser){
+        return sessionUser != null && sessionUser.getRoles() != null &&
+                sessionUser.getRoles().stream()
+                        .anyMatch(r -> r.equalsIgnoreCase("ADMIN"));
+    }
+
     /*  //With Spring Security (?)
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
