@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -36,20 +38,27 @@ public class UserController {
 
         @GetMapping("/update/{id}")
         public String update (@PathVariable Long id, Model model, HttpSession session){
-            User user = (User) session.getAttribute("user");
-            model.addAttribute("user", user);
+            User sessionUser = (User) session.getAttribute("user");
+
+            //Check session
+            if(!userService.validateSession(sessionUser, id)){
+                return "redirect: /";
+                //Redirect to error
+            }
+
+            model.addAttribute("user", sessionUser);
+            //Possible change: only show non-sensitive attributes
             return "user-form";
         }
 
         @GetMapping ("/profile/{id}")
         public String profile(@PathVariable Long id, HttpSession session, Model model){
             User user = (User) session.getAttribute("user");
-
-            //Change to redirect to error
-            if (user == null) {
-                return "redirect:/user/login";
+            //Check session
+            if(!userService.validateSession(user, id)){
+                return "redirect: /";
+                //Redirect to error
             }
-
             model.addAttribute("user", user);
 
             // Initials for fallback image
@@ -61,6 +70,8 @@ public class UserController {
             return "profile";
         }
 
+
+        /// /////////////
         @GetMapping("/list")
         public String userList (HttpSession session, Model model){
             List<User> userList = userService.getAllUsers();
@@ -71,6 +82,7 @@ public class UserController {
             model.addAttribute("users", userList);
             return "admin-user-page";
         }
+        ///   //////////////
 
 
 
@@ -81,7 +93,6 @@ public class UserController {
                            HttpSession session, Model model) {
             /// ///////////////////////////////////////
             //Change redirection logic to error template
-            /// ////////////////////////////////////////
 
             User userDb = userService.findByEmail(email);
 
@@ -124,7 +135,7 @@ public class UserController {
                 //Then save:
                 userService.save(user, image);
 
-                return "redirect:profile";
+                return "profile";
             }
 
             //error
@@ -133,23 +144,34 @@ public class UserController {
         }
 
         @PostMapping("/update/{id}")
-        public String updateSubmit (@PathVariable Long id, @ModelAttribute User formUser, HttpSession session){
+        public String updateSubmit (@PathVariable Long id, @ModelAttribute User formUser, HttpSession session, RedirectAttributes redirectAttributes){
             User sessionUser = (User) session.getAttribute("user");
+
+            //Check session
+            if(!userService.validateSession(sessionUser, id)){
+                return "redirect: /";
+                //Redirect to error
+            }
 
             /// ////////////////
             //Clean input first then save
             /// ///////////////
 
+            //Update
             userService.updateDataUser(sessionUser, formUser);
 
-            return "user-form";
+            //Save session
+            session.setAttribute("user", sessionUser);
+
+            redirectAttributes.addFlashAttribute("success", "Updated data");
+            return "profile";
         }
 
         @PostMapping ("/delete/{id}")
         public String deleteUser (@PathVariable Long id, Model model, User user){
             //Add logic
             userService.delete(user);
-            return "redirect:index";
+            return "redirect: /";
         }
 
 

@@ -77,6 +77,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Optional<User> findById (Long id){return userRepository.findById(id);}
+
     public User findByEmail (String email){
         return userRepository.findByEmail(email);
     }
@@ -116,6 +118,10 @@ public class UserService {
             throw new RuntimeException("Unauthenticated user");
         }
         return user.getId();
+    }
+
+    public boolean validateSession (User sessionUser, Long sessionId){
+        return sessionUser.getId().equals(sessionId);
     }
 
     /*  //With Spring Security (?)
