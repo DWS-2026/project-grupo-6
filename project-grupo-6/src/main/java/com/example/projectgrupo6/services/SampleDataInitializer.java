@@ -28,6 +28,9 @@ public class SampleDataInitializer {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private ImageService imageService;
+
     @PostConstruct
     public void initData() {
         // 1. HX416 Assault AEG 
@@ -84,64 +87,64 @@ public class SampleDataInitializer {
 
         //CREATE USERS
         try {
-            Path imagePath1 = Path.of("src/main/resources/static/img/pfp1.jpg");
-            byte[] imageBytes1 = Files.readAllBytes(imagePath1);
-            Blob imageBlob1 = new SerialBlob(imageBytes1);
+            //Path imagePath1 = Path.of("src/main/resources/static/css/img/pfp1.jpg");
+            //byte[] imageBytes1 = Files.readAllBytes(imagePath1);
+            //Blob imageBlob1 = new SerialBlob(imageBytes1);
 
             User u1 = new User();
             u1.setFirstname("Alex");
             u1.setLastname("Murphy");
             u1.setUsername("a.murph$");
             u1.setEmail("lex_murph@airsoft.com");
-            u1.setProfileImage(imageBlob1);
+            u1.setProfileImage(imageService.loadImage("pfp1.jpg"));
             //Encode when ready
             u1.setPassword("1234");
             //u1.setRoles("Admin");
             userService.save(u1);
 
 
-            Path imagePath2 = Path.of("src/main/resources/static/img/pfp2.jpg");
-            byte[] imageBytes2 = Files.readAllBytes(imagePath2);
-            Blob imageBlob2 = new SerialBlob(imageBytes2);
+            //Path imagePath2 = Path.of("/static/css/img/pfp2.jpg");
+            //byte[] imageBytes2 = Files.readAllBytes(imagePath2);
+            //Blob imageBlob2 = new SerialBlob(imageBytes2);
 
             User u2 = new User();
             u2.setFirstname("Charlie");
             u2.setLastname("Brown");
             u2.setUsername("puppycharlie");
             u2.setEmail("charlie.brown@mailcute.com");
-            u2.setProfileImage(imageBlob2);
+            u2.setProfileImage(imageService.loadImage("pfp2.jpg"));
             //Encode when ready
             u2.setPassword("5678");
             //u2.setRol("User");
             userService.save(u2);
 
 
-            Path imagePath3 = Path.of("src/main/resources/static/img/pfp3.jpg");
-            byte[] imageBytes3 = Files.readAllBytes(imagePath3);
-            Blob imageBlob3 = new SerialBlob(imageBytes3);
+            //Path imagePath3 = Path.of("/static/css/img/pfp3.jpg");
+            //byte[] imageBytes3 = Files.readAllBytes(imagePath3);
+            //Blob imageBlob3 = new SerialBlob(imageBytes3);
 
             User u3 = new User();
             u3.setFirstname("Pandora");
             u3.setLastname("James");
             u3.setUsername("pandyJames");
             u3.setEmail("pan.james@cozymail.com");
-            u3.setProfileImage(imageBlob3);
+            u3.setProfileImage(imageService.loadImage("pfp3.jpg"));
             //Encode when ready
             u3.setPassword("134340");
             //u3.setRol("User");
             userService.save(u3);
 
 
-            Path imagePath4 = Path.of("src/main/resources/static/img/pfp4.jpg");
-            byte[] imageBytes4 = Files.readAllBytes(imagePath4);
-            Blob imageBlob4 = new SerialBlob(imageBytes4);
+            //Path imagePath4 = Path.of("/static/css/img/pfp4.jpg");
+            //byte[] imageBytes4 = Files.readAllBytes(imagePath4);
+            //Blob imageBlob4 = new SerialBlob(imageBytes4);
 
             User u4 = new User();
             u4.setFirstname("Riley");
             u4.setLastname("Smith");
             u4.setUsername("riley_smith");
             u4.setEmail("asd@asd");
-            u4.setProfileImage(imageBlob4);
+            u4.setProfileImage(imageService.loadImage("pfp4.jpg"));
             //Encode when ready
             u4.setPassword("asd");
             //u4.setRol("User");
@@ -162,7 +165,8 @@ public class SampleDataInitializer {
 
 
         } catch (Exception e){
-            e.getCause();
+            System.err.println("❌ Error inicializando usuarios o comentarios: " + e.getMessage());
+            e.printStackTrace(); // Esto te dirá exactamente qué línea falla
         }
 
 
