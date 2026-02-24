@@ -89,18 +89,19 @@ public class UserController {
         }
 
 
-        // POST
+        @GetMapping ("/login")
+        public String loginpage(Model model){
+            return "login";
+        }
+
         @PostMapping ("/login")
         public String loginSubmit(@RequestParam String email, 
                            @RequestParam String password, 
                            HttpSession session, Model model) {
-            /// ///////////////////////////////////////
-            //Change redirection logic to error template
 
             User userDb = userService.findByEmail(email);
 
             if (userDb != null && userService.logincheck(userDb, password)) {
-                // Save user directly on Jakarta's session
                 session.setAttribute("loggedUser", userDb);
                 return "redirect:/";
             }
