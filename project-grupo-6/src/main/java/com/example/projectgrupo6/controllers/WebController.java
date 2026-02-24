@@ -64,10 +64,12 @@ public class WebController {
         return "index";
     }
 
+    /*
     @GetMapping("/login") 
     public String showlogin(Model model){
         return "login";
     }
+    */
 
     //Already in User Controller:
     @GetMapping("/user-form") 

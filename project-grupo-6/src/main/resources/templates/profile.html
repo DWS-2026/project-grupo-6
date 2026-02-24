@@ -76,6 +76,7 @@
                 <!-- -->
             </aside>
 
+            {{#user}}
             <!-- Main: Profile Dashboard -->
             <main class="col-12 col-md-8">
                 <div class="card">
@@ -99,26 +100,25 @@
                                 <!-- User Details -->
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">First Name</span>
-                                    <strong class="ms-3">{{user.firstname}}</strong>
+                                    <strong class="ms-3">{{firstname}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Last Name</span>
-                                    <strong class="ms-3">{{user.lastname}}</strong>
+                                    <strong class="ms-3">{{lastname}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Username</span>
-                                    <strong class="ms-3">{{user.username}}</strong>
+                                    <strong class="ms-3">{{username}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Email</span>
-                                    <strong class="ms-3">{{user.email}}</strong>
+                                    <strong class="ms-3">{{email}}</strong>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span class="list-label text-muted">Rol</span>
-                                    <strong class="ms-3">User</strong>
-
-                                    <!-- strong class="ms-3">{{user.rol}}</strong -->
-                                    <!-- Change -->
+                                        <{{#roles}}
+                                        <strong class="ms-3">{{.}}</strong>
+                                        {{/roles}}
 
                                 </li>
                             </ul>
@@ -126,6 +126,8 @@
                     </div>
                 </div>
             </main>
+            {{/user}}
+
         </div>
     </section>
 

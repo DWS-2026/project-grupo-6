@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Blob;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -96,7 +97,7 @@ public class SampleDataInitializer {
             u1.setProfileImage(imageBlob1);
             //Encode when ready
             u1.setPassword("1234");
-            //u1.setRoles("Admin");
+            u1.setRoles(List.of("ADMIN"));
             userService.save(u1);
 
 

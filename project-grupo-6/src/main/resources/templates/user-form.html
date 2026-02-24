@@ -33,7 +33,7 @@
                         <form action="/user/new" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="name" value="{{user.firstname}}" required>
+                                <input type="text" class="form-control" name="firstname" value="{{user.firstname}}" required>
                             </div>
 
                             <div class="mb-3">
@@ -63,7 +63,7 @@
 
                             <div class="mb-3">
                                 <label for="profileImage" class="form-label">Profile image</label>
-                                <input class="form-control" type="file" id="profileImage" name="image" value="{{user.profileImage}}" accept=".jpg,.jpeg,.png">
+                                <input class="form-control" type="file" id="profileImage" name="profileImage" accept=".jpg,.jpeg,.png">
                                 <div class="form-text">
                                     Upload your profile image (JPG, JPEG, PNG).
                                 </div>
@@ -81,6 +81,7 @@
                                 </a>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
