@@ -21,6 +21,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+        //
+        @GetMapping("/login")
+        public String showlogin(Model model){
+            return "login";
+        }
+
         @GetMapping ("/logout")
         public String logout(HttpServletRequest request) {
             HttpSession session = request.getSession(false);
@@ -143,13 +149,17 @@ public class UserController {
             if (userService.findByEmail(user.getEmail()) != null
                     || userService.findByUsername(user.getUsername()) != null) {
                 //error
+                System.out.println("DEBUG: user = " + user);
                 model.addAttribute("error", "User with those credentials already exists");
+                model.addAttribute("user", user);
                 return "user-form";
             }
 
             //Then check correct password twice:
             if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
+                System.out.println("DEBUG: user = " + user);
                 model.addAttribute("error", "Passwords don't match");
+                model.addAttribute("user", user);
                 return "user-form";
             }
 
