@@ -104,12 +104,6 @@ public class UserController {
             return "admin-user-page";
         }
 
-
-        @GetMapping ("/login")
-        public String loginpage(Model model){
-            return "login";
-        }
-
         @PostMapping("/login")
         public String processLogin(@RequestParam String email, 
                                 @RequestParam String password, 
