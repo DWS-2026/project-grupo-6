@@ -53,17 +53,21 @@ public class UserController {
 
         @GetMapping("/profile")
         public String profile(HttpSession session, Model model) {
-
             User sessionUser = (User) session.getAttribute("user");
-            
+
             if (sessionUser == null) {
                 return "redirect:/user/login"; 
             }
 
             User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
-
             model.addAttribute("user", user);
 
+            // TRUCO MUSTACHE: Creamos una variable booleana para la vista
+            // Comprobamos si el rol ignora mayúsculas/minúsculas ("admin", "Admin", "ADMIN")
+            boolean isAdmin = user.getRol() != null && user.getRol().equalsIgnoreCase("Admin");
+            model.addAttribute("isAdmin", isAdmin);
+
+            // ... código de las initials (se mantiene igual) ...
             String initials = "";
             if (user.getFirstname() != null && !user.getFirstname().isEmpty()) {
                 initials += user.getFirstname().substring(0, 1).toUpperCase();
