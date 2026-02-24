@@ -51,22 +51,28 @@ public class UserController {
             return "user-form";
         }
 
-        @GetMapping ("/profile/{id}")
-        public String profile(@PathVariable Long id, HttpSession session, Model model){
-            User user = (User) session.getAttribute("user");
-            //Check session
-            if(!userService.validateSession(user, id)){
-                return "redirect: /";
-                //Redirect to error
+        @GetMapping("/profile")
+        public String profile(HttpSession session, Model model) {
+
+            User sessionUser = (User) session.getAttribute("user");
+            
+            if (sessionUser == null) {
+                return "redirect:/user/login"; 
             }
+
+            User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
+
             model.addAttribute("user", user);
 
-            // Initials for fallback image
-            String initials =
-                    user.getFirstname().substring(0, 1).toUpperCase() +
-                            user.getLastname().substring(0, 1).toUpperCase();
-
+            String initials = "";
+            if (user.getFirstname() != null && !user.getFirstname().isEmpty()) {
+                initials += user.getFirstname().substring(0, 1).toUpperCase();
+            }
+            if (user.getLastname() != null && !user.getLastname().isEmpty()) {
+                initials += user.getLastname().substring(0, 1).toUpperCase();
+            }
             model.addAttribute("initials", initials);
+
             return "profile";
         }
 
