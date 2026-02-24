@@ -100,7 +100,7 @@ public class SampleDataInitializer {
             u1.setProfileImage(imageService.loadImage("pfp1.jpg"));
             //Encode when ready
             u1.setPassword("1234");
-            u1.setRoles(List.of("ADMIN"));
+            u1.setRol("Admin");
             userService.save(u1);
 
 
@@ -116,7 +116,7 @@ public class SampleDataInitializer {
             u2.setProfileImage(imageService.loadImage("pfp2.jpg"));
             //Encode when ready
             u2.setPassword("5678");
-            //u2.setRol("User");
+            u2.setRol("User");
             userService.save(u2);
 
 
@@ -132,7 +132,7 @@ public class SampleDataInitializer {
             u3.setProfileImage(imageService.loadImage("pfp3.jpg"));
             //Encode when ready
             u3.setPassword("134340");
-            //u3.setRol("User");
+            u3.setRol("User");
             userService.save(u3);
 
 
@@ -148,7 +148,7 @@ public class SampleDataInitializer {
             u4.setProfileImage(imageService.loadImage("pfp4.jpg"));
             //Encode when ready
             u4.setPassword("asd");
-            //u4.setRol("User");
+            u4.setRol("User");
             userService.save(u4);
 
             // CREATE SAMPLE COMMENTS
