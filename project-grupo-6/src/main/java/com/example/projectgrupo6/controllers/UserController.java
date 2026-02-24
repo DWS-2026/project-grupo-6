@@ -27,7 +27,7 @@ public class UserController {
             if (session != null) {
                 session.invalidate();
             }
-            return "redirect: /login";
+            return "redirect:/";
         }
 
         @GetMapping ("/new")
@@ -129,7 +129,7 @@ public class UserController {
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }*/
 
-            return "redirect: /index";
+            return "redirect:/";
         }
 
         @PostMapping ("/new")
@@ -186,7 +186,7 @@ public class UserController {
             //Add logic
             userService.delete(user);
             redirectAttributes.addFlashAttribute("success", "Logged out successfully");
-            return "redirect: /";
+            return "redirect:/";
         }
 
 
