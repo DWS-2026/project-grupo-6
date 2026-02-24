@@ -101,11 +101,7 @@ public class UserController {
         }
 
 
-        @GetMapping ("/login")
-        public String loginpage(Model model){
-            return "login";
-        }
-
+        //POST
         @PostMapping("/login")
         public String processLogin(@RequestParam String email, 
                                 @RequestParam String password, 

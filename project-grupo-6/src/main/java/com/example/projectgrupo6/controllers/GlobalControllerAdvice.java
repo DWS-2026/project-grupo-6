@@ -21,24 +21,24 @@ public class GlobalControllerAdvice {
     @Autowired
     private CartService cartService;
 
-    // Se ejecuta ANTES de que se devuelva cualquier vista (HTML)
+    //Executes BEFORE rendering any view (HTML)
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
         try {
-            // Tu método lanza RuntimeException si es null, ¡perfecto para el try-catch!
+            // Method throws RuntimeException if null
             Long userId = userService.getCurrentUserId(session);
             Optional<User> userOpt = userService.getById(userId);
             
             if (userOpt.isPresent()) {
-                // Si existe, lo pasamos a Mustache bajo el nombre "loggedUser"
+                // If exists, send to Mustache with the name "loggedUser"
                 model.addAttribute("loggedUser", userOpt.get());
                 
-                // Aprovechamos y pasamos también el carrito a todas las páginas
+                // We send the cart all of its pages
                 int cartCount = cartService.getCartTotalItems(userId);
                 model.addAttribute("cartCount", cartCount);
             }
         } catch (RuntimeException e) {
-            // Si salta el error de tu UserService, es un visitante anónimo
+            // If error in UserService, anonymous session
             model.addAttribute("cartCount", 0);
         }
     }
