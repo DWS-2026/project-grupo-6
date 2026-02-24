@@ -1,6 +1,7 @@
 package com.example.projectgrupo6.domain;
 
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +43,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.profileImage = profileImage;
-        this.roles = List.of(rol);
+        this.setRol(rol); 
         this.review = review;
     }
 
@@ -107,7 +108,19 @@ public class User {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+    public String getRol() {
+        return (this.roles != null && !this.roles.isEmpty()) ? this.roles.get(0) : "User";
+    }
 
+    public void setRol(String rol) {
+        if (this.roles == null) {
+            this.roles = new ArrayList<>();
+        }
+        this.roles.clear();
+        if (rol != null && !rol.isEmpty()) {
+            this.roles.add(rol);
+        }
+    }
     public void addReview(Comment comment) {
         this.review.add(comment);
     }

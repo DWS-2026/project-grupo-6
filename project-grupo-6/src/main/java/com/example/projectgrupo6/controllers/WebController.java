@@ -6,7 +6,7 @@ import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.ImageService;
-import org.h2.engine.User;
+import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,7 +79,8 @@ public class WebController {
 
 
     @GetMapping("/cart")
-    public String showCart(HttpSession session, Model model) {
+public String showCart(HttpSession session, Model model) {
+    try {
         Long userId = userService.getCurrentUserId(session);
         List<CartItem> cartItems = cartService.getCartItems(userId);
         double total = cartService.getCartTotal(userId);
@@ -88,7 +89,11 @@ public class WebController {
         model.addAttribute("total", total);
         model.addAttribute("totalItems", totalItems);
         return "cart";
+    } catch (RuntimeException e) {
+        // Usuario no autenticado → redirigir al login
+        return "redirect:/login";
     }
+}
 
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {

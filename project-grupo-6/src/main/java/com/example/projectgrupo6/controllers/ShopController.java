@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.projectgrupo6.services.ImageService;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.UserService;
-import org.h2.engine.User;
+import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
 import org.springframework.stereotype.Controller;
@@ -63,18 +63,9 @@ public class ShopController {
         return "shop";
     }
     
-    @GetMapping("/shopping-cart") 
-    public String showshoppingcart(Model model,HttpSession session){
-        Long userId = getCurrentUserId(session); // Implementa este método para obtener el ID del usuario actual
-        List<CartItem> cartItems = cartService.getCartItems(userId);
-        double total = cartService.getCartTotal(userId);
-        int totalItems = cartService.getCartTotalItems(userId);
-
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("total", total);
-        model.addAttribute("totalItems", totalItems);
-        return "shopping-cart";
-
+    @GetMapping("/shopping-cart")
+    public String redirectToCart(){
+        return "redirect:/cart";
     }
     
     @GetMapping("/shop-single/{id}")

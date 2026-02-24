@@ -33,7 +33,7 @@ public class UserController {
             if (session != null) {
                 session.invalidate();
             }
-            return "redirect: /login";
+            return "redirect:/";
         }
 
         @GetMapping ("/new")
@@ -57,22 +57,28 @@ public class UserController {
             return "user-form";
         }
 
-        @GetMapping ("/profile/{id}")
-        public String profile(@PathVariable Long id, HttpSession session, Model model){
-            User user = (User) session.getAttribute("user");
-            //Check session
-            if(!userService.validateSession(user, id)){
-                return "redirect: /";
-                //Redirect to error
+        @GetMapping("/profile")
+        public String profile(HttpSession session, Model model) {
+
+            User sessionUser = (User) session.getAttribute("user");
+            
+            if (sessionUser == null) {
+                return "redirect:/user/login"; 
             }
+
+            User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
+
             model.addAttribute("user", user);
 
-            // Initials for fallback image
-            String initials =
-                    user.getFirstname().substring(0, 1).toUpperCase() +
-                            user.getLastname().substring(0, 1).toUpperCase();
-
+            String initials = "";
+            if (user.getFirstname() != null && !user.getFirstname().isEmpty()) {
+                initials += user.getFirstname().substring(0, 1).toUpperCase();
+            }
+            if (user.getLastname() != null && !user.getLastname().isEmpty()) {
+                initials += user.getLastname().substring(0, 1).toUpperCase();
+            }
             model.addAttribute("initials", initials);
+
             return "profile";
         }
 
@@ -95,23 +101,26 @@ public class UserController {
         }
 
 
-        // POST
-        @PostMapping ("/login")
-        public String loginSubmit(@RequestParam String email, 
-                           @RequestParam String password, 
-                           HttpSession session, Model model) {
-            /// ///////////////////////////////////////
-            //Change redirection logic to error template
+        @GetMapping ("/login")
+        public String loginpage(Model model){
+            return "login";
+        }
 
+        @PostMapping("/login")
+        public String processLogin(@RequestParam String email, 
+                                @RequestParam String password, 
+                                HttpSession session, 
+                                Model model) {
+            
             User userDb = userService.findByEmail(email);
 
             if (userDb != null && userService.logincheck(userDb, password)) {
-                // Save user directly on Jakarta's session
-                session.setAttribute("loggedUser", userDb);
-                return "redirect:/";
+                session.setAttribute("user", userDb);
+                return "redirect:/"; 
+            } else {
+                model.addAttribute("error", "Email o contraseña incorrectos");
+                return "login";
             }
-            model.addAttribute("error", "Invalid email or password");
-            return "login";
         }
 
         @PostMapping ("/logout")
@@ -126,7 +135,7 @@ public class UserController {
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }*/
 
-            return "redirect: /index";
+            return "redirect:/";
         }
 
         @PostMapping ("/new")
@@ -187,7 +196,7 @@ public class UserController {
             //Add logic
             userService.delete(user);
             redirectAttributes.addFlashAttribute("success", "Logged out successfully");
-            return "redirect: /";
+            return "redirect:/";
         }
 
 
