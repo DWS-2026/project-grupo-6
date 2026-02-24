@@ -94,19 +94,21 @@ public class UserController {
             return "login";
         }
 
-        @PostMapping ("/login")
-        public String loginSubmit(@RequestParam String email, 
-                           @RequestParam String password, 
-                           HttpSession session, Model model) {
-
+        @PostMapping("/login")
+        public String processLogin(@RequestParam String email, 
+                                @RequestParam String password, 
+                                HttpSession session, 
+                                Model model) {
+            
             User userDb = userService.findByEmail(email);
 
             if (userDb != null && userService.logincheck(userDb, password)) {
-                session.setAttribute("loggedUser", userDb);
-                return "redirect:/";
+                session.setAttribute("user", userDb);
+                return "redirect:/"; 
+            } else {
+                model.addAttribute("error", "Email o contraseña incorrectos");
+                return "login";
             }
-            model.addAttribute("error", "Invalid email or password");
-            return "login";
         }
 
         @PostMapping ("/logout")
