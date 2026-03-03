@@ -91,7 +91,7 @@ public String showCart(HttpSession session, Model model) {
         return "cart";
     } catch (RuntimeException e) {
         // Usuario no autenticado → redirigir al login
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 }
 
