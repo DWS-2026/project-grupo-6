@@ -1,6 +1,7 @@
 package com.example.projectgrupo6.services;
 
 import com.example.projectgrupo6.domain.Comment;
+import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.repositories.UserRepository;
@@ -90,7 +91,6 @@ public class UserService {
     public boolean correctLoginInput (String email, String password){
         return email.isEmpty()&&password.isEmpty();
     }
-
 
     public boolean logincheck (User user, String password){
         return user.getPassword().equals(password);

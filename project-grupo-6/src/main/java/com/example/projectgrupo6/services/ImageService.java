@@ -43,7 +43,7 @@ public class ImageService {
     }
     public Blob loadImage(String fileName) {
     try {
-        // La ruta empieza directamente desde lo que hay dentro de 'resources'
+        // Route starts directly from what's inside 'resources'
         org.springframework.core.io.Resource resource = new org.springframework.core.io.ClassPathResource("static/css/img/" + fileName);
         if (resource.exists()) {
             byte[] bytes = resource.getInputStream().readAllBytes();
@@ -54,6 +54,6 @@ public class ImageService {
     } catch (Exception e) {
         System.err.println("❌ Error procesando " + fileName + ": " + e.getMessage());
     }
-    return null; // Si falla, el usuario simplemente no tendrá foto
+    return null; //If it fails, it won't have image
 }
 }

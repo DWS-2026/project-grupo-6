@@ -87,12 +87,7 @@ public class SampleDataInitializer {
 
 
         //CREATE USERS
-        try {
-            //Path imagePath1 = Path.of("src/main/resources/static/css/img/pfp1.jpg");
-            //byte[] imageBytes1 = Files.readAllBytes(imagePath1);
-            //Blob imageBlob1 = new SerialBlob(imageBytes1);
-
-            User u1 = new User();
+        User u1 = new User();
             u1.setFirstname("Alex");
             u1.setLastname("Murphy");
             u1.setUsername("a.murph$");
@@ -101,14 +96,9 @@ public class SampleDataInitializer {
             //Encode when ready
             u1.setPassword("1234");
             u1.setRol("Admin");
-            userService.save(u1);
+        userService.save(u1);
 
-
-            //Path imagePath2 = Path.of("/static/css/img/pfp2.jpg");
-            //byte[] imageBytes2 = Files.readAllBytes(imagePath2);
-            //Blob imageBlob2 = new SerialBlob(imageBytes2);
-
-            User u2 = new User();
+        User u2 = new User();
             u2.setFirstname("Charlie");
             u2.setLastname("Brown");
             u2.setUsername("puppycharlie");
@@ -117,14 +107,9 @@ public class SampleDataInitializer {
             //Encode when ready
             u2.setPassword("5678");
             u2.setRol("User");
-            userService.save(u2);
+        userService.save(u2);
 
-
-            //Path imagePath3 = Path.of("/static/css/img/pfp3.jpg");
-            //byte[] imageBytes3 = Files.readAllBytes(imagePath3);
-            //Blob imageBlob3 = new SerialBlob(imageBytes3);
-
-            User u3 = new User();
+        User u3 = new User();
             u3.setFirstname("Pandora");
             u3.setLastname("James");
             u3.setUsername("pandyJames");
@@ -133,14 +118,9 @@ public class SampleDataInitializer {
             //Encode when ready
             u3.setPassword("134340");
             u3.setRol("User");
-            userService.save(u3);
+        userService.save(u3);
 
-
-            //Path imagePath4 = Path.of("/static/css/img/pfp4.jpg");
-            //byte[] imageBytes4 = Files.readAllBytes(imagePath4);
-            //Blob imageBlob4 = new SerialBlob(imageBytes4);
-
-            User u4 = new User();
+        User u4 = new User();
             u4.setFirstname("Riley");
             u4.setLastname("Smith");
             u4.setUsername("riley_smith");
@@ -149,27 +129,21 @@ public class SampleDataInitializer {
             //Encode when ready
             u4.setPassword("asd");
             u4.setRol("User");
-            userService.save(u4);
-
-            // CREATE SAMPLE COMMENTS
-            // Comment of Alex (Admin) about HX416
-            Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
-            commentService.save(c1);
-
-            // Comment of Charlie about G17
-            Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
-            commentService.save(c2);
-
-            // Comment of Pandora about HX416
-            Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
-            commentService.save(c3);
+        userService.save(u4);
 
 
-        } catch (Exception e){
-            System.err.println("❌ Error inicializando usuarios o comentarios: " + e.getMessage());
-            e.printStackTrace(); // Esto te dirá exactamente qué línea falla
-        }
+        // CREATE SAMPLE COMMENTS
+        // Comment of Alex (Admin) about HX416
+        Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
+        commentService.save(c1);
 
+        // Comment of Charlie about G17
+        Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
+        commentService.save(c2);
+
+        // Comment of Pandora about HX416
+        Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
+        commentService.save(c3);
 
     }
 }

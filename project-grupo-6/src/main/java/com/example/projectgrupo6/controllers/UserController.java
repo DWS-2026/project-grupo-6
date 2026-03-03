@@ -1,6 +1,8 @@
 package com.example.projectgrupo6.controllers;
 
+import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +32,15 @@ public class UserController {
         }
 
         @GetMapping ("/logout")
-        public String logout(HttpServletRequest request) {
+        public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.invalidate();
             }
+
+            //logout message
+            redirectAttributes.addFlashAttribute("logoutMessage", "Has cerrado sesión correctamente.");
+
             return "redirect:/";
         }
 
@@ -61,23 +69,12 @@ public class UserController {
         public String profile(HttpSession session, Model model) {
 
             User sessionUser = (User) session.getAttribute("user");
-            
             if (sessionUser == null) {
                 return "redirect:/user/login"; 
             }
 
             User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
-
             model.addAttribute("user", user);
-
-            String initials = "";
-            if (user.getFirstname() != null && !user.getFirstname().isEmpty()) {
-                initials += user.getFirstname().substring(0, 1).toUpperCase();
-            }
-            if (user.getLastname() != null && !user.getLastname().isEmpty()) {
-                initials += user.getLastname().substring(0, 1).toUpperCase();
-            }
-            model.addAttribute("initials", initials);
 
             return "profile";
         }
@@ -120,10 +117,12 @@ public class UserController {
         }
 
         @PostMapping ("/logout")
-        public String logoutSubmit(HttpSession session){
+        public String logoutSubmit(HttpSession session, RedirectAttributes redirectAttributes){
             if (session != null) {
                 session.invalidate();
             }
+
+            redirectAttributes.addFlashAttribute("logoutMessage", "Has cerrado sesión correctamente.");
 
             /*  //With Spring Security (?)
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -155,8 +154,17 @@ public class UserController {
                 return "user-form";
             }
 
+            // Set image
+            if(!image.isEmpty()){
+                try {
+                    user.setProfileImage(new SerialBlob(image.getBytes()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             //Then save:
-            userService.save(user, image);
+            userService.save(user);
 
             //Automathic login
             session.setAttribute("user", user);

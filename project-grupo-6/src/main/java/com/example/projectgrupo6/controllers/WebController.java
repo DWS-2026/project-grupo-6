@@ -10,16 +10,12 @@ import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.ProductService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -39,7 +35,7 @@ public class WebController {
     private CartService cartService;
 
     @GetMapping("/") 
-    public String greeting(Model model,HttpSession session){
+    public String greeting(Model model, @ModelAttribute("logoutMessage") String logoutMessage, HttpSession session){
         
         List<Product> products = productService.getAllProducts();
         
@@ -57,7 +53,7 @@ public class WebController {
         int cartCount = cartService.getCartTotalItems(userId);
         model.addAttribute("cartCount", cartCount);
         } catch (RuntimeException e) {
-        // Usuario no autenticado, no mostrar contador
+        // Not authenticated user, don't show counter
         model.addAttribute("cartCount", 0);
         }
 
