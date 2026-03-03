@@ -84,39 +84,54 @@ public String showCart(HttpSession session, Model model) {
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("total", total);
         model.addAttribute("totalItems", totalItems);
-        return "cart";
+        return "shopping-cart";
     } catch (RuntimeException e) {
-        // Usuario no autenticado → redirigir al login
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 }
 
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
-        Long userId = userService.getCurrentUserId(session);
-        cartService.addProductToCart(userId, productId, quantity);
-        return "redirect:/cart";
+        try {
+            Long userId = userService.getCurrentUserId(session);
+            cartService.addProductToCart(userId, productId, quantity);
+            return "redirect:/cart";
+        } catch (RuntimeException e) {
+            return "redirect:/user/login";
+        }
     }
 
     @PostMapping("/cart/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId, HttpSession session) {
-        Long userId = userService.getCurrentUserId(session);
-        cartService.removeProductFromCart(userId, productId);
-        return "redirect:/cart";
+        try{
+            Long userId = userService.getCurrentUserId(session);
+            cartService.removeProductFromCart(userId, productId);
+            return "redirect:/cart";
+        }catch(RuntimeException e){
+            return "redirect:/user/login";
+        }
     }
 
     @PostMapping("/cart/update/{productId}")
     public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpSession session) {
-        Long userId = userService.getCurrentUserId(session);
-        cartService.updateProductQuantity(userId, productId, quantity);
-        return "redirect:/cart";
+        try{
+            Long userId = userService.getCurrentUserId(session);
+            cartService.updateProductQuantity(userId, productId, quantity);
+            return "redirect:/cart";
+        }catch(RuntimeException e){
+            return "redirect:/user/login";
+        }
+        
     }
 
     @PostMapping("/cart/clear")
     public String clearCart(HttpSession session) {
-        Long userId = userService.getCurrentUserId(session);
-        cartService.clearCart(userId);
-        return "redirect:/cart";
+        try {
+            Long userId = userService.getCurrentUserId(session);
+            cartService.clearCart(userId);
+            return "redirect:/cart";
+        } catch (RuntimeException e) {
+            return "redirect:/user/login";
+        }
     }
-    
 }

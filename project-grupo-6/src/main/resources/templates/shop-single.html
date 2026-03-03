@@ -52,13 +52,12 @@
                                 </li>
                             </ul>
                             
-                            <form action="/cart/add" method="POST">
+                            <form action="/add-to-cart" method="POST">
                                 <input type="hidden" name="productId" value="{{product.id}}">
-                                <div class="row pb-3">
-                                    <div class="col d-grid">
-                                        <button type="submit" class="btn btn-success btn-lg">Buy Now</button>
-                                    </div>
-                                </div>
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-success btn-lg w-100">
+                                    Buy Now
+                                </button>
                             </form>
                         </div>
                     </div>
