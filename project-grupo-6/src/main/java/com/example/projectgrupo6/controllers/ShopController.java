@@ -68,25 +68,27 @@ public class ShopController {
         return "redirect:/cart";
     }
     
-    @GetMapping("/shop-single/{id}")
-    public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
-        
-        Optional<Product> productOpt = productService.getById(id);
-        if (!productOpt.isPresent()) {
-            model.addAttribute("product", productOpt.get());
-             try {
-                Long userId = getCurrentUserId(session);
-                int cartCount = cartService.getCartTotalItems(userId);
-                model.addAttribute("cartCount", cartCount);
-            } catch (RuntimeException e) {
-                model.addAttribute("cartCount", 0);
-            }
-            return "shop-single";
-        } else {
-            return "redirect:/shop";
+   @GetMapping("/shop-single/{id}")
+public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
+
+    Optional<Product> productOpt = productService.getById(id);
+
+    if (productOpt.isPresent()) {
+        model.addAttribute("product", productOpt.get());
+
+        try {
+            Long userId = getCurrentUserId(session);
+            int cartCount = cartService.getCartTotalItems(userId);
+            model.addAttribute("cartCount", cartCount);
+        } catch (RuntimeException e) {
+            model.addAttribute("cartCount", 0);
         }
-  
+
+        return "shop-single";  
+    } else {
+        return "redirect:/shop";
     }
+}
     @PostMapping("/add-to-cart")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
@@ -94,11 +96,12 @@ public class ShopController {
         try {
             Long userId = getCurrentUserId(session);
             cartService.addProductToCart(userId, productId, quantity);
-            redirectAttributes.addFlashAttribute("successMessage", "Producto añadido al carrito.");
+            redirectAttributes.addFlashAttribute("successMessage", 
+            "Product added successfully to cart.");        
         } catch (RuntimeException e) {
             // Si el usuario no está autenticado, redirigir al login
             if (e.getMessage().equals("Usuario no autenticado")) {
-                return "redirect:/login";
+                return "redirect:/user/login";
             }
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
