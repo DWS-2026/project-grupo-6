@@ -12,6 +12,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -28,19 +29,21 @@ public class ImageService {
         }
 
         imageRepository.save(image);
-
         return image;
     }
 
     public Resource getImageFile(long id) throws SQLException {
-        Image image = imageRepository.findById(id).orElseThrow();
+        Optional<Image> image = imageRepository.findById(id);
 
-        if (image.getImageFile() != null) {
-            return new InputStreamResource(image.getImageFile().getBinaryStream());
+        if (image.isPresent()) {
+            return new InputStreamResource(image.get().getImageFile().getBinaryStream());
         } else {
             throw new RuntimeException("Image file not found");
+            //return new ClassPathResource("static/images/default-profile.png");
         }
     }
+
+
     public Blob loadImage(String fileName) {
     try {
         // Route starts directly from what's inside 'resources'
@@ -51,9 +54,9 @@ public class ImageService {
         } else {
             System.err.println("⚠️ No se encontró el archivo en el classpath: static/css/img/" + fileName);
         }
-    } catch (Exception e) {
-        System.err.println("❌ Error procesando " + fileName + ": " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("❌ Error procesando " + fileName + ": " + e.getMessage());
+        }
+        return null; //If it fails, it won't have image
     }
-    return null; //If it fails, it won't have image
-}
 }

@@ -7,6 +7,11 @@ import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ImageService imageService;
 
         //
         @GetMapping("/login")
@@ -77,6 +87,26 @@ public class UserController {
             model.addAttribute("user", user);
 
             return "profile";
+        }
+
+        @GetMapping("/{id}/image")
+        public ResponseEntity<Object> getImageFile(@PathVariable long id) throws SQLException {
+            Optional<User> op_user = userService.findById(id);
+            if(op_user.isPresent() && op_user.get().getProfileImage() != null) {
+                Blob image = op_user.get().getProfileImage();
+                Resource imageFile = new InputStreamResource(image.getBinaryStream());
+
+                MediaType mediaType = MediaTypeFactory
+                        .getMediaType(imageFile)
+                        .orElse(MediaType.IMAGE_JPEG);
+
+                return ResponseEntity
+                        .ok()
+                        .contentType(mediaType)
+                        .body(imageFile);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         }
 
         @GetMapping("/list")
@@ -157,7 +187,8 @@ public class UserController {
             // Set image
             if(!image.isEmpty()){
                 try {
-                    user.setProfileImage(new SerialBlob(image.getBytes()));
+                    Image saved = imageService.createImage(image);
+                    user.setProfileImage(new SerialBlob(saved.getImageFile()));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -199,7 +230,7 @@ public class UserController {
         public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
             //Add logic
             userService.delete(user);
-            redirectAttributes.addFlashAttribute("success", "Logged out successfully");
+            redirectAttributes.addFlashAttribute("success", "User deleted successfully");
             return "redirect:/";
         }
 
