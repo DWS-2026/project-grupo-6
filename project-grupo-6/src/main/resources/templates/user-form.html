@@ -27,28 +27,50 @@
             <div class="col-md-6">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h3 class="text-center mb-4">Create Account</h3>
 
-                        <!--form action="#" method="POST" enctype="multipart/form-data"-->
-                        <form action="/user/new" method="post" enctype="multipart/form-data">
+                        {{#edit}} <h3 class="text-center mb-4">Edit Account</h3> {{/edit}}
+                        {{^edit}} <h3 class="text-center mb-4">Create Account</h3> {{/edit}}
+
+                        <form method="post" enctype="multipart/form-data"
+                              action="{{#edit}}/user/update{{/edit}}{{^edit}}/user/new{{/edit}}">
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
-                                <input type="text" class="form-control" name="firstname" required>
+                                {{#edit}}
+                                    <input type="text" class="form-control" value="{{user.firstname}}" name="firstname" required>
+                                {{/edit}}
+                                {{^edit}}
+                                    <input type="text" class="form-control" name="firstname" required>
+                                {{/edit}}
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Last Name</label>
-                                <input type="text" class="form-control" name="lastname" required>
+                                {{#edit}}
+                                    <input type="text" class="form-control" value="{{user.lastname}}" name="lastname" required>
+                                {{/edit}}
+                                {{^edit}}
+                                    <input type="text" class="form-control" name="lastname" required>
+                                {{/edit}}
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
-                                <input type="email" class="form-control" name="email" required>
+                                {{#edit}}
+                                    <input type="email" class="form-control" value="{{user.email}}" name="email" required>
+                                {{/edit}}
+                                {{^edit}}
+                                    <input type="email" class="form-control" name="email" required>
+                                {{/edit}}
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Username</label>
-                                <input type="text" class="form-control" name="username" required>
+                                {{#edit}}
+                                    <input type="text" class="form-control" value="{{user.username}}" name="username" required>
+                                {{/edit}}
+                                {{^edit}}
+                                    <input type="text" class="form-control" name="username" required>
+                                {{/edit}}
                             </div>
 
                             <div class="mb-3">
@@ -70,9 +92,16 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-success btn-lg" value="Save">
-                                    Create Account
-                                </button>
+                                {{#edit}}
+                                    <button type="submit" class="btn btn-success btn-lg" value="Save">
+                                        Edit Account
+                                    </button>
+                                {{/edit}}
+                                {{^edit}}
+                                    <button type="submit" class="btn btn-success btn-lg" value="Save">
+                                        Create Account
+                                    </button>
+                                {{/edit}}
                             </div>
 
                             <div class="d-grid mt-3">

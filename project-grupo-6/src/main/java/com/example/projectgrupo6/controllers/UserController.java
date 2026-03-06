@@ -57,20 +57,26 @@ public class UserController {
         @GetMapping ("/new")
         public String register (Model model){
             model.addAttribute("user", new User());
+            //model.addAttribute("formAction", "/user/new");
+            model.addAttribute("edit", false);
+
             return "user-form";
         }
 
-        @GetMapping("/update/{id}")
-        public String update (@PathVariable Long id, Model model, HttpSession session){
+        @GetMapping("/update")
+        public String update (Model model, HttpSession session){
             User sessionUser = (User) session.getAttribute("user");
 
             //Check session
-            if(!userService.validateSession(sessionUser, id)){
-                return "redirect: /";
+            if(!userService.validateSession(sessionUser, sessionUser.getId())){
+                return "redirect:/";
                 //Redirect to error
             }
 
+            //model.addAttribute("formAction", "/user/update/" + id);
+            model.addAttribute("edit", true);
             model.addAttribute("user", sessionUser);
+
             //Possible change: only show non-sensitive attributes
             return "user-form";
         }
@@ -114,12 +120,12 @@ public class UserController {
             //If admin: show list, otherwise redirect to profile
             User sessionUser = (User) session.getAttribute("user");
             if(!userService.checkIfAdmin(sessionUser)){
-                return "redirect: /user/profile/{id}";
+                return "redirect:/user/profile/{id}";
             }
 
             List<User> userList = userService.getAllUsers();
             if(userList.isEmpty()){
-                return "redirect: /";
+                return "redirect:/";
                 //Add redirection to error or message of empty
             }
 
@@ -203,13 +209,13 @@ public class UserController {
             return "profile";
         }
 
-        @PostMapping("/update/{id}")
-        public String updateSubmit (@PathVariable Long id, @ModelAttribute User formUser, HttpSession session, RedirectAttributes redirectAttributes){
+        @PostMapping("/update")
+        public String updateSubmit (@ModelAttribute User formUser, HttpSession session, RedirectAttributes redirectAttributes){
             User sessionUser = (User) session.getAttribute("user");
 
             //Check session
-            if(!userService.validateSession(sessionUser, id)){
-                return "redirect: /";
+            if(!userService.validateSession(sessionUser, sessionUser.getId())){
+                return "redirect:/";
                 //Redirect to error
             }
 
