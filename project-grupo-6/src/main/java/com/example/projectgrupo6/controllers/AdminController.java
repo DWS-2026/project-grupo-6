@@ -1,6 +1,7 @@
 package com.example.projectgrupo6.controllers;
 
 import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.CommentService;
@@ -66,8 +67,8 @@ public class AdminController {
         return "admin-user-page";
     }
 
-    @GetMapping("/users")
-    public String listUsers(HttpSession session, Model model) {
+    @GetMapping("/products")
+    public String listProducts(HttpSession session, Model model) {
         
         User sessionUser = (User) session.getAttribute("user");
 
@@ -81,9 +82,9 @@ public class AdminController {
 
         model.addAttribute("isAdmin", true);
 
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "admin-user-page";
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+        return "admin-product-page";
     }
 
 
