@@ -85,7 +85,7 @@
                     {{^cartItems}}
                     <div class="text-center py-4">
                         <h5>Your cart is empty</h5>
-                        <a href="/products" class="btn btn-primary mt-3">
+                        <a href="/shop" class="btn btn-primary mt-3">
                             Continue shopping
                         </a>
                     </div>
@@ -119,13 +119,12 @@
                         <span>{{total}} €</span>
                     </div>
 
-                    {{#cartItems}}
                     <form action="/cart/checkout" method="post">
                         <button class="btn btn-success w-100 mt-3">
                             Complete purchase
                         </button>
                     </form>
-                    {{/cartItems}}
+
 
                 </div>
             </div>

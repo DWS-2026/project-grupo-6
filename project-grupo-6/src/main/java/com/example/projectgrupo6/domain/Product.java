@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Product {
@@ -41,6 +42,9 @@ public class Product {
     private int reviewCount; 
     private int stock;
 
+    @Column(length = 2000)
+    private String specification; 
+
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Comment> comments;
 
@@ -49,7 +53,7 @@ public class Product {
     // Constructors
     public Product() {}
 
-    public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock, List<Comment> comments) {
+    public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock, List<Comment> comments, String specification) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -61,6 +65,7 @@ public class Product {
         this.reviewCount = reviewCount;
         this.stock = stock;
         this.comments = comments;
+        this.specification = specification;
     }
 
     public Long getId() {
@@ -169,6 +174,18 @@ public class Product {
 
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
+    }
+    @Transient
+    public String getImageUrl(){
+        return images.isEmpty() ? "/img/default.png" : images.get(0);
+    }
+
+    public String getSpecification() {
+    return specification;
+}
+
+    public void setSpecification(String specification) {
+        this.specification = specification;
     }
 
 }

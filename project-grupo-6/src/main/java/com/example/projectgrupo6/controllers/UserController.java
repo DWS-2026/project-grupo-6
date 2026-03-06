@@ -91,6 +91,9 @@ public class UserController {
 
             User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
             model.addAttribute("user", user);
+            if(userService.checkIfAdmin(sessionUser)){
+                model.addAttribute("isAdmin", true);
+            }
 
             return "profile";
         }
