@@ -17,7 +17,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/user/{id}/image")
+    @GetMapping("/{id}/image")
     public ResponseEntity<Object> getImageFile(@PathVariable long id) throws SQLException {
 
         Resource imageFile = imageService.getImageFile(id);
