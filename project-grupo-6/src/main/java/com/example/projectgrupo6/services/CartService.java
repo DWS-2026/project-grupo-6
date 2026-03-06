@@ -128,8 +128,10 @@ public class CartService {
     }
 
     
+    @Transactional(readOnly = true)
     public List<CartItem> getCartItems(Long userId) {
         Cart cart = getOrCreateCartForUser(userId);
+        cart.getItems().size();    
         return cart.getItems();
     }
 }
