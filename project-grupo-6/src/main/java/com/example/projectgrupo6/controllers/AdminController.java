@@ -47,5 +47,45 @@ public class AdminController {
     @Autowired
     private CommentService commentService;
 
+    @GetMapping("/users")
+    public String listUsers(HttpSession session, Model model) {
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        model.addAttribute("isAdmin", true);
+
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "admin-user-page";
+    }
+
+    @GetMapping("/users")
+    public String listUsers(HttpSession session, Model model) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        model.addAttribute("isAdmin", true);
+
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "admin-user-page";
+    }
+
+
 
 }
