@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 @Entity
 public class Product {
@@ -169,6 +170,10 @@ public class Product {
 
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
+    }
+    @Transient
+    public String getImageUrl(){
+        return images.isEmpty() ? "/img/default.png" : images.get(0);
     }
 
 }
