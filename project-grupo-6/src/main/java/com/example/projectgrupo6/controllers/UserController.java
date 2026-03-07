@@ -148,7 +148,7 @@ public class UserController {
 
             if (userDb != null && userService.logincheck(userDb, password)) {
                 session.setAttribute("user", userDb);
-                return "redirect:/"; 
+                return "redirect:/user/profile"; 
             } else {
                 model.addAttribute("error", "Email o contraseña incorrectos");
                 return "login";

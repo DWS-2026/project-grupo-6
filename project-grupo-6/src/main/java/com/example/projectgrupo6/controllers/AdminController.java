@@ -67,6 +67,31 @@ public class AdminController {
         return "admin-user-page";
     }
 
+    @GetMapping("/users/edit/{id}")
+    public String editUser(@PathVariable Long id, HttpSession session, Model model) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        model.addAttribute("isAdmin", true);
+
+        Optional<User> userOptional = userService.getById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "admin-user-edit";
+        } else {
+            return "redirect:/admin/users";
+        }
+    }
+
     @GetMapping("/products")
     public String listProducts(HttpSession session, Model model) {
         

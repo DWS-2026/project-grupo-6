@@ -29,59 +29,7 @@
 
     <section class="container py-5">
         <div class="row">
-            <aside class="col-12 col-md-4 mb-4">
-                <div class="card mb-4 mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Account</h5>
-                        <div class="list-group list-group-flush">
-                            <a href="/user/profile" class="list-group-item list-group-item-action d-flex align-items-center">
-                                <i class="fas fa-user me-3"></i>
-                                <span>Profile</span>
-                            </a>
-                            <a href="/user/orders" class="list-group-item list-group-item-action d-flex align-items-center">
-                                <i class="fas fa-history me-3 "></i>
-                                <span>Purchase History</span>
-                            </a>
-                            <a href="/user/update" class="list-group-item list-group-item-action d-flex align-items-center">
-                                <i class="fas fa-user-cog me-3"></i>
-                                <span>Change Data</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {{#isAdmin}}
-                <div class="card mb-4 mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title text-danger">Admin Panel</h5>
-                        <div class="list-group list-group-flush">
-                            <a href="/admin/users" class="list-group-item list-group-item-action d-flex align-items-center">
-                                <i class="fas fa-users me-3 text-danger"></i>
-                                <span>Users List</span>
-                            </a>
-                            <a href="/admin/products" class="list-group-item list-group-item-action d-flex align-items-center">
-                                <i class="fas fa-box-open me-3 text-danger"></i>
-                                <span>Products Management</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                {{/isAdmin}}
-
-                <div class="col d-grid">
-                    <form action="/user/delete" method="post">
-                        <button type="submit" class="btn btn-outline-danger btn-lg">
-                            Delete profile
-                        </button>
-                    </form>
-                </div>
-
-                <div class="col d-grid mt-3">
-                    <a href="/user/logout" class="btn btn-outline-danger btn-lg">
-                        Log out
-                    </a>
-                </div>
-            </aside>
+            {{>sidebar}}
 
             <main class="col-12 col-md-8">
                 <div class="card">
