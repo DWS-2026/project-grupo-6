@@ -35,7 +35,7 @@ public class WebController {
     private CartService cartService;
 
     @GetMapping("/") 
-    public String greeting(Model model, @ModelAttribute("logoutMessage") String logoutMessage, HttpSession session){
+    public String greeting(Model model, HttpSession session){
         
         List<Product> products = productService.getAllProducts();
         

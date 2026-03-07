@@ -35,7 +35,6 @@ public class UserController {
     @Autowired
     private ImageService imageService;
 
-        //
         @GetMapping("/login")
         public String showlogin(Model model){
             return "login";
@@ -99,26 +98,6 @@ public class UserController {
                 return ResponseEntity.badRequest().build();
             }
         }
-
-        @GetMapping("/list")
-        public String userList (HttpSession session, Model model){
-            //If admin: show list, otherwise redirect to profile
-            User sessionUser = (User) session.getAttribute("user");
-            if(!userService.checkIfAdmin(sessionUser)){
-                return "redirect:/user/profile/{id}";
-            }
-
-            List<User> userList = userService.getAllUsers();
-            if(userList.isEmpty()){
-                return "redirect:/";
-                //Add redirection to error or message of empty
-            }
-
-            model.addAttribute("users", userList);
-            return "admin-user-page";
-        }
-
-
         //POST
         @PostMapping("/login")
         public String processLogin(@RequestParam String email, 
