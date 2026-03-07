@@ -1,7 +1,13 @@
-<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Products Management - Crossfire Shop</title>
+    </head>
+
+<body class="d-flex flex-column min-vh-100">
     {{>header}}
 
-    <section class="container py-5">
+    <section class="container py-5 flex-grow-1">
         <div class="row">
             {{>sidebar}}
 
@@ -29,12 +35,10 @@
 
                                 <div class="col-md-3">
                                     <div class="card-body d-flex flex-column gap-2">
-                                        <a href="/product/{{id}}" class="btn btn-outline-success btn-sm">
-                                            <i class="far fa-eye"></i> View
-                                        </a>
                                         <a href="/product/edit/{{id}}" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-edit"></i> Edit
+                                            <i class="fas fa-edit"></i> Manage
                                         </a>
+                                        
                                         <form action="/product/delete/{{id}}" method="post" onsubmit="return confirm('Delete this product?');">
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash"></i> Delete
@@ -49,21 +53,23 @@
                     
                     {{^products}}
                     <div class="col-12 text-center py-5">
-                        <p class="text-muted">No products found. Start by creating one!</p>
+                        <div class="alert alert-light border">
+                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                            <p class="text-muted mb-0">No products found. Start by creating one!</p>
+                        </div>
                     </div>
                     {{/products}}
                 </div>
 
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-end mb-3 mt-3">
                     <a href="/product/add" class="btn btn-success">
-                        <i class="fas fa-plus me-1"></i> Create product
+                        <i class="fas fa-plus me-2"></i> Create product
                     </a>
                 </div>
             </main>
         </div>
-        
     </section>
 
-{{>footer}}    
+    {{>footer}}    
 </body>
 </html>

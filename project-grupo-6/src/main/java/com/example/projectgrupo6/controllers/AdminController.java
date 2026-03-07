@@ -64,7 +64,7 @@ public class AdminController {
 
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "admin-user-page";
+        return "admin-user-list";
     }
 
     @GetMapping("/users/edit/{id}")
@@ -91,6 +91,74 @@ public class AdminController {
             return "redirect:/admin/users";
         }
     }
+    @PostMapping("/users/edit/{id}")
+    public String editUserPost(
+        @PathVariable Long id, 
+        @RequestParam String firstname,
+        @RequestParam String lastname,
+        @RequestParam String email,
+        @RequestParam String username,
+        @RequestParam String rol,
+        HttpSession session,
+        RedirectAttributes redirectAttributes) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        Optional<User> userOptional = userService.getById(id);
+        
+        if (userOptional.isPresent()) {
+            User userToUpdate = userOptional.get();
+            
+            userToUpdate.setFirstname(firstname);
+            userToUpdate.setLastname(lastname);
+            userToUpdate.setEmail(email);
+            userToUpdate.setUsername(username);
+            userToUpdate.setRol(rol);
+
+            userService.save(userToUpdate);
+            
+            
+            redirectAttributes.addFlashAttribute("successMessage", "User profile updated successfully!");
+
+            return "redirect:/admin/users/edit/{id}";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cannot be updated.");
+            return "redirect:/admin/users/edit/{id}";
+        }
+    }
+
+    @GetMapping("/users/view/{id}")
+    public String viewUser(@PathVariable Long id, HttpSession session, Model model) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        model.addAttribute("isAdmin", true);
+
+        Optional<User> userOptional = userService.getById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "admin-user-view";
+        } else {
+            return "redirect:/admin/users";
+        }
+    }
 
     @GetMapping("/products")
     public String listProducts(HttpSession session, Model model) {
@@ -109,7 +177,7 @@ public class AdminController {
 
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-        return "admin-product-page";
+        return "admin-product-list";
     }
 
 

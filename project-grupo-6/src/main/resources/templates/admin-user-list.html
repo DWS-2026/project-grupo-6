@@ -63,13 +63,11 @@
 
                                 <!-- Actions -->
                                 <div class="col-md-3">
-                                    <div class="card-body d-flex flex-column gap-2">
-                                        <a href="/admin/users/{{id}}" class="btn btn-outline-success btn-sm">
-                                            <i class="far fa-eye"></i> View
-                                        </a>
+                                    <div class="card-body d-flex flex-column gap-2">                                      
                                         <a href="/admin/users/edit/{{id}}" class="btn btn-outline-primary btn-sm">
-                                            <i class="fas fa-edit"></i> Edit
+                                            <i class="fas fa-user-cog"></i> Manage
                                         </a>
+                                        
                                         <form action="/admin/users/delete/{{id}}" method="post" onsubmit="return confirm('Delete this user?');">
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash"></i> Delete
