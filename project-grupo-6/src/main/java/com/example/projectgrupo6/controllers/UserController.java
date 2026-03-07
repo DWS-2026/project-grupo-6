@@ -63,24 +63,6 @@ public class UserController {
             return "user-form";
         }
 
-        @GetMapping("/update")
-        public String update (Model model, HttpSession session){
-            User sessionUser = (User) session.getAttribute("user");
-
-            //Check session
-            if(!userService.validateSession(sessionUser, sessionUser.getId())){
-                return "redirect:/";
-                //Redirect to error
-            }
-
-            //model.addAttribute("formAction", "/user/update/" + id);
-            model.addAttribute("edit", true);
-            model.addAttribute("user", sessionUser);
-
-            //Possible change: only show non-sensitive attributes
-            return "user-form";
-        }
-
         @GetMapping("/profile")
         public String profile(HttpSession session, Model model) {
 
@@ -211,28 +193,70 @@ public class UserController {
 
             return "profile";
         }
-
-        @PostMapping("/update")
-        public String updateSubmit (@ModelAttribute User formUser, HttpSession session, RedirectAttributes redirectAttributes){
+        
+        @GetMapping("/update")
+        public String showUserProfile(HttpSession session, Model model) {
+            
             User sessionUser = (User) session.getAttribute("user");
-
-            //Check session
-            if(!userService.validateSession(sessionUser, sessionUser.getId())){
-                return "redirect:/";
-                //Redirect to error
+            
+            if (sessionUser == null) {
+                return "redirect:/user/login";
             }
 
-            /// ////////////////
-            //Clean input first then save
+            Optional<User> freshUser = userService.getById(sessionUser.getId());
+            
+            if (freshUser.isPresent()) {
+                User user = freshUser.get();
+                
+                model.addAttribute("user", user);
+                
+                session.setAttribute("user", user);
+            } else {
+                session.invalidate(); 
+                return "redirect:/user/login";
+            }
 
-            //Update
-            userService.updateDataUser(sessionUser, formUser);
+            model.addAttribute("isAdmin", userService.checkIfAdmin(sessionUser));
 
-            //Save session
-            session.setAttribute("user", sessionUser);
+            return "profile-edit"; 
+        }
 
-            redirectAttributes.addFlashAttribute("success", "Updated data");
-            return "profile";
+        @PostMapping("/update")
+        public String updateUserProfile(
+            @RequestParam String firstname,
+            @RequestParam String lastname,
+            @RequestParam String username,
+            @RequestParam String email,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+            User sessionUser = (User) session.getAttribute("user");
+            
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+
+            Optional<User> userOptional = userService.getById(sessionUser.getId());
+            
+            if (userOptional.isPresent()) {
+                User userToUpdate = userOptional.get();
+                
+                userToUpdate.setFirstname(firstname);
+                userToUpdate.setLastname(lastname);
+                userToUpdate.setUsername(username);
+                userToUpdate.setEmail(email);
+
+                User savedUser = userService.save(userToUpdate);
+
+                // WHEN THE USER IS UPDATED, WE ALSO UPDATE THE SESSION
+                session.setAttribute("user", savedUser);
+
+                redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while updating your profile.");
+            }
+
+            return "redirect:/user/profile";
         }
 
         @PostMapping ("/delete/{id}")

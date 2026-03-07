@@ -32,8 +32,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public void save(User user){
+    public User save(User user){
         userRepository.save(user);
+        return user;
     }
 
     public void save(User user, MultipartFile imageFile) throws IOException {

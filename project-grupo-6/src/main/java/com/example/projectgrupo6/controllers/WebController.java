@@ -75,20 +75,20 @@ public class WebController {
 
 
     @GetMapping("/cart")
-public String showCart(HttpSession session, Model model) {
-    try {
-        Long userId = userService.getCurrentUserId(session);
-        List<CartItem> cartItems = cartService.getCartItems(userId);
-        double total = cartService.getCartTotal(userId);
-        int totalItems = cartService.getCartTotalItems(userId);
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("total", total);
-        model.addAttribute("totalItems", totalItems);
-        return "shopping-cart";
-    } catch (RuntimeException e) {
-        return "redirect:/user/login";
+    public String showCart(HttpSession session, Model model) {
+        try {
+            Long userId = userService.getCurrentUserId(session);
+            List<CartItem> cartItems = cartService.getCartItems(userId);
+            double total = cartService.getCartTotal(userId);
+            int totalItems = cartService.getCartTotalItems(userId);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("total", total);
+            model.addAttribute("totalItems", totalItems);
+            return "shopping-cart";
+        } catch (RuntimeException e) {
+            return "redirect:/user/login";
+        }
     }
-}
 
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
