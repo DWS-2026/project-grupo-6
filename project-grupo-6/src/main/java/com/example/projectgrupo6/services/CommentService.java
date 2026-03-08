@@ -1,6 +1,10 @@
 package com.example.projectgrupo6.services;
 
+import java.lang.foreign.Linker.Option;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.example.projectgrupo6.repositories.UserRepository;
@@ -60,8 +64,78 @@ public class CommentService {
         }
     }
 
+    @Transactional
+    public void editComment(Long commentId, Long userId, String newContent){
+        Optional<Comment> commentOpt = repository.findById(commentId);
+        Optional<User> userOpt = userRepository.findById(userId);
+
+        if (commentOpt.isPresent() && userOpt.isPresent()) {
+            
+            User user = userOpt.get();
+            Comment comment = commentOpt.get();
+
+            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().contains("ROLE_ADMIN"))){
+                comment.setContent(newContent);
+                repository.save(comment);
+            }
+        }
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId, Long userId){
+        Optional<Comment> commentOpt = repository.findById(commentId);
+        Optional<User> userOpt = userRepository.findById(userId);
+
+        if (commentOpt.isPresent() && userOpt.isPresent()) {
+            
+            User user = userOpt.get();
+            Comment comment = commentOpt.get();
+
+            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().contains("ROLE_ADMIN"))){
+                if (comment.getProduct() != null) {
+                    comment.getProduct().removeComment(comment);
+                    comment.getProduct().setReviewCount(Math.max(0, comment.getProduct().getReviewCount() - 1));
+                }
+                repository.delete(comment);
+            }
+        }
+    }
+
+    public List<Map<String, Object>> getCommentsForProductView(Long productId, Long loggedInUserId) {
+        
+        List<Comment> comments = repository.findByProductId(productId);
+        
+        List<Map<String, Object>> viewList = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            Map<String, Object> map = new HashMap<>();
+            
+            // Metemos los datos puros del comentario
+            map.put("id", comment.getId());
+            map.put("content", comment.getContent());
+            map.put("productId", productId);
+            
+            if (comment.getOwner() != null) {
+                map.put("ownerName", comment.getOwner().getUsername());
+                
+                boolean isMine = (loggedInUserId != null && comment.getOwner().getId().equals(loggedInUserId));
+                map.put("isMine", isMine);
+            } else {
+                map.put("ownerName", comment.getAuthor());
+                map.put("isMine", false);
+            }
+
+            viewList.add(map);
+        }
+
+        return viewList;
+    }
+
     public List<Comment> findAllByUser (User user){
         return repository.findByOwner(user);
+    }
+    public List<Comment> findAllByProductId (Long productId){
+        return repository.findByProductId(productId);
     }
 
     public void deleteList (List<Comment> comments){

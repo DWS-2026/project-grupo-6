@@ -30,7 +30,7 @@ public class User {
     private List<String> roles;
 
     @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL)
-    private List<Comment> review;
+    private List<Comment> review = new ArrayList<>();
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;

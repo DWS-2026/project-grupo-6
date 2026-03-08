@@ -1,6 +1,9 @@
 package com.example.projectgrupo6.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.example.projectgrupo6.services.ImageService;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.CartItem;
+import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.services.CartService;
+import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +39,9 @@ public class ShopController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private CartService cartService;
@@ -69,26 +77,59 @@ public class ShopController {
     }
     
    @GetMapping("/shop-single/{id}")
-public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
+    public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
 
-    Optional<Product> productOpt = productService.getById(id);
+        Optional<Product> productOpt = productService.getById(id);
 
-    if (productOpt.isPresent()) {
-        model.addAttribute("product", productOpt.get());
+        if (productOpt.isPresent()) {
+            model.addAttribute("product", productOpt.get());
 
-        try {
-            Long userId = getCurrentUserId(session);
-            int cartCount = cartService.getCartTotalItems(userId);
-            model.addAttribute("cartCount", cartCount);
-        } catch (RuntimeException e) {
-            model.addAttribute("cartCount", 0);
+            // 1. Averiguamos quién es el usuario
+            Long loggedInUserId = null;
+            try {
+                loggedInUserId = getCurrentUserId(session);
+                model.addAttribute("cartCount", cartService.getCartTotalItems(loggedInUserId));
+            } catch (RuntimeException e) {
+                model.addAttribute("cartCount", 0);
+            }
+
+            List<Map<String, Object>> commentsView = commentService.getCommentsForProductView(id, loggedInUserId);
+            
+            // 3. Pasamos la lista ya cocinada al modelo
+            model.addAttribute("productComments", commentsView);
+
+            return "shop-single";  
+        } else {
+            return "redirect:/shop";
+        }
+    }
+
+    @PostMapping("/shop-single/{id}/comment")
+    public String addComment(@PathVariable Long id, @RequestParam String content, HttpSession session) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            return "redirect:/user/login";
         }
 
-        return "shop-single";  
-    } else {
-        return "redirect:/shop";
+        commentService.addComment(sessionUser.getId(), id, content);
+        
+        return "redirect:/shop-single/" + id;
     }
-}
+    
+    @PostMapping("/shop-single/{productId}/comment/edit/{commentId}")
+    public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("user");
+
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+        // SECURITY CHECK NEEDED
+        commentService.editComment(commentId, sessionUser.getId(), newContent);
+        return "redirect:/shop-single/" + productId;
+    }
+
     @PostMapping("/add-to-cart")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,

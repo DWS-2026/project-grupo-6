@@ -46,7 +46,7 @@ public class Product {
     private String specification; 
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     //add documentation on .pdf file
 
