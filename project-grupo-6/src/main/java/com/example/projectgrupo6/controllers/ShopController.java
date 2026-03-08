@@ -117,7 +117,7 @@ public class ShopController {
         
         return "redirect:/shop-single/" + id;
     }
-    
+
     @PostMapping("/shop-single/{productId}/comment/edit/{commentId}")
     public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpSession session) {
         User sessionUser = (User) session.getAttribute("user");
@@ -127,6 +127,17 @@ public class ShopController {
         }
         // SECURITY CHECK NEEDED
         commentService.editComment(commentId, sessionUser.getId(), newContent);
+        return "redirect:/shop-single/" + productId;
+    }
+
+    @PostMapping("/shop-single/{productId}/comment/delete/{commentId}")
+    public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("user"); 
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+        // SECURITY CHECK NEEDED
+        commentService.deleteComment(commentId, sessionUser.getId());
         return "redirect:/shop-single/" + productId;
     }
 
