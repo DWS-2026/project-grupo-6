@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.enterprise.inject.Any;
+
 import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,6 @@ public class CommentService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     public void save(Comment comment) {
         repository.save(comment);
@@ -74,7 +75,8 @@ public class CommentService {
             User user = userOpt.get();
             Comment comment = commentOpt.get();
 
-            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().contains("ROLE_ADMIN"))){
+            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().stream()
+                        .anyMatch(r -> r.equalsIgnoreCase("ADMIN")))){
                 comment.setContent(newContent);
                 repository.save(comment);
             }
@@ -91,7 +93,8 @@ public class CommentService {
             User user = userOpt.get();
             Comment comment = commentOpt.get();
 
-            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().contains("ROLE_ADMIN"))){
+            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().stream()
+                        .anyMatch(r -> r.equalsIgnoreCase("ADMIN")))){
                 if (comment.getProduct() != null) {
                     comment.getProduct().removeComment(comment);
                     comment.getProduct().setReviewCount(Math.max(0, comment.getProduct().getReviewCount() - 1));

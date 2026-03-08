@@ -1,5 +1,6 @@
 package com.example.projectgrupo6.controllers;
 
+import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
@@ -180,6 +181,71 @@ public class AdminController {
         return "admin-product-list";
     }
 
+    @GetMapping("/users/{userId}/comments")
+    public String viewUserCommentsAsAdmin(@PathVariable Long userId, Model model, HttpSession session) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        
+        if (sessionUser == null || !userService.checkIfAdmin(sessionUser)) {
+            return "redirect:/user/login"; 
+        }
 
+        model.addAttribute("isAdmin", true);
+        
+        Optional<User> targetUserOpt = userService.findById(userId); 
+        
+        if (targetUserOpt.isPresent()) {
+            User targetUser = targetUserOpt.get();
+            
+            model.addAttribute("targetUser", targetUser); 
+            
+            List<Comment> userComments = commentService.findAllByUser(targetUser.getId());
+            model.addAttribute("comments", userComments);
+            
+            return "admin-comment-list";
+        } else {
+            return "redirect:/admin/users"; 
+        }
+    }
+    @PostMapping("/users/{userId}/comments/{commentId}/edit")
+    public String updateCommentAdmin(@PathVariable Long userId, 
+                                     @PathVariable Long commentId, 
+                                     @RequestParam String newContent, 
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        
+        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
+            try {
+                commentService.editComment(commentId, sessionUser.getId(), newContent);
+                redirectAttributes.addFlashAttribute("successMessage", "Review updated successfully!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error updating the review.");
+            }
+        }
+        
+        return "redirect:/admin/users/" + userId + "/comments";
+    }
+
+    @PostMapping("/users/{userId}/comments/{commentId}/delete")
+    public String deleteCommentAdmin(@PathVariable Long userId, 
+                                     @PathVariable Long commentId, 
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        
+        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
+            try {
+                commentService.deleteComment(commentId, sessionUser.getId());
+                redirectAttributes.addFlashAttribute("successMessage", "Review deleted successfully!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the review.");
+            }
+        }
+        
+        return "redirect:/admin/users/" + userId + "/comments";
+    }
 
 }

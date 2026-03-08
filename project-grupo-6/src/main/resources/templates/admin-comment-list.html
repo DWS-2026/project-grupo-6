@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Manage User Comments - Admin Panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    <style>
+        .admin-edit-card { border: 2px solid #0d6efd; box-shadow: 0 0 15px rgba(13, 110, 253, 0.1); }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    {{>header}}
+
+    <section class="container py-5 flex-grow-1">
+        <div class="row">
+            {{>sidebar}}
+
+            <main class="col-12 col-md-8">
+                
+                {{#successMessage}}
+                    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-check-circle fa-2x me-3"></i>
+                        <div>
+                            <strong>Success!</strong> {{successMessage}}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/successMessage}}
+
+                {{#errorMessage}}
+                    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                        <div>
+                            <strong>Error!</strong> {{errorMessage}}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/errorMessage}}
+
+                <div class="alert alert-primary d-flex align-items-center mb-4" role="alert">
+                    <i class="fas fa-tools fa-2x me-3"></i>
+                    <div>
+                        <h5 class="alert-heading mb-0">Admin Mode</h5>
+                        <span>You are viewing the reviews of <strong>{{targetUser.username}}</strong>. Any changes made and saved will be applied directly to their account.</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <img src="/user/{{targetUser.id}}/image" 
+                         class="rounded-circle shadow-sm me-3 border border-primary p-1" 
+                         style="width: 80px; height: 80px; object-fit: cover;" 
+                         alt="{{targetUser.username}}">
+                    <div>
+                        <h3 class="text-primary mb-1">
+                            <i class="fas fa-comments me-2"></i>{{targetUser.username}}'s Reviews
+                        </h3>
+                        <p class="text-muted mb-0">{{targetUser.email}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {{#comments}}
+                    <div class="col-12">
+                        <div class="card mb-3 rounded-0 admin-edit-card">
+                            <div class="row g-0 align-items-center">
+                                
+                                <div class="col-md-3 text-center p-3">
+                                    <a href="/shop-single/{{product.id}}">
+                                        <img src="{{product.mainImage}}" 
+                                             class="img-fluid rounded" 
+                                             alt="{{product.name}}"
+                                             onerror="this.src='/css/img/default-product.png'">
+                                    </a>
+                                </div>
+
+                                <div class="col-md-6 p-3">
+                                    <h6 class="card-title mb-2">
+                                        <a href="/shop-single/{{product.id}}" class="text-decoration-none text-success fw-bold">{{product.name}}</a>
+                                    </h6>
+                                    
+                                    <form action="/admin/users/{{targetUser.id}}/comments/{{id}}/edit" method="POST" id="update-form-{{id}}">
+                                        <textarea name="newContent" class="form-control border-primary" rows="3" required>{{content}}</textarea>
+                                    </form>
+                                    <small class="text-muted mt-1 d-block">Edit the user's text and click Update.</small>
+                                </div>
+
+                                <div class="col-md-3 p-3">
+                                    <div class="d-flex flex-column gap-2">
+                                        <button type="submit" form="update-form-{{id}}" class="btn btn-primary btn-sm w-100">
+                                            <i class="fas fa-save me-1"></i> Update
+                                        </button>
+                                        
+                                        <form action="/admin/users/{{targetUser.id}}/comments/{{id}}/delete" method="POST" class="w-100">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                                <i class="fas fa-trash me-1"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {{/comments}}
+                    
+                    {{^comments}}
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-light border border-primary">
+                            <i class="fas fa-comment-slash fa-3x text-primary mb-3"></i>
+                            <p class="text-muted mb-0"><strong>{{targetUser.username}}</strong> hasn't written any reviews yet.</p>
+                        </div>
+                    </div>
+                    {{/comments}}
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/admin/users" class="btn btn-success">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Users
+                    </a>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    {{>footer}}    
+</body>
+</html>
