@@ -134,6 +134,17 @@ public class CommentService {
     public List<Comment> findAllByUser (User user){
         return repository.findByOwner(user);
     }
+
+    public List <Comment> findAllByUser (Long userId){
+        Optional<User> userOpt = userRepository.findById(userId);
+        
+        if (userOpt.isPresent()) {
+            return repository.findByOwner(userOpt.get());
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     public List<Comment> findAllByProductId (Long productId){
         return repository.findByProductId(productId);
     }

@@ -77,13 +77,13 @@
             <div class="row">
                 <div class="col-12">
                     {{#productComments}}
-                        <div class="card mb-3 {{#isMine}}border-primary bg-light{{/isMine}}{{^isMine}}border{{/isMine}}">
+                        <div class="card mb-3 {{#isMine}}border-secondary bg-light{{/isMine}}{{^isMine}}border{{/isMine}}">
                             <div class="card-body d-flex align-items-start">
-                                <i class="fa fa-user-circle fa-2x {{#isMine}}text-primary{{/isMine}}{{^isMine}}text-success{{/isMine}} me-3 mt-1"></i>
+                                <i class="fa fa-user-circle fa-2x {{#isMine}}text-secondary{{/isMine}}{{^isMine}}text-success{{/isMine}} me-3 mt-1"></i>
                                 
                                 <div class="w-100">
                                     <strong>{{ownerName}}</strong> 
-                                    {{#isMine}}<span class="badge bg-primary ms-2">You</span>{{/isMine}}
+                                    {{#isMine}}<span class="badge bg-secondary ms-2">You</span>{{/isMine}}
                                     
                                     {{^isMine}}
                                         <p class="mb-0 mt-2">{{content}}</p>
@@ -100,7 +100,7 @@
                                         </form>
 
                                         <div class="d-flex gap-2">
-                                            <button type="submit" form="update-form-{{id}}" class="btn btn-sm btn-primary">
+                                            <button type="submit" form="update-form-{{id}}" class="btn btn-sm btn-secondary">
                                                 <i class="fas fa-save"></i> Update
                                             </button>
                                             <button type="submit" form="delete-form-{{id}}" class="btn btn-sm btn-outline-danger">

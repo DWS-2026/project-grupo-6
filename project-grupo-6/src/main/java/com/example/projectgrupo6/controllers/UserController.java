@@ -1,7 +1,9 @@
 package com.example.projectgrupo6.controllers;
 
+import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -34,6 +37,9 @@ public class UserController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private CommentService commentService;
 
         @GetMapping("/login")
         public String showlogin(Model model){
@@ -98,7 +104,7 @@ public class UserController {
                 return ResponseEntity.badRequest().build();
             }
         }
-        //POST
+        
         @PostMapping("/login")
         public String processLogin(@RequestParam String email, 
                                 @RequestParam String password, 
@@ -171,6 +177,52 @@ public class UserController {
             session.setAttribute("user", user);
 
             return "profile";
+        }
+
+        @GetMapping("/comments")
+        public String showUserComments(Model model, HttpSession session) {
+            User sessionUser = (User) session.getAttribute("user");
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+
+            if(userService.checkIfAdmin(sessionUser) == true){
+            model.addAttribute("isAdmin", true);
+            }
+
+            List <Comment> userComments = commentService.findAllByUser(sessionUser.getId());
+            model.addAttribute("comments", userComments);
+
+            return "profile-comments";
+        }
+
+        @PostMapping("/comments/update/{commentId}")
+        public String updateCommentFromProfile(@PathVariable Long commentId, 
+                                            @RequestParam String newContent, 
+                                            HttpSession session) {
+            
+            User sessionUser = (User) session.getAttribute("user");
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+
+            commentService.editComment(commentId, sessionUser.getId(), newContent);
+
+            return "redirect:/user/comments"; 
+        }
+
+        @PostMapping("/comments/delete/{commentId}")
+        public String deleteCommentFromProfile(@PathVariable Long commentId, 
+                                            HttpSession session) {
+            
+            User sessionUser = (User) session.getAttribute("user");
+            if (sessionUser == null) {
+                return "redirect:/user/login";
+            }
+
+            commentService.deleteComment(commentId, sessionUser.getId());
+
+            return "redirect:/user/comments";
         }
         
         @GetMapping("/update")
