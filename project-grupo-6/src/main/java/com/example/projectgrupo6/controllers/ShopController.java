@@ -32,13 +32,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ShopController {
-    //add HttpObject for sessions
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private CommentService commentService;
@@ -46,56 +42,34 @@ public class ShopController {
     @Autowired
     private CartService cartService;
 
+
     private Long getCurrentUserId(HttpSession session) {
-         User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             throw new RuntimeException("Usuario no autenticado");
         }
-        return (long) user.getId();
+        return user.getId();
     }
 
-
     @GetMapping("/shop") 
-    public String showshop(Model model,HttpSession session){
-        
+    public String showshop(Model model) {
         List<Product> products = productService.getAllProducts();
-        
         model.addAttribute("products", products);
-        try {
-            Long userId = getCurrentUserId(session);
-            int cartCount = cartService.getCartTotalItems(userId);
-            model.addAttribute("cartCount", cartCount);
-        } catch (RuntimeException e) {
-            model.addAttribute("cartCount", 0);
-        }
         return "shop";
     }
     
-    @GetMapping("/shopping-cart")
-    public String redirectToCart(){
-        return "redirect:/cart";
-    }
     
-   @GetMapping("/shop-single/{id}")
+    @GetMapping("/shop/{id}")
     public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
-
         Optional<Product> productOpt = productService.getById(id);
 
         if (productOpt.isPresent()) {
             model.addAttribute("product", productOpt.get());
 
-            // 1. Averiguamos quién es el usuario
-            Long loggedInUserId = null;
-            try {
-                loggedInUserId = getCurrentUserId(session);
-                model.addAttribute("cartCount", cartService.getCartTotalItems(loggedInUserId));
-            } catch (RuntimeException e) {
-                model.addAttribute("cartCount", 0);
-            }
+            User sessionUser = (User) session.getAttribute("user");
+            Long userId = (sessionUser != null) ? sessionUser.getId() : null;
 
-            List<Map<String, Object>> commentsView = commentService.getCommentsForProductView(id, loggedInUserId);
-            
-            // 3. Pasamos la lista ya cocinada al modelo
+            List<Map<String, Object>> commentsView = commentService.getCommentsForProductView(id, userId);
             model.addAttribute("productComments", commentsView);
 
             return "shop-single";  
@@ -106,64 +80,56 @@ public class ShopController {
 
     @PostMapping("/shop-single/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam String content, HttpSession session) {
-        
-        User sessionUser = (User) session.getAttribute("user");
-
-        if (sessionUser == null) {
+        try {
+            Long userId = getCurrentUserId(session);
+            commentService.addComment(userId, id, content);
+            return "redirect:/shop-single/" + id;
+        } catch (RuntimeException e) {
             return "redirect:/user/login";
         }
-
-        commentService.addComment(sessionUser.getId(), id, content);
-        
-        return "redirect:/shop-single/" + id;
     }
 
     @PostMapping("/shop-single/{productId}/comment/edit/{commentId}")
     public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("user");
-
-        if (sessionUser == null) {
+        try {
+            Long userId = getCurrentUserId(session);
+            commentService.editComment(commentId, userId, newContent);
+            return "redirect:/shop-single/" + productId;
+        } catch (RuntimeException e) {
             return "redirect:/user/login";
         }
-        // SECURITY CHECK NEEDED
-        commentService.editComment(commentId, sessionUser.getId(), newContent);
-        return "redirect:/shop-single/" + productId;
     }
 
     @PostMapping("/shop-single/{productId}/comment/delete/{commentId}")
     public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("user"); 
-        if (sessionUser == null) {
+        try {
+            Long userId = getCurrentUserId(session);
+            commentService.deleteComment(commentId, userId);
+            return "redirect:/shop-single/" + productId;
+        } catch (RuntimeException e) {
             return "redirect:/user/login";
         }
-        // SECURITY CHECK NEEDED
-        commentService.deleteComment(commentId, sessionUser.getId());
-        return "redirect:/shop-single/" + productId;
     }
 
     @PostMapping("/add-to-cart")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
-                            RedirectAttributes redirectAttributes,HttpSession session) {
+                            RedirectAttributes redirectAttributes, 
+                            HttpSession session) {
         try {
             Long userId = getCurrentUserId(session);
             cartService.addProductToCart(userId, productId, quantity);
-            redirectAttributes.addFlashAttribute("successMessage", 
-            "Product added successfully to cart.");        
+            redirectAttributes.addFlashAttribute("successMessage", "Product added successfully to cart.");        
         } catch (RuntimeException e) {
-            // Si el usuario no está autenticado, redirigir al login
             if (e.getMessage().equals("Usuario no autenticado")) {
                 return "redirect:/user/login";
             }
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
-        // Redirigir a la página desde donde se hizo la petición (o al carrito)
-        String referer = session.getAttribute("previousPage") != null ?
-                         session.getAttribute("previousPage").toString() : "/shopping-cart";
+        
+        String referer = session.getAttribute("previousPage") != null ? session.getAttribute("previousPage").toString() : "/cart";
         return "redirect:" + referer;
     }
-
-
     
 
 }
