@@ -2,9 +2,11 @@ package com.example.projectgrupo6.controllers;
 
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ImageService;
+import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +42,9 @@ public class UserController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private OrderService orderService;
 
         @GetMapping("/login")
         public String showlogin(Model model){
@@ -298,5 +303,27 @@ public class UserController {
             return "redirect:/";
         }
 
+        @GetMapping("/orders")
+        public String viewPurchaseHistory(HttpSession session, Model model) {
+            try {
+                User sessionUser = (User) session.getAttribute("user");
+                if (sessionUser == null) {
+                    return "redirect:/user/login";
+                }
+
+                if(userService.checkIfAdmin(sessionUser) == true){
+                model.addAttribute("isAdmin", true);
+                }
+
+                List<Order> userOrders = orderService.findAllByUser(sessionUser);
+                
+                model.addAttribute("orders", userOrders);
+                
+                return "profile-orders"; 
+                
+            } catch (RuntimeException e) {
+                return "redirect:/user/login";
+            }
+        }
 
 }

@@ -78,34 +78,34 @@ public class ShopController {
         }
     }
 
-    @PostMapping("/shop-single/{id}/comment")
+    @PostMapping("/shop/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam String content, HttpSession session) {
         try {
             Long userId = getCurrentUserId(session);
             commentService.addComment(userId, id, content);
-            return "redirect:/shop-single/" + id;
+            return "redirect:/shop/" + id;
         } catch (RuntimeException e) {
             return "redirect:/user/login";
         }
     }
 
-    @PostMapping("/shop-single/{productId}/comment/edit/{commentId}")
+    @PostMapping("/shop/{productId}/comment/edit/{commentId}")
     public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpSession session) {
         try {
             Long userId = getCurrentUserId(session);
             commentService.editComment(commentId, userId, newContent);
-            return "redirect:/shop-single/" + productId;
+            return "redirect:/shop/" + productId;
         } catch (RuntimeException e) {
             return "redirect:/user/login";
         }
     }
 
-    @PostMapping("/shop-single/{productId}/comment/delete/{commentId}")
+    @PostMapping("/shop/{productId}/comment/delete/{commentId}")
     public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpSession session) {
         try {
             Long userId = getCurrentUserId(session);
             commentService.deleteComment(commentId, userId);
-            return "redirect:/shop-single/" + productId;
+            return "redirect:/shop/" + productId;
         } catch (RuntimeException e) {
             return "redirect:/user/login";
         }

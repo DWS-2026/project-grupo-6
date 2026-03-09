@@ -66,7 +66,7 @@ public class CartService {
         return cart;
     }
 
-  @Transactional
+    @Transactional
     public Cart removeProductFromCart(Long userId, Long productId) {
         Cart cart = getOrCreateCartForUser(userId);
         cart.getItems().removeIf(item -> {

@@ -90,12 +90,12 @@
                                     {{/isMine}}
 
                                     {{#isMine}}
-                                        <form action="/shop-single/{{productId}}/comment/edit/{{id}}" method="POST" id="update-form-{{id}}" class="mt-2">
+                                        <form action="/shop/{{productId}}/comment/edit/{{id}}" method="POST" id="update-form-{{id}}" class="mt-2">
                                             <input type="hidden" name="productId" value="{{productId}}">
                                             <textarea name="newContent" class="form-control mb-2" rows="2" required>{{content}}</textarea>
                                         </form>
                                         
-                                        <form action="/shop-single/{{productId}}/comment/delete/{{id}}" method="POST" id="delete-form-{{id}}">
+                                        <form action="/shop/{{productId}}/comment/delete/{{id}}" method="POST" id="delete-form-{{id}}">
                                             <input type="hidden" name="productId" value="{{productId}}">
                                         </form>
 
@@ -122,7 +122,7 @@
                     {{/productComments}}
 
                     <h3 class="h3 pb-2 mt-5">Write a Review</h3>
-                    <form action="/shop-single/{{product.id}}/comment" method="POST">
+                    <form action="/shop/{{product.id}}/comment" method="POST">
                         <div class="mb-3">
                             <textarea name="content" class="form-control" rows="4" placeholder="Your experience..." required></textarea>
                         </div>
