@@ -3,6 +3,7 @@ package com.example.projectgrupo6.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.projectgrupo6.domain.User;
@@ -41,5 +42,9 @@ public class GlobalControllerAdvice {
             // If error in UserService, anonymous session
             model.addAttribute("cartCount", 0);
         }
+    }
+    @ExceptionHandler(Exception.class)
+    public String handleError() {
+        return "error";
     }
 }
