@@ -97,6 +97,7 @@ public class AdminController {
             return "redirect:/admin/users";
         }
     }
+
     @PostMapping("/users/edit/{id}")
     public String editUserPost(
         @PathVariable Long id, 
@@ -105,6 +106,7 @@ public class AdminController {
         @RequestParam String email,
         @RequestParam String username,
         @RequestParam String rol,
+        @RequestParam(value = "image", required = false) MultipartFile image, 
         HttpSession session,
         RedirectAttributes redirectAttributes) {
         
@@ -129,14 +131,22 @@ public class AdminController {
             userToUpdate.setUsername(username);
             userToUpdate.setRol(rol);
 
+            if (image != null && !image.isEmpty()) {
+                try {
+                    Image saved = imageService.createImage(image);
+                    userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error updating the profile image.");
+                    return "redirect:/admin/users/edit/" + id;
+                }
+            }
+
             userService.save(userToUpdate);
             
-            
             redirectAttributes.addFlashAttribute("successMessage", "User profile updated successfully!");
-
             return "redirect:/admin/users/edit/{id}";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Cannot be updated.");
+            redirectAttributes.addFlashAttribute("errorMessage", "User cannot be updated.");
             return "redirect:/admin/users/edit/{id}";
         }
     }

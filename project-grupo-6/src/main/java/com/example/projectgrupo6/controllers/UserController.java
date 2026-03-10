@@ -263,6 +263,7 @@ public class UserController {
             @RequestParam String lastname,
             @RequestParam String username,
             @RequestParam String email,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, 
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -282,9 +283,19 @@ public class UserController {
                 userToUpdate.setUsername(username);
                 userToUpdate.setEmail(email);
 
+                // --- NUEVA LÓGICA DE IMAGEN ---
+                if (imageFile != null && !imageFile.isEmpty()) {
+                    try {
+                        Image saved = imageService.createImage(imageFile);
+                        userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
+                    } catch (Exception e) {
+                        redirectAttributes.addFlashAttribute("errorMessage", "Error updating your profile image.");
+                        return "redirect:/user/profile"; 
+                    }
+                }
+
                 User savedUser = userService.save(userToUpdate);
 
-                // WHEN THE USER IS UPDATED, WE ALSO UPDATE THE SESSION
                 session.setAttribute("user", savedUser);
 
                 redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
