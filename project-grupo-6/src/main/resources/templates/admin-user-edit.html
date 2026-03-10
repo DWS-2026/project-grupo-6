@@ -30,7 +30,7 @@
         <div class="row">
             {{>sidebar}}
             <main class="col-12 col-md-8">
-                        {{#successMessage}}
+                    {{#successMessage}}
                         <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
                             <i class="fas fa-check-circle fa-2x me-3"></i>
                             <div>
@@ -49,6 +49,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     {{/errorMessage}}
+                {{#user}}
                 <div class="alert alert-primary d-flex align-items-center mb-4" role="alert">
                     <i class="fas fa-tools fa-2x me-3"></i>
                     <div>
@@ -128,6 +129,7 @@
 
                     </div>
                 </div>
+                {{/user}}
             </main>
         </div>
     </section>
@@ -135,12 +137,12 @@
     {{>footer}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Buscamos el selector por su atributo 'name'
+            // Search selector by attribute 'name'
             const roleSelect = document.querySelector('select[name="rol"]');
             
             if(roleSelect) {
-                // Le inyectamos el valor que viene de Mustache.
-                // Si el usuario es "User", el JS cambiará el select a "User" automáticamente.
+                // Injects the value from Mustache.
+                // If user is "User", JS will change the select to "User" automatically.
                 roleSelect.value = "{{user.rol}}";
             }
         });

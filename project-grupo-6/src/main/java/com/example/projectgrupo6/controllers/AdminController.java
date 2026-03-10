@@ -94,6 +94,7 @@ public class AdminController {
             model.addAttribute("user", user);
             return "admin-user-edit";
         } else {
+            model.addAttribute("user", null);
             return "redirect:/admin/users";
         }
     }
@@ -172,6 +173,7 @@ public class AdminController {
             model.addAttribute("user", user);
             return "admin-user-view";
         } else {
+            model.addAttribute("user", null);
             return "redirect:/admin/users";
         }
     }
@@ -219,6 +221,8 @@ public class AdminController {
             
             return "admin-comment-list";
         } else {
+            model.addAttribute("targetUser", null);
+            model.addAttribute("comments", null);
             return "redirect:/admin/users"; 
         }
     }
@@ -282,9 +286,11 @@ public class AdminController {
             
             List<Order> userOrders = orderService.findAllByUser(targetUser);
             model.addAttribute("orders", userOrders);
-            
-            return "admin-user-orders"; // El nombre de nuestra nueva plantilla
+            return "admin-user-orders";
+
         } else {
+            model.addAttribute("targetUser", null);
+            model.addAttribute("orders", null);
             return "redirect:/admin/users"; 
         }
     }
