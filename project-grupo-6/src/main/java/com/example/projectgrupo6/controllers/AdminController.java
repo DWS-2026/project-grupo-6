@@ -222,6 +222,7 @@ public class AdminController {
             return "redirect:/admin/users"; 
         }
     }
+
     @PostMapping("/users/{userId}/comments/{commentId}/edit")
     public String updateCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId, 
@@ -328,6 +329,14 @@ public class AdminController {
             }
         }
         return "redirect:/admin/users/" + userId + "/orders";
+    }
+
+    @PostMapping ("/users/delete/{id}")
+    public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
+        //Add logic
+        userService.delete(user);
+        redirectAttributes.addFlashAttribute("success", "User deleted successfully");
+        return "redirect:/admin/users";
     }
 
 }

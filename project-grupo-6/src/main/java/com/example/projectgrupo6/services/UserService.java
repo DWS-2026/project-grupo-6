@@ -1,9 +1,7 @@
 package com.example.projectgrupo6.services;
 
-import com.example.projectgrupo6.domain.Comment;
-import com.example.projectgrupo6.domain.Image;
-import com.example.projectgrupo6.domain.Order;
-import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.domain.*;
+import com.example.projectgrupo6.repositories.CartRepository;
 import com.example.projectgrupo6.repositories.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -21,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private CommentService commentService;
@@ -55,6 +56,13 @@ public class UserService {
 
         List<Order> orders = orderService.findAllByUser(user);
         orderService.deleteList(orders);
+
+        Optional<Cart> op = cartRepository.findByUserId(user.getId());
+        if(op.isPresent()){
+            Cart deleteCart = op.get();
+            cartRepository.delete(deleteCart);
+        }
+
 
         userRepository.delete(user);
     }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Error - Crossfire Shop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+</head>
+
+<body>
+
+
+
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card product-wap rounded-0 text-center">
+
+                <div class="card-body py-5">
+
+                    <h1 class="display-3 text-danger" th:text="${status}">500</h1>
+
+                    <h3 class="mb-3" th:text="${error}">
+                        An error occurred
+                    </h3>
+
+                    <p class="text-muted mb-4" th:text="${message}">
+                        Something went wrong.
+                    </p>
+
+                    <a class="btn btn-success" href="/">
+                        <i class="fas fa-home"></i> Back to home
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
