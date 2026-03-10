@@ -2,11 +2,13 @@ package com.example.projectgrupo6.controllers;
 
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ImageService;
+import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.ProductService;
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,6 +50,9 @@ public class AdminController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/users")
     public String listUsers(HttpSession session, Model model) {
@@ -246,6 +251,73 @@ public class AdminController {
         }
         
         return "redirect:/admin/users/" + userId + "/comments";
+    }
+    
+    @GetMapping("/users/{userId}/orders")
+    public String viewUserOrdersAsAdmin(@PathVariable Long userId, Model model, HttpSession session) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser == null || !userService.checkIfAdmin(sessionUser)) {
+            return "redirect:/user/login"; 
+        }
+
+        model.addAttribute("isAdmin", true);
+        
+        Optional<User> targetUserOpt = userService.getById(userId); 
+        
+        if (targetUserOpt.isPresent()) {
+            User targetUser = targetUserOpt.get();
+            model.addAttribute("targetUser", targetUser); 
+            
+            List<Order> userOrders = orderService.findAllByUser(targetUser);
+            model.addAttribute("orders", userOrders);
+            
+            return "admin-user-orders"; // El nombre de nuestra nueva plantilla
+        } else {
+            return "redirect:/admin/users"; 
+        }
+    }
+
+    @PostMapping("/users/{userId}/orders/{orderId}/status")
+    public String updateOrderStatusAsAdmin(@PathVariable Long userId, 
+                                           @PathVariable Long orderId, 
+                                           @RequestParam String newStatus, 
+                                           HttpSession session,
+                                           RedirectAttributes redirectAttributes) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
+            try {
+                Optional<Order> orderOpt = orderService.findById(orderId);
+                if(orderOpt.isPresent()) {
+                    Order order = orderOpt.get();
+                    order.setStatus(newStatus);
+                    orderService.save(order);
+                    redirectAttributes.addFlashAttribute("successMessage", "Order #" + orderId + " status updated to " + newStatus);
+                }
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error updating the order status.");
+            }
+        }
+        return "redirect:/admin/users/" + userId + "/orders";
+    }
+
+    @PostMapping("/users/{userId}/orders/{orderId}/delete")
+    public String deleteOrderAsAdmin(@PathVariable Long userId, 
+                                     @PathVariable Long orderId, 
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+        
+        User sessionUser = (User) session.getAttribute("user");
+        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
+            try {
+                orderService.deleteById(orderId);
+                redirectAttributes.addFlashAttribute("successMessage", "Order deleted successfully.");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the order.");
+            }
+        }
+        return "redirect:/admin/users/" + userId + "/orders";
     }
 
 }

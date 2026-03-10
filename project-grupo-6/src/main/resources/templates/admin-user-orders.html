@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+<head>
+    <title>Manage User Orders - Admin Panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+
+    <style>
+        .admin-edit-card { border: 2px solid #0d6efd; box-shadow: 0 0 15px rgba(13, 110, 253, 0.1); }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    {{>header}}
+
+    <section class="container py-5 flex-grow-1">
+        <div class="row">
+            {{>sidebar}}
+
+            <main class="col-12 col-md-8">
+                
+                {{#successMessage}}
+                    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-check-circle fa-2x me-3"></i>
+                        <div><strong>Success!</strong> {{successMessage}}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/successMessage}}
+
+                {{#errorMessage}}
+                    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                        <div><strong>Error!</strong> {{errorMessage}}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {{/errorMessage}}
+
+                <div class="alert alert-primary d-flex align-items-center mb-4" role="alert">
+                    <i class="fas fa-tools fa-2x me-3"></i>
+                    <div>
+                        <h5 class="alert-heading mb-0">Admin Mode</h5>
+                        <span>You are viewing the orders of <strong>{{targetUser.username}}</strong>. Any changes will immediately affect their account.</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <img src="/user/{{targetUser.id}}/image" 
+                         class="rounded-circle shadow-sm me-3 border border-primary p-1" 
+                         style="width: 80px; height: 80px; object-fit: cover;" 
+                         alt="{{targetUser.username}}"
+                         onerror="this.src='/css/img/default-product.png'">
+                    <div>
+                        <h3 class="text-primary mb-1">
+                            <i class="fas fa-box me-2"></i>{{targetUser.username}}'s Orders
+                        </h3>
+                        <p class="text-muted mb-0">{{targetUser.email}}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {{#orders}}
+                    <div class="col-12">
+                        <div class="card mb-4 rounded-0 admin-edit-card">
+                            
+                            <div class="card-header bg-light d-flex flex-wrap justify-content-between align-items-center py-3">
+                                <div class="mb-2 mb-md-0">
+                                    <strong class="text-primary fs-5">Order #{{id}}</strong>
+                                    <span class="text-muted ms-2 d-block d-md-inline"><i class="far fa-calendar-alt me-1"></i> {{orderDate}}</span>
+                                </div>
+                                
+                                <form action="/admin/users/{{targetUser.id}}/orders/{{id}}/status" method="POST" class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-secondary">Current: {{status}}</span>
+                                    <select name="newStatus" class="form-select form-select-sm border-primary" style="width: auto;" required>
+                                        <option value="PENDING">PENDING</option>
+                                        <option value="SHIPPED">SHIPPED</option>
+                                        <option value="DELIVERED">DELIVERED</option>
+                                        <option value="CANCELLED">CANCELLED</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                </form>
+                            </div>
+
+                            <div class="card-body">
+                                {{#items}}
+                                <div class="row align-items-center mb-2 pb-2 border-bottom">
+                                    <div class="col-md-2 text-center">
+                                        <img src="{{product.mainImage}}" class="img-fluid rounded" alt="{{product.name}}" style="max-height: 60px; object-fit: contain;">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <h6 class="mb-0 text-dark">{{product.name}}</h6>
+                                        <small class="text-muted">Qty: {{quantity}}</small>
+                                    </div>
+                                    <div class="col-md-3 text-end fw-bold">
+                                        {{subtotal}} €
+                                    </div>
+                                </div>
+                                {{/items}}
+
+                                <div class="d-flex justify-content-between align-items-end mt-4">
+                                    <form action="/admin/users/{{targetUser.id}}/orders/{{id}}/delete" method="POST">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i> Delete Order
+                                        </button>
+                                    </form>
+                                    
+                                    <h5 class="mb-0 text-dark">Total: <span class="text-success fw-bold ms-2">{{totalAmount}} €</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/orders}}
+                    
+                    {{^orders}}
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-light border border-primary">
+                            <i class="fas fa-box-open fa-3x text-primary mb-3"></i>
+                            <p class="text-muted mb-0"><strong>{{targetUser.username}}</strong> hasn't placed any orders yet.</p>
+                        </div>
+                    </div>
+                    {{/orders}}
+                </div>
+                
+                <div class="mt-2">
+                    <a href="/admin/users" class="btn btn-success">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Users
+                    </a>
+                </div>
+            </main>
+        </div>
+    </section>
+
+    {{>footer}}    
+</body>
+</html>
