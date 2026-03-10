@@ -37,12 +37,16 @@ public class GlobalControllerAdvice {
                 // We send the cart all of its pages
                 int cartCount = cartService.getCartTotalItems(userId);
                 model.addAttribute("cartCount", cartCount);
+            } else {
+                model.addAttribute("loggedUser", null); //for Mustache
+                model.addAttribute("cartCount", 0);
             }
         } catch (RuntimeException e) {
             // If error in UserService, anonymous session
             model.addAttribute("cartCount", 0);
         }
     }
+
     @ExceptionHandler(Exception.class)
     public String handleError() {
         return "error";

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 
 <head>
     <title>Error - Crossfire Shop</title>
@@ -18,44 +18,30 @@
 </head>
 
 <body>
-
-
-
-
 <div class="container py-5">
-
     <div class="row justify-content-center">
-
         <div class="col-md-6">
 
             <div class="card product-wap rounded-0 text-center">
-
                 <div class="card-body py-5">
+                    <h1 class="display-3 text-danger">{{status}}</h1>
 
-                    <h1 class="display-3 text-danger" th:text="${status}">500</h1>
-
-                    <h3 class="mb-3" th:text="${error}">
-                        An error occurred
+                    <h3 class="mb-3">
+                        {{error}}
                     </h3>
 
-                    <p class="text-muted mb-4" th:text="${message}">
-                        Something went wrong.
+                    <p class="text-muted mb-4">
+                        {{message}}
                     </p>
 
                     <a class="btn btn-success" href="/">
                         <i class="fas fa-home"></i> Back to home
                     </a>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-
 
 </body>
 </html>
