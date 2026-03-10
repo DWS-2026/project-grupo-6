@@ -59,7 +59,7 @@ public class UserController {
             }
 
             //logout message
-            redirectAttributes.addFlashAttribute("logoutMessage", "Has cerrado sesión correctamente.");
+            redirectAttributes.addFlashAttribute("message", "Has cerrado sesión correctamente.");
 
             return "redirect:/";
         }
@@ -133,7 +133,7 @@ public class UserController {
                 session.invalidate();
             }
 
-            redirectAttributes.addFlashAttribute("logoutMessage", "Has cerrado sesión correctamente.");
+            redirectAttributes.addFlashAttribute("message", "Has cerrado sesión correctamente.");
 
             /*  //With Spring Security (?)
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -299,7 +299,7 @@ public class UserController {
         public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
             //Add logic
             userService.delete(user);
-            redirectAttributes.addFlashAttribute("success", "User deleted successfully");
+            redirectAttributes.addFlashAttribute("message", "User deleted successfully");
             return "redirect:/";
         }
 
