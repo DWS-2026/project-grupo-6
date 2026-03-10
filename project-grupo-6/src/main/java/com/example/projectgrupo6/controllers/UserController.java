@@ -178,10 +178,17 @@ public class UserController {
             //Then save:
             userService.save(user);
 
-            //Automathic login
-            session.setAttribute("user", user);
+            //Redirect:
+            User currentUser = (User) session.getAttribute("user");
+            if (currentUser != null && userService.checkIfAdmin(currentUser)) {
+                return "redirect:/admin/users";
+            } else {
+                //Automathic login
+                session.setAttribute("user", user);
 
-            return "profile";
+                return "profile";
+            }
+
         }
 
         @GetMapping("/comments")
