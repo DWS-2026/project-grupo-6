@@ -306,11 +306,18 @@ public class UserController {
             return "redirect:/user/profile";
         }
 
-        @PostMapping ("/delete/{id}")
-        public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
-            //Add logic
-            userService.delete(user);
+        @PostMapping ("/delete")
+        public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpSession session){
+            
+                User sessionUser = (User) session.getAttribute("user");
+                
+                if (sessionUser == null) {
+                    return "redirect:/user/login";
+                }
+
+            userService.delete(sessionUser);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
+            session.invalidate();
             return "redirect:/";
         }
 
