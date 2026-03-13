@@ -31,7 +31,9 @@
                         {{#edit}} <h3 class="text-center mb-4">Edit Account</h3> {{/edit}}
                         {{^edit}} <h3 class="text-center mb-4">Create Account</h3> {{/edit}}
 
-                        <form method="post" enctype="multipart/form-data"
+                        <div id="errorBox" class="alert alert-danger" style="display:none"></div>
+
+                        <form method="post" id="registerForm" enctype="multipart/form-data"
                               action="{{#edit}}/user/update{{/edit}}{{^edit}}/user/new{{/edit}}">
                             <div class="mb-3">
                                 <label class="form-label">First Name</label>
@@ -91,6 +93,12 @@
                                 </div>
                             </div>
 
+                            {{#error}}
+                            <div class="alert alert-danger" role="alert">
+                                {{error}}
+                            </div>
+                            {{/error}}
+
                             <div class="d-grid">
                                 {{#edit}}
                                     <button type="submit" class="btn btn-success btn-lg" value="Save">
@@ -120,6 +128,31 @@
     <!-- Scripts -->
     <script src="../static/css/js/jquery-1.11.0.min.js"></script>
     <script src="../static/css/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function(e) {
+            e.preventDefault(); //avoids refreshing the page
+
+            const form = this;
+            const formData = new FormData(form);
+
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData
+            });
+
+            if(response.status === 400){
+                const text = await response.text();
+                const errorBox = document.getElementById("errorBox");
+                errorBox.innerText = text;
+                errorBox.style.display = "block";
+                return;
+            }
+
+            // if all fine -> redirect
+            window.location.href = await response.text();
+        });
+    </script>
 
     {{>footer}}
 

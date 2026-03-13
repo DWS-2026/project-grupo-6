@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
@@ -145,24 +146,22 @@ public class UserController {
         }
 
         @PostMapping ("/new")
-        public String registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model, HttpSession session) throws Exception{
+        public ResponseEntity<String> registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model, HttpSession session, HttpStatus status) throws Exception{
 
             //Search email & username doesn't already exist
             if (userService.findByEmail(user.getEmail()) != null
                     || userService.findByUsername(user.getUsername()) != null) {
                 //error
-                System.out.println("DEBUG: user = " + user);
-                model.addAttribute("error", "User with those credentials already exists");
-                model.addAttribute("user", user);
-                return "user-form";
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("User with those credentials already exists");
             }
 
             //Then check correct password twice:
             if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
-                System.out.println("DEBUG: user = " + user);
-                model.addAttribute("error", "Passwords don't match");
-                model.addAttribute("user", user);
-                return "user-form";
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("Passwords don't match");
             }
 
             // Set image
@@ -181,12 +180,12 @@ public class UserController {
             //Redirect:
             User currentUser = (User) session.getAttribute("user");
             if (currentUser != null && userService.checkIfAdmin(currentUser)) {
-                return "redirect:/admin/users";
+                return ResponseEntity.ok("/admin/users");
             } else {
                 //Automathic login
                 session.setAttribute("user", user);
 
-                return "profile";
+                return ResponseEntity.ok("profile");
             }
 
         }
