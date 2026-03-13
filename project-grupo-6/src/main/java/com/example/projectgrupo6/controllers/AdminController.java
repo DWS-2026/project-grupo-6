@@ -38,19 +38,14 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private ImageService imageService;
-
     @Autowired
     private ProductService productService;
-    
     @Autowired
     private CartService cartService;
-
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private OrderService orderService;
 
