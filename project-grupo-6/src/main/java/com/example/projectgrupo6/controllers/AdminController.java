@@ -198,6 +198,46 @@ public class AdminController {
         return "admin-product-list";
     }
 
+    @GetMapping ("/products/{productId}")
+    public String showProduct (@PathVariable long prodId, HttpSession session, Model model){
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+        model.addAttribute("isAdmin", true);
+
+        Optional <Product> op = productService.getById(prodId);
+        if(!op.isPresent()){
+            return "redirect:/products";
+        }
+
+        Product prod = op.get();
+        model.addAttribute("product", prod);
+        return "product1-details";
+    }
+
+    @GetMapping("/products/{productId}/edit")
+    public String editProduct (@PathVariable long prodId, HttpSession session, Model model){
+
+        return "product-form";
+    }
+
+    @PostMapping("/products/{productId}/edit")
+    public String editProductSubmit (@PathVariable long prodId, HttpSession session, Model model){
+
+        return "product-form";
+    }
+
+    @PostMapping("/products/{productId}/delete")
+    public String deleteProd (@PathVariable long prodId, HttpSession session, Model model){
+
+        return "admin-product-list";
+    }
+
     @GetMapping("/users/{userId}/comments")
     public String viewUserCommentsAsAdmin(@PathVariable Long userId, Model model, HttpSession session) {
         

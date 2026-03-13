@@ -44,7 +44,7 @@ public class SampleDataInitializer {
         p1.setBrand("Specna Arms");
         p1.addColor("Black");
         p1.setReviewCount(0);
-        p1.setImages(Arrays.asList("/css/img/HX416AssaultAEG.png", "/css/img/HX416AssaultAEG_2.png", "/css/img/HX416AssaultAEG_3.png", "/css/img/HX416AssaultAEG_4.png")); // Varias imágenes
+        p1.setImages(Arrays.asList("/css/img/HX416AssaultAEG.png", "/css/img/HX416AssaultAEG_2.png", "/css/img/HX416AssaultAEG_3.png", "/css/img/HX416AssaultAEG_4.png")); // Multiple images
         productService.save(p1);
 
         // 2. Specter M4 CQB 
