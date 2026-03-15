@@ -1,123 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Product Form For Admin</title>
+    <title>Create Product - Admin Panel</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="../static/css/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="../static/css/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
 
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/templatemo.css">
-    <link rel="stylesheet" href="../static/css/custom.css">
-
-    <!-- Load fonts style after rendering the layout styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     {{>header}}
 
-    <!-- Product form -->
-    <section class="container py-5">
+    <section class="container py-5 flex-grow-1">
         <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card shadow">
+            <div class="col-lg-8"> 
+                <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                    <i class="fas fa-box-open fa-3x text-success me-3"></i>
+                    <div>
+                        <h3 class="text-success mb-1">Create New Product</h3>
+                        <p class="text-muted mb-0">Fill in the details to add a new item to the store catalog.</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm rounded-0 border-0">
                     <div class="card-body p-4">
-                        <h3 class="card-title text-center mb-3">Manage Product Details</h3>
+                        
+                        <form action="/product/add" method="POST" enctype="multipart/form-data">
+                            
+                            {{#errorMessage}}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i> {{errorMessage}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {{/errorMessage}}
 
-                        <form action="#" method="post" enctype="multipart/form-data">
-                            <!-- Product name -->
-                            <div class="mb-3">
-                                <label for="productName" class="form-label">Product name</label>
-                                <input type="text" class="form-control" id="productName" name="productName" placeholder="Name" required>
+                            <h5 class="text-primary mb-3 border-bottom pb-2">Basic Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label text-muted small">Product Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="brand" class="form-label text-muted small">Brand *</label>
+                                    <input type="text" class="form-control" id="brand" name="brand" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="price" class="form-label text-muted small">Price (€) *</label>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="category" class="form-label text-muted small">Category *</label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="" selected disabled>Select...</option>
+                                        <option value="Assault Rifle">Assault Rifle</option>
+                                        <option value="Sniper">Sniper</option>
+                                        <option value="Pistol">Pistol</option>
+                                        <option value="Shotgun">Shotgun</option>
+                                        <option value="Gear">Gear & Accessories</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <!-- Product prize -->
-                            <div class="mb-3">
-                                <label for="productPrize" class="form-label">Prize</label>
-                                <input type="text" class="form-control" id="productPrize" name="productPrize" placeholder="Prize" required>
+                            <div class="mb-4">
+                                <label for="powerSource" class="form-label text-muted small">Power Source *</label>
+                                <select class="form-select" id="powerSource" name="powerSource" required>
+                                    <option value="" selected disabled>Select power source...</option>
+                                    <option value="AEG (Electric)">AEG (Electric)</option>
+                                    <option value="Gas Blowback (GBB)">Gas Blowback (GBB)</option>
+                                    <option value="Spring">Spring</option>
+                                    <option value="HPA">HPA</option>
+                                    <option value="N/A">N/A (Not applicable)</option>
+                                </select>
                             </div>
 
-                            <!-- Product description -->
+                            <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Details & Specifications</h5>
+
                             <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control mt-1" id="description" name="description" placeholder="Description of the product" rows="8"></textarea>
-                            </div>
-
-                            <!-- Available colors -->
-                            <div class="mb-3">
-                                <label class="form-label">Available colors</label>
-                                <div class="d-flex flex-wrap gap-3">
+                                <label class="form-label text-muted small">Available Colors</label>
+                                <div class="d-flex flex-wrap gap-3 p-2 border rounded bg-light">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBrown" value="brown">
-                                        <label class="form-check-label" for="colorBrown">
-                                            Brown
-                                        </label>
+                                        <input class="form-check-input" type="checkbox" name="colors" value="Black" id="color1">
+                                        <label class="form-check-label" for="color1">Black</label>
                                     </div>
-
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGrey" value="grey">
-                                        <label class="form-check-label" for="colorGrey">
-                                            Grey
-                                        </label>
+                                        <input class="form-check-input" type="checkbox" name="colors" value="Tan" id="color2">
+                                        <label class="form-check-label" for="color2">Tan / Desert</label>
                                     </div>
-
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorGreen" value="green">
-                                        <label class="form-check-label" for="colorGreen">
-                                            Green
-                                        </label>
+                                        <input class="form-check-input" type="checkbox" name="colors" value="OD Green" id="color3">
+                                        <label class="form-check-label" for="color3">OD Green</label>
                                     </div>
-
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="colors[]" id="colorBlack" value="black">
-                                        <label class="form-check-label" for="colorBlack">
-                                            Black
-                                        </label>
+                                        <input class="form-check-input" type="checkbox" name="colors" value="Grey" id="color4">
+                                        <label class="form-check-label" for="color4">Grey</label>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Product specification -->
                             <div class="mb-3">
-                                <label for="specification" class="form-label">Specification</label>
-                                <textarea class="form-control mt-1" id="specification" name="specification" placeholder="Specification of the product" rows="8"></textarea>
+                                <label for="description" class="form-label text-muted small">Main Description *</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
                             </div>
 
-                            <!-- Number of available products in stock -->
-                            <div class="mb-3">
-                                <label for="productStock" class="form-label">Available quantity</label>
-                                <input type="number" class="form-control" id="productStock" name="stock" placeholder="Quantity" min="0" step="1" required>
+                            <div class="mb-4">
+                                <label for="specification" class="form-label text-muted small">Technical Specifications (FPS, Weight, Material...)</label>
+                                <textarea class="form-control" id="specification" name="specification" rows="4"></textarea>
                             </div>
 
-                            <!-- Product images -->
-                            <div class="mb-3">
-                                <label for="productImages" class="form-label">Product images</label>
-                                <input class="form-control" type="file" id="productImages" name="images[]" accept=".jpg,.jpeg,.png" multiple>
-                                <div class="form-text">
-                                    You can upload one or more images (JPG, JPEG, PNG).
-                                </div>
+                            <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Media</h5>
+
+                            <div class="mb-3 p-3 border rounded bg-light">
+                                <label for="images" class="form-label text-muted small">Product Images (Max 4)</label>
+                                <input class="form-control mb-2" type="file" id="images" name="imageFiles" accept="image/png, image/jpeg" multiple onchange="limitFiles(this, 4)">
+                                <small class="text-muted"><i class="fas fa-images me-1"></i> Select up to 4 images. Hold Ctrl (or Cmd) to select multiple.</small>
                             </div>
 
-                            <!-- Product documentation (PDF) -->
-                            <div class="mb-3">
-                                <label for="documentation" class="form-label">Product Documentation (PDF)</label>
-                                <input class="form-control mt-1" type="file" id="documentation" name="documentation" accept="application/pdf">
-                                <div class="form-text">
-                                    Upload the official product documentation in PDF format.
-                                </div>
+                            <div class="mb-4 p-3 border rounded bg-light">
+                                <label for="documentation" class="form-label text-muted small">Product Manual (PDF)</label>
+                                <input class="form-control mb-2" type="file" id="documentation" name="documentation" accept="application/pdf">
+                                <small class="text-muted"><i class="fas fa-file-pdf me-1"></i> Upload the official documentation or manual in PDF format (optional).</small>
                             </div>
 
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-success">Upload</button>
-                            </div>
-                            <div class="d-grid mb-3">
-                                <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+                            <div class="d-flex justify-content-end gap-2 mt-5">
+                                <a href="/admin/products" class="btn btn-outline-secondary px-4">Cancel</a>
+                                <button type="submit" class="btn btn-success px-4">
+                                    <i class="fas fa-save me-2"></i> Create Product
+                                </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -125,5 +145,14 @@
     </section>
 
     {{>footer}}
+
+    <script>
+        function limitFiles(input, maxFiles) {
+            if (input.files.length > maxFiles) {
+                alert("You can only upload a maximum of " + maxFiles + " images.");
+                input.value = ""; // Resetea el input para que vuelva a elegir
+            }
+        }
+    </script>
 </body>
 </html>

@@ -11,8 +11,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
+import java.sql.Blob;
 
 @Entity
 public class Product {
@@ -28,8 +30,12 @@ public class Product {
 
     private Double price; 
 
+    @Lob
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> images = new ArrayList<>();
+    private List<Blob> images = new ArrayList<>();
+
+    @Lob
+    private Blob documentation;
 
     private String category; 
 
@@ -53,7 +59,7 @@ public class Product {
     // Constructors
     public Product() {}
 
-    public Product(String name, String description, Double price, List<String> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock, List<Comment> comments, String specification) {
+    public Product(String name, String description, Double price, List<Blob> images, String category, String powerSource, String brand, List<String> colors, int reviewCount, int stock, List<Comment> comments, String specification) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -122,19 +128,20 @@ public class Product {
     public void removeColor(String color) {
         this.colors.remove(color);
     }
-    public List<String> getImages() {
+    public List<Blob> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<Blob> images) {
         this.images = images;
     }
 
+    @Transient
     public String getMainImage() {
-        if (images != null && !images.isEmpty()) {
-            return images.get(0); 
+        if (this.id != null && this.images != null && !this.images.isEmpty()) {
+            return "/product/" + this.id + "/image/0";
         }
-        return "/css/img/default-product.png"; 
+        return "/css/img/default-product.png";
     }
 
     public String getPowerSource() {
@@ -175,10 +182,10 @@ public class Product {
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
     }
-    @Transient
-    public String getImageUrl(){
-        return images.isEmpty() ? "/img/default.png" : images.get(0);
-    }
+    //@Transient
+    //public String getImageUrl(){
+      //  return images.isEmpty() ? "/img/default.png" : images.get(0);
+    //}
 
     public String getSpecification() {
     return specification;
