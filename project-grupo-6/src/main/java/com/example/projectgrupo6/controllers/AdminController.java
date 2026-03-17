@@ -223,7 +223,19 @@ public class AdminController {
 
     @PostMapping("/products/{productId}/edit")
     public String editProductSubmit (@PathVariable long prodId, HttpSession session, Model model){
+        User sessionUser = (User) session.getAttribute("user");
 
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        List<Comment> comments = commentService.findAllByProductId(prodId);
+        commentService.deleteList(comments);
+
+        productService.delete(prodId);
         return "product-form";
     }
 
