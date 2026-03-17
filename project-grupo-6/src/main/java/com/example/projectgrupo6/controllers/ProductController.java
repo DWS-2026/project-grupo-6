@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller; 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class ProductController {
     private ImageService imageService;
 
     @GetMapping("/add")
-    public String renderProductForm(HttpSession session) {
+    public String renderProductForm(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -52,8 +53,12 @@ public class ProductController {
         }
 
         if(userService.checkIfAdmin(sessionUser) == false){
+            model.addAttribute("isAdmin", false);
             return "redirect:/";
         }
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("isEdit", false);
+
         return "product-form";
     }
 

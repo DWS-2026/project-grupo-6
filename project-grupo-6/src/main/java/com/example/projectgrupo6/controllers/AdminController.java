@@ -29,6 +29,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -226,6 +227,7 @@ public class AdminController {
             return "redirect:/";
         }
         model.addAttribute("isAdmin", true);
+        model.addAttribute("isEdit", true);
 
         Optional<Product> op = productService.getById(prodId);
         if(op.isPresent()) {
@@ -240,9 +242,21 @@ public class AdminController {
     }
 
     @PostMapping("/products/{productId}/edit")
-    public String editProductSubmit (@PathVariable long prodId, HttpSession session, Model model){
-        User sessionUser = (User) session.getAttribute("user");
+    public String editProductSubmit (@PathVariable long prodId,
+                                     @RequestParam String name,
+                                     @RequestParam String brand,
+                                     @RequestParam Double price,
+                                     @RequestParam String category,
+                                     @RequestParam String description,
+                                     @RequestParam String specification,
+                                     @RequestParam String powerSource,
+                                     @RequestParam List<String> colors,
+                                     @RequestParam int stock,
+                                     @RequestParam(value = "image", required = false) MultipartFile[] images,
+                                     @RequestParam(value = "image", required = false) MultipartFile documentation,
+                                     HttpSession session, Model model){
 
+        User sessionUser = (User) session.getAttribute("user");
         if(sessionUser == null){
             return "redirect:/user/login";
         }
@@ -250,7 +264,21 @@ public class AdminController {
             return "redirect:/";
         }
 
+        Optional<Product> op = productService.getById(prodId);
+        if(op.isPresent()){
+            Product p = op.get();
+            model.addAttribute("product", p);
 
+            productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
+            p.setColors(colors != null ? colors : new ArrayList<>());
+            p.setReviewCount(0);
+
+            //images and pdf logic here
+
+        } else {
+           model.addAttribute("product", null);
+           return "redirect:/admin/products";
+        }
 
         return "product-form";
     }
