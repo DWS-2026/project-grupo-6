@@ -217,6 +217,24 @@ public class AdminController {
 
     @GetMapping("/products/{productId}/edit")
     public String editProduct (@PathVariable long prodId, HttpSession session, Model model){
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+        model.addAttribute("isAdmin", true);
+
+        Optional<Product> op = productService.getById(prodId);
+        if(op.isPresent()) {
+            Product p = op.get();
+            model.addAttribute("product", p);
+        } else {
+            model.addAttribute("product", null);
+            return "redirect:/admin/product";
+        }
 
         return "product-form";
     }
@@ -232,16 +250,26 @@ public class AdminController {
             return "redirect:/";
         }
 
-        List<Comment> comments = commentService.findAllByProductId(prodId);
-        commentService.deleteList(comments);
 
-        productService.delete(prodId);
+
         return "product-form";
     }
 
     @PostMapping("/products/{productId}/delete")
     public String deleteProd (@PathVariable long prodId, HttpSession session, Model model){
+        User sessionUser = (User) session.getAttribute("user");
 
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        List<Comment> comments = commentService.findAllByProductId(prodId);
+        commentService.deleteList(comments);
+
+        productService.delete(prodId);
         return "admin-product-list";
     }
 

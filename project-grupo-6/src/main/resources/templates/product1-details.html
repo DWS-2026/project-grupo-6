@@ -27,7 +27,9 @@
             <div class="row">
                 <div class="col-lg-5 mt-5">
                     <div class="card mb-3">
-                        <img class="card-img img-fluid" src="../static/css/img/HX416AssaultAEG.png" alt="Card image cap" id="product-detail">
+                        {{#product.images}}
+                        <img class="card-img img-fluid" src="/product/{{product.id}}/image/{{-index}}">
+                        {{/product.images}}
                     </div>
                     <div class="row">
                         <!--Start Controls-->
@@ -43,43 +45,25 @@
                             <!--Start Slides-->
                             <div class="carousel-inner product-links-wap" role="listbox">
 
-                                <!--First slide-->
+                                <!--Slide-->
                                 <div class="carousel-item active">
                                     <div class="row">
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="../static/css/img/HX416AssaultAEG.png" alt="Product Image 1">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="../static/css/img/HX416AssaultAEG_2.png" alt="Product Image 2">
-                                            </a>
-                                        </div>
-                                        <div class="col-4">
-                                            <a href="#">
-                                                <img class="card-img img-fluid" src="../static/css/img/HX416AssaultAEG_3.png" alt="Product Image 3">
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/.First slide-->
 
-                                <!--Second slide-->
-                                <div class="carousel-item">
-                                    <div class="row">
+                                        {{#product.images}}
                                         <div class="col-4">
                                             <a href="#">
-                                                <img class="card-img img-fluid" src="../static/css/img/HX416AssaultAEG_4.png" alt="Product Image 4">
+                                                <img class="card-img img-fluid" src="/product/{{product.id}}/image/{{-index}}">
                                             </a>
                                         </div>
+                                        {{/product.images}}
                                     </div>
                                 </div>
-                                <!--/.Second slide-->
                             </div>
                             <!--End Slides-->
+
                         </div>
                         <!--End Carousel Wrapper-->
+
                         <!--Start Controls-->
                         <div class="col-1 align-self-center">
                             <a href="#multi-item-example" role="button" data-bs-slide="next">
@@ -88,54 +72,53 @@
                             </a>
                         </div>
                         <!--End Controls-->
+
                     </div>
                 </div>
-                <!-- col end -->
+
+                <!-- Info -->
+                {{#product}}
                 <div class="col-lg-7 mt-5">
                     <div class="card">
                         <div class="card-body">
-                            <h1 class="h2">HX416 Assault AEG</h1>
-                            <p class="h3 py-2">249,00€</p>
+                            <h1 class="h2">{{product.name}}</h1>
+                            <p class="h3 py-2">{{product.price}}€</p>
 
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <h6>Brand:</h6>
                                 </li>
                                 <li class="list-inline-item">
-                                    <p class="text-muted"><strong>Fake Gun</strong></p>
+                                    <p class="text-muted"><strong>{{product.brand}}</strong></p>
                                 </li>
                             </ul>
 
                             <h6>Description:</h6>
-                            <p>Electric airsoft rifle inspired by 416 platforms, featuring a metal body and M-LOK handguard—ideal 
-                                for assault players seeking reliability and mid-range accuracy. </p>
-                            <p>Includes a basic battery and wall charger, adjustable stock, and flip-up sights.</p>
+                            <p>{{product.description}}</p>
+
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <h6>Avaliable Color :</h6>
                                 </li>
                                 <li class="list-inline-item">
-                                    <p class="text-muted"><strong>Black-brown</strong></p>
+                                    {{#product.colors}}
+                                    <p class="text-muted"><strong>{{.}}</strong></p>
+                                    {{/product.colors}}
                                 </li>
                             </ul>
 
                             <h6>Specification:</h6>
-                            <ul class="list-unstyled pb-3">
-                                <li>Type: Electric airsoft assault rifle (AEG)</li>
-                                <li>Caliber: 6 mm BB</li>
-                                <li>Construction: Metal receiver, metal handguard, polymer stock and pistol grip</li>
-                                <li>Gearbox: Reinforced Version 2, quick spring change</li>
-                                <li>Overall length: Approx. 880 mm (adjustable stock)</li>
-                                <li>Weight: Approx. 3.0 kg</li>
-                                <li>Battery type: 7.4V Li-Po</li>
-                            </ul>
+                            <p>{{product.specification}}</p>
+
+                            <!-- STOCK -->
+                            <p><strong>Stock:</strong> {{product.stock}}</p>
 
                             <form action="" method="GET">
                                 <input type="hidden" name="product-title" value="Activewear">
 
                                 <div class="row pb-3">
                                     <div class="col d-grid">
-                                        <a href="product-form.html" class="btn btn-success btn-lg d-block">
+                                        <a href="/admin/products/{productId}/edit" class="btn btn-success btn-lg d-block">
                                             Edit
                                         </a>
                                     </div>
@@ -148,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+                {{/product}}
             </div>
         </div>
     </section>

@@ -50,4 +50,14 @@ public class ProductService {
         
         return randomList.subList(0, Math.min(3, randomList.size()));
     }
+
+    public void setAttbProduct (Product product, String name, String brand, double price, String categ, String powerS, String desc, String spec){
+        product.setName(name);
+        product.setBrand(brand);
+        product.setPrice(price);
+        product.setCategory(categ);
+        product.setPowerSource(powerS);
+        product.setDescription(desc);
+        product.setSpecification(spec);
+    }
 }
