@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.repositories.ProductRepository;
+import com.example.projectgrupo6.repositories.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 
@@ -32,8 +34,16 @@ public class SampleDataInitializer {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     @PostConstruct
     public void initData() {
+
+        if (userRepository.count() == 0 && productRepository.count() == 0) {
         // 1. HX416 Assault AEG 
         Product p1 = new Product();
         p1.setName("HX416 Assault AEG");
@@ -164,6 +174,6 @@ public class SampleDataInitializer {
         // Comment of Pandora about HX416
         Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
         commentService.save(c3);
-
+        }
     }
 }
