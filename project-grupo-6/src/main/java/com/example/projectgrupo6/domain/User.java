@@ -20,7 +20,7 @@ public class User {
     private String lastname;
     private String username;
     private String email;
-    private String password;
+    private String encodedPassword;
 
     @Lob
     private Blob profileImage;
@@ -36,13 +36,13 @@ public class User {
     private List<Order> orders;
 
     //Constructor
-    public User(Long id, String firstname, String lastname, String username, String email, String password, Blob profileImage, String rol, List<Comment> review) {
+    public User(Long id, String firstname, String lastname, String username, String email, String encodedPassword, Blob profileImage, String rol, List<Comment> review) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.encodedPassword = encodedPassword;
         this.profileImage = profileImage;
         this.setRol(rol); 
         this.review = review;
@@ -86,11 +86,11 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncodedPassword() {
+        return encodedPassword;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncodedPassword(String encodedPassword) {
+        this.encodedPassword = encodedPassword;
     }
 
     public Blob getProfileImage() {
@@ -138,7 +138,7 @@ public class User {
                 ", lastname='" + lastname + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", encodedPassword='" + encodedPassword + '\'' +
                 ", profileImage='" + profileImage + '\'' +
                 '}';
     }
