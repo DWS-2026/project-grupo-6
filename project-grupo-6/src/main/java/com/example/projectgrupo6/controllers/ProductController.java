@@ -79,12 +79,7 @@ public class ProductController {
         
         // --- SECURITY VALIDATION OF BACKEND ---
         // Count how many real archives are sent (not empty)
-        long validImagesCount = 0;
-        if (imageFiles != null) {
-            for (MultipartFile file : imageFiles) {
-                if (!file.isEmpty()) validImagesCount++;
-            }
-        }
+        long validImagesCount = productService.checkNumberImages(imageFiles);
         
         // If more than 4, block
         if (validImagesCount > 4) {

@@ -254,7 +254,7 @@ public class AdminController {
                                      @RequestParam int stock,
                                      @RequestParam(value = "image", required = false) MultipartFile[] images,
                                      @RequestParam(value = "image", required = false) MultipartFile documentation,
-                                     HttpSession session, Model model){
+                                     RedirectAttributes attributes, HttpSession session, Model model){
 
         User sessionUser = (User) session.getAttribute("user");
         if(sessionUser == null){
@@ -274,13 +274,24 @@ public class AdminController {
             p.setReviewCount(0);
 
             //images and pdf logic here
+            List<java.sql.Blob> productImages = new ArrayList<>();
+            if(images != null) {
+                boolean imageError = productService.setProductImages(p, images);
+                boolean docError = productService.setDocumentation(p, documentation);
+                if(imageError || docError){
+                    attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
+                    return "redirect:/admin//products/{productId}/edit";
+                }
+            } else {
+                imageService.loadImage("default-product.png");
+            }
+            productService.save(p);
+            return "redirect:/admin/products";
 
         } else {
            model.addAttribute("product", null);
            return "redirect:/admin/products";
         }
-
-        return "product-form";
     }
 
     @PostMapping("/products/{productId}/delete")
