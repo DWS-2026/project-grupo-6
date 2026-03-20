@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Error - Crossfire Shop</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+    {{>header}}
+
+    <section class="container py-5 flex-grow-1 d-flex align-items-center justify-content-center">
+        <div class="row w-100 justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div class="card-body p-5 text-center">
+                        
+                        <div class="mb-4">
+                            <i class="fas fa-exclamation-circle text-danger" style="font-size: 5rem;"></i>
+                        </div>
+                        
+                        <h2 class="h3 text-danger fw-bold mb-3">Login Failed</h2>
+                        
+                        <p class="text-muted mb-4">
+                            The username or password you entered is incorrect. Please check your credentials and try again.
+                        </p>
+
+                        <div class="d-grid gap-3">
+                            <a href="/user/login" class="btn btn-success btn-lg fw-bold">
+                                <i class="fas fa-undo me-2"></i> Try Again
+                            </a>
+                            <a href="/" class="btn btn-outline-secondary">
+                                <i class="fas fa-home me-2"></i> Back to Home
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{>footer}}
+</body>
+</html>
