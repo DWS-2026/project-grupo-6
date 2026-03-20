@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.projectgrupo6.domain.Comment;
@@ -39,6 +40,9 @@ public class SampleDataInitializer {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+	private PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void initData() {
@@ -124,7 +128,7 @@ public class SampleDataInitializer {
             u1.setEmail("lex_murph@airsoft.com");
             u1.setProfileImage(imageService.loadImage("pfp1.jpg"));
             //Encode when ready
-            u1.setPassword("1234");
+            u1.setEncodedPassword(passwordEncoder.encode("1234"));
             u1.setRol("Admin");
         userService.save(u1);
 
@@ -135,7 +139,7 @@ public class SampleDataInitializer {
             u2.setEmail("charlie.brown@mailcute.com");
             u2.setProfileImage(imageService.loadImage("pfp2.jpg"));
             //Encode when ready
-            u2.setPassword("5678");
+            u2.setEncodedPassword(passwordEncoder.encode("5678"));
             u2.setRol("User");
         userService.save(u2);
 
@@ -146,7 +150,7 @@ public class SampleDataInitializer {
             u3.setEmail("pan.james@cozymail.com");
             u3.setProfileImage(imageService.loadImage("pfp3.jpg"));
             //Encode when ready
-            u3.setPassword("134340");
+            u3.setEncodedPassword(passwordEncoder.encode("134340"));
             u3.setRol("User");
         userService.save(u3);
 
@@ -157,7 +161,7 @@ public class SampleDataInitializer {
             u4.setEmail("asd@asd");
             u4.setProfileImage(imageService.loadImage("pfp4.jpg"));
             //Encode when ready
-            u4.setPassword("asd");
+            u4.setEncodedPassword(passwordEncoder.encode("asd"));
             u4.setRol("User");
         userService.save(u4);
 

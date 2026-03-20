@@ -117,10 +117,10 @@ public class UserController {
                                 HttpSession session, 
                                 Model model) {
             
-            User userDb = userService.findByEmail(email);
+            Optional<User> userDb = userService.findByEmail(email);
 
-            if (userDb != null && userService.logincheck(userDb, password)) {
-                session.setAttribute("user", userDb);
+            if (userDb.isPresent() && userService.logincheck(userDb.get(), password)) {
+                session.setAttribute("user", userDb.get());
                 return "redirect:/user/profile"; 
             } else {
                 model.addAttribute("error", "Email o contraseña incorrectos");
@@ -158,7 +158,7 @@ public class UserController {
             }
 
             //Then check correct password twice:
-            if(!userService.checkCreatePassword(user.getPassword(), confirmPassword)){
+            if(!userService.checkCreatePassword(user.getEncodedPassword(), confirmPassword)){
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body("Passwords don't match");

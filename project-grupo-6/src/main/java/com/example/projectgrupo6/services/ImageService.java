@@ -19,7 +19,7 @@ public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
 
-    public Image createImage(MultipartFile imageFile) throws IOException {
+    public Image createImage(MultipartFile imageFile) throws IOException { //save
         Image image = new Image();
 
         try {
@@ -32,7 +32,7 @@ public class ImageService {
         return image;
     }
 
-    public Resource getImageFile(long id) throws SQLException {
+    public Resource getImageFile(long id) throws SQLException { //show
         Optional<Image> image = imageRepository.findById(id);
 
         if (image.isPresent()) {
@@ -43,8 +43,7 @@ public class ImageService {
         }
     }
 
-
-    public Blob loadImage(String fileName) {
+    public Blob loadImage(String fileName) { //Image by default
     try {
         // Route starts directly from what's inside 'resources'
         org.springframework.core.io.Resource resource = new org.springframework.core.io.ClassPathResource("static/css/img/" + fileName);

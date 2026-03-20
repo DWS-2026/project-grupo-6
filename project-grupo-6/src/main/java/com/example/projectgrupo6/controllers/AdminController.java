@@ -29,6 +29,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -217,12 +218,84 @@ public class AdminController {
 
     @GetMapping("/products/{productId}/edit")
     public String editProduct (@PathVariable long prodId, HttpSession session, Model model){
+        User sessionUser = (User) session.getAttribute("user");
+
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("isEdit", true);
+
+        Optional<Product> op = productService.getById(prodId);
+        if(op.isPresent()) {
+            Product p = op.get();
+            model.addAttribute("product", p);
+        } else {
+            model.addAttribute("product", null);
+            return "redirect:/admin/product";
+        }
 
         return "product-form";
     }
 
     @PostMapping("/products/{productId}/edit")
-    public String editProductSubmit (@PathVariable long prodId, HttpSession session, Model model){
+    public String editProductSubmit (@PathVariable long prodId,
+                                     @RequestParam String name,
+                                     @RequestParam String brand,
+                                     @RequestParam Double price,
+                                     @RequestParam String category,
+                                     @RequestParam String description,
+                                     @RequestParam String specification,
+                                     @RequestParam String powerSource,
+                                     @RequestParam List<String> colors,
+                                     @RequestParam int stock,
+                                     @RequestParam(value = "image", required = false) MultipartFile[] images,
+                                     @RequestParam(value = "image", required = false) MultipartFile documentation,
+                                     RedirectAttributes attributes, HttpSession session, Model model){
+
+        User sessionUser = (User) session.getAttribute("user");
+        if(sessionUser == null){
+            return "redirect:/user/login";
+        }
+        if(userService.checkIfAdmin(sessionUser) == false){
+            return "redirect:/";
+        }
+
+        Optional<Product> op = productService.getById(prodId);
+        if(op.isPresent()){
+            Product p = op.get();
+            model.addAttribute("product", p);
+
+            productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
+            p.setColors(colors != null ? colors : new ArrayList<>());
+            p.setReviewCount(0);
+
+            //images and pdf logic here
+            List<java.sql.Blob> productImages = new ArrayList<>();
+            if(images != null) {
+                boolean imageError = productService.setProductImages(p, images);
+                boolean docError = productService.setDocumentation(p, documentation);
+                if(imageError || docError){
+                    attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
+                    return "redirect:/admin//products/{productId}/edit";
+                }
+            } else {
+                imageService.loadImage("default-product.png");
+            }
+            productService.save(p);
+            return "redirect:/admin/products";
+
+        } else {
+           model.addAttribute("product", null);
+           return "redirect:/admin/products";
+        }
+    }
+
+    @PostMapping("/products/{productId}/delete")
+    public String deleteProd (@PathVariable long prodId, HttpSession session, Model model){
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -236,12 +309,6 @@ public class AdminController {
         commentService.deleteList(comments);
 
         productService.delete(prodId);
-        return "product-form";
-    }
-
-    @PostMapping("/products/{productId}/delete")
-    public String deleteProd (@PathVariable long prodId, HttpSession session, Model model){
-
         return "admin-product-list";
     }
 

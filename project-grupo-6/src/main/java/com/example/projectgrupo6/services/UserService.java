@@ -89,11 +89,11 @@ public class UserService {
 
     public Optional<User> findById (Long id){return userRepository.findById(id);}
 
-    public User findByEmail (String email){
+    public Optional<User> findByEmail (String email){
         return userRepository.findByEmail(email);
     }
 
-    public User findByUsername (String username){
+    public Optional<User> findByUsername (String username){
         return userRepository.findByUsername(username);
     }
 
@@ -102,7 +102,7 @@ public class UserService {
     }
 
     public boolean logincheck (User user, String password){
-        return user.getPassword().equals(password);
+        return user.getEncodedPassword().equals(password);
     }
 
     public boolean checkCreatePassword (String password, String confirmPassword){
@@ -114,7 +114,7 @@ public class UserService {
         oldUser.setLastname(newUser.getLastname());
         oldUser.setUsername(newUser.getUsername());
         oldUser.setEmail(newUser.getEmail());
-        oldUser.setPassword(newUser.getPassword());
+        oldUser.setEncodedPassword(newUser.getEncodedPassword());
         oldUser.setProfileImage(newUser.getProfileImage());
         oldUser.setRoles(newUser.getRoles());
 

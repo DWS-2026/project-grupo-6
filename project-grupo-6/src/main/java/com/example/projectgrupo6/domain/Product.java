@@ -34,6 +34,7 @@ public class Product {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Blob> images = new ArrayList<>();
 
+    //add documentation on .pdf file
     @Lob
     private Blob documentation;
 
@@ -54,7 +55,7 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    //add documentation on .pdf file
+
 
     // Constructors
     public Product() {}
@@ -182,15 +183,23 @@ public class Product {
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
     }
+
     //@Transient
     //public String getImageUrl(){
       //  return images.isEmpty() ? "/img/default.png" : images.get(0);
     //}
 
+
+    public Blob getDocumentation() {
+        return documentation;
+    }
+    public void setDocumentation(Blob documentation) {
+        this.documentation = documentation;
+    }
+
     public String getSpecification() {
     return specification;
 }
-
     public void setSpecification(String specification) {
         this.specification = specification;
     }

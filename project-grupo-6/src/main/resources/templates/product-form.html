@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Create Product - Admin Panel</title>
+    <title>Create/Update Product - Admin Panel</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,8 +31,10 @@
 
                 <div class="card shadow-sm rounded-0 border-0">
                     <div class="card-body p-4">
-                        
-                        <form action="/product/add" method="POST" enctype="multipart/form-data">
+
+
+                        <form action="{{#isEdit}}/admin/product/{{id}}/edit{{/isEdit}}
+                           {{^isEdit}}/product/add{{/isEdit}}" method="POST" enctype="multipart/form-data">
                             
                             {{#errorMessage}}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -42,20 +44,23 @@
                             {{/errorMessage}}
 
                             <h5 class="text-primary mb-3 border-bottom pb-2">Basic Information</h5>
-                            
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label text-muted small">Product Name *</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <input type="text" class="form-control" id="name" name="name" required
+                                           value="{{#isEdit}}{{product.name}}{{/isEdit}}">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="brand" class="form-label text-muted small">Brand *</label>
-                                    <input type="text" class="form-control" id="brand" name="brand" required>
+                                    <input type="text" class="form-control" id="brand" name="brand" required
+                                           value="{{#isEdit}}{{product.brand}}{{/isEdit}}">
                                 </div>
                                 
                                 <div class="col-md-6 mb-3">
                                     <label for="price" class="form-label text-muted small">Price (€) *</label>
-                                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required>
+                                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required
+                                           value="{{#isEdit}}{{product.price}}{{/isEdit}}">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="category" class="form-label text-muted small">Category *</label>
@@ -66,6 +71,10 @@
                                         <option value="Pistol">Pistol</option>
                                         <option value="Shotgun">Shotgun</option>
                                         <option value="Gear">Gear & Accessories</option>
+                                        <!--##########################################333
+                                        ##############################################3333333
+                                        ######################################33333333333333-->
+
                                     </select>
                                 </div>
                             </div>
@@ -79,10 +88,18 @@
                                     <option value="Spring">Spring</option>
                                     <option value="HPA">HPA</option>
                                     <option value="N/A">N/A (Not applicable)</option>
+                                    <!--##########################################333
+                                        ##############################################3333333
+                                        ######################################33333333333333-->
                                 </select>
+
                             </div>
 
                             <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Details & Specifications</h5>
+
+                            <!--##########################################333
+                                        ##############################################3333333
+                                        ######################################33333333333333-->
 
                             <div class="mb-3">
                                 <label class="form-label text-muted small">Available Colors</label>
@@ -108,19 +125,23 @@
 
                             <div class="mb-3">
                                 <label for="description" class="form-label text-muted small">Main Description *</label>
-                                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="4" required>
+                                    {{#isEdit}}{{product.description}}{{/isEdit}}
+                                </textarea>
                             </div>
 
                             <div class="mb-4">
                                 <label for="specification" class="form-label text-muted small">Technical Specifications (FPS, Weight, Material...)</label>
-                                <textarea class="form-control" id="specification" name="specification" rows="4"></textarea>
+                                <textarea class="form-control" id="specification" name="specification" rows="4">
+                                    {{#isEdit}}{{product.specification}}{{/isEdit}}
+                                </textarea>
                             </div>
 
                             <h5 class="text-primary mb-3 mt-4 border-bottom pb-2">Media</h5>
 
                             <div class="mb-3 p-3 border rounded bg-light">
                                 <label for="images" class="form-label text-muted small">Product Images (Max 4)</label>
-                                <input class="form-control mb-2" type="file" id="images" name="imageFiles" accept="image/png, image/jpeg" multiple onchange="limitFiles(this, 4)">
+                                <input class="form-control mb-2" type="file" id="images" name="imageFiles" accept="image/png, image/jpeg" multiple>
                                 <small class="text-muted"><i class="fas fa-images me-1"></i> Select up to 4 images. Hold Ctrl (or Cmd) to select multiple.</small>
                             </div>
 
@@ -133,7 +154,8 @@
                             <div class="d-flex justify-content-end gap-2 mt-5">
                                 <a href="/admin/products" class="btn btn-outline-secondary px-4">Cancel</a>
                                 <button type="submit" class="btn btn-success px-4">
-                                    <i class="fas fa-save me-2"></i> Create Product
+                                    <i class="fas fa-save me-2"></i>
+                                    {{#isEdit}}Update Product{{/isEdit}}{{^isEdit}}Create Product{{/isEdit}}
                                 </button>
                             </div>
                         </form>
@@ -150,7 +172,7 @@
         function limitFiles(input, maxFiles) {
             if (input.files.length > maxFiles) {
                 alert("You can only upload a maximum of " + maxFiles + " images.");
-                input.value = ""; // Resetea el input para que vuelva a elegir
+                input.value = ""; // Resets input so it chooses again
             }
         }
     </script>
