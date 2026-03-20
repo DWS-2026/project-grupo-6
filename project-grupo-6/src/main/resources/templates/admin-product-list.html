@@ -35,11 +35,11 @@
 
                                 <div class="col-md-3">
                                     <div class="card-body d-flex flex-column gap-2">
-                                        <a href="/product/edit/{{id}}" class="btn btn-outline-primary btn-sm">
+                                        <a href="/admin/product/{{id}}/edit" class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-edit"></i> Manage
                                         </a>
                                         
-                                        <form action="/product/delete/{{id}}" method="post" onsubmit="return confirm('Delete this product?');">
+                                        <form action="/admin//products/{{id}}/delete" method="post" onsubmit="return confirm('Delete this product?');">
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>

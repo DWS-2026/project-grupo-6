@@ -28,7 +28,7 @@ public class GlobalControllerAdvice {
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
         
-        // 1. EL SALVAVIDAS: Ponemos los valores por defecto SIEMPRE al principio.
+        // 1. SAVIOUR: ALWAYS defect values at the beginning
         // Así, pase lo que pase, Mustache nunca se quedará en blanco.
         model.addAttribute("cartCount", 0);
         model.addAttribute("loggedUser", false); // Mustache prefiere booleanos falsos a nulos para los bloques {{#...}}
@@ -55,17 +55,17 @@ public class GlobalControllerAdvice {
         }
     }
 
-    @ExceptionHandler(Exception.class)
-    public String handleError() {
-        return "error";
-    }
-    @ExceptionHandler(MultipartException.class)
-    public String handleMultipartException(MultipartException exc, RedirectAttributes redirectAttributes) {
-        
-        // Le mandamos el mensaje rojo al formulario
-        redirectAttributes.addFlashAttribute("errorMessage", "Error: The uploaded files are too large or invalid. Maximum 15MB per file.");
-        
-        // Lo devolvemos a la página de añadir producto
-        return "redirect:/product/add"; 
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String handleError() {
+//        return "error";
+//    }
+//    @ExceptionHandler(MultipartException.class)
+//    public String handleMultipartException(MultipartException exc, RedirectAttributes redirectAttributes) {
+//
+//        // Le mandamos el mensaje rojo al formulario
+//        redirectAttributes.addFlashAttribute("errorMessage", "Error: The uploaded files are too large or invalid. Maximum 15MB per file.");
+//
+//        // Lo devolvemos a la página de añadir producto
+//        return "redirect:/product/add";
+//    }
 }

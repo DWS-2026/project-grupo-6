@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Tu Base de Datos
+  mysql-db:
+    image: mysql:8.0
+    container_name: crossfire_mysql
+    environment:
+      MYSQL_DATABASE: crossfire_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # El Visor Web (phpMyAdmin)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: crossfire_pma
+    ports:
+      # Lo ponemos en el 8081 para dejar tu puerto 8080 libre para Spring Boot
+      - "8081:80" 
+    environment:
+      # ¡Aquí está la magia! Le decimos que se conecte al servicio llamado "mysql-db"
+      PMA_HOST: mysql-db 
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql_data:

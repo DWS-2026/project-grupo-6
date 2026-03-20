@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller; 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class ProductController {
     private ImageService imageService;
 
     @GetMapping("/add")
-    public String renderProductForm(HttpSession session) {
+    public String renderProductForm(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -52,8 +53,12 @@ public class ProductController {
         }
 
         if(userService.checkIfAdmin(sessionUser) == false){
+            model.addAttribute("isAdmin", false);
             return "redirect:/";
         }
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("isEdit", false);
+
         return "product-form";
     }
 
@@ -69,39 +74,28 @@ public class ProductController {
             @RequestParam(required = false) String specification,
             @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles,
             @RequestParam(value = "documentation", required = false) MultipartFile documentation,
-            RedirectAttributes attributes // <-- MAGIA para enviar mensajes de error a la vista
+            RedirectAttributes attributes // <-- MAGIC to send messages of error to the view
     ) {
         
-        // --- VALIDACIÓN DE SEGURIDAD BACKEND ---
-        // Contamos cuántos archivos reales nos han enviado (que no estén vacíos)
-        long validImagesCount = 0;
-        if (imageFiles != null) {
-            for (MultipartFile file : imageFiles) {
-                if (!file.isEmpty()) validImagesCount++;
-            }
-        }
+        // --- SECURITY VALIDATION OF BACKEND ---
+        // Count how many real archives are sent (not empty)
+        long validImagesCount = productService.checkNumberImages(imageFiles);
         
-        // Si nos intentan colar más de 4, bloqueamos y devolvemos error
+        // If more than 4, block
         if (validImagesCount > 4) {
             attributes.addFlashAttribute("errorMessage", "Security Error: Maximum 4 images allowed.");
             return "redirect:/product/add";
         }
 
         Product p = new Product();
-        p.setName(name);
-        p.setBrand(brand);
-        p.setPrice(price);
-        p.setCategory(category);
-        p.setPowerSource(powerSource);
-        p.setDescription(description);
-        p.setSpecification(specification);
+        productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
         p.setColors(colors != null ? colors : new ArrayList<>());
         p.setReviewCount(0);
 
         List<java.sql.Blob> productImages = new ArrayList<>();
         
         try {
-            // 1. Lógica de Imágenes
+            // 1. Images logic
             if (imageFiles != null && imageFiles.length > 0) {
                 for (MultipartFile file : imageFiles) {
                     if (!file.isEmpty()) {
@@ -117,16 +111,16 @@ public class ProductController {
             }
             p.setImages(productImages);
 
-            // 2. Lógica del PDF (¡Descomentada y lista!)
-            //if (documentation != null && !documentation.isEmpty()) {
-            //    byte[] docBytes = documentation.getBytes();
-            //    java.sql.Blob docBlob = new javax.sql.rowset.serial.SerialBlob(docBytes);
-            //    p.setDocumentation(docBlob);
-            //}
+            // 2. Logic of PDF
+            if (documentation != null && !documentation.isEmpty()) {
+                byte[] docBytes = documentation.getBytes();
+                java.sql.Blob docBlob = new javax.sql.rowset.serial.SerialBlob(docBytes);
+                p.setDocumentation(docBlob);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Si algo falla al procesar, avisamos al admin
+            // If something fails to process, warn admin
             attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
             return "redirect:/product/add";
         }
@@ -138,34 +132,34 @@ public class ProductController {
     @GetMapping("/{id}/image/{index}")
     public ResponseEntity<Object> getProductImage(@PathVariable Long id, @PathVariable int index) throws SQLException {
         
-        // Buscamos el producto en la BD
+        // Search product
         Optional<Product> productOpt = productService.getById(id); 
         
         if (productOpt.isPresent()) {
             Product product = productOpt.get();
             List<java.sql.Blob> images = product.getImages();
             
-            // Comprobamos que tenga fotos y que el índice que pedimos exista
+            // Check if it has images
             if (images != null && index >= 0 && index < images.size()) {
                 
                 java.sql.Blob imageBlob = images.get(index);
                 
-                // Lo convertimos a Resource (igual que en vuestro ImageService)
+                // Change to Resource
                 Resource imageFile = new InputStreamResource(imageBlob.getBinaryStream());
                 
-                // Adivinamos el tipo (JPEG, PNG...)
+                // Guess the type (JPEG, PNG...)
                 MediaType mediaType = MediaTypeFactory
                         .getMediaType(imageFile)
                         .orElse(MediaType.IMAGE_JPEG);
 
-                // Lo enviamos a la vista
+                // Send to view
                 return ResponseEntity.ok()
                         .contentType(mediaType)
                         .body(imageFile);
             }
         }
         
-        // Si falla algo, devolvemos 404
+        // If it fails -> 404
         return ResponseEntity.notFound().build();
     }
 }

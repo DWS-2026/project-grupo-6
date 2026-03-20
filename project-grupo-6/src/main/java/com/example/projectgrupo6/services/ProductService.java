@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.repositories.ProductRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductService {
@@ -50,4 +51,62 @@ public class ProductService {
         
         return randomList.subList(0, Math.min(3, randomList.size()));
     }
+
+    public void setAttbProduct (Product product, String name, String brand, double price, String categ, String powerS, String desc, String spec){
+        product.setName(name);
+        product.setBrand(brand);
+        product.setPrice(price);
+        product.setCategory(categ);
+        product.setPowerSource(powerS);
+        product.setDescription(desc);
+        product.setSpecification(spec);
+    }
+
+    public long checkNumberImages (MultipartFile[] imageFiles){
+        long validImagesCount = 0;
+        if (imageFiles != null) {
+            for (MultipartFile file : imageFiles) {
+                if (!file.isEmpty()) validImagesCount++;
+            }
+        }
+        return validImagesCount;
+    }
+
+    public boolean setProductImages(Product p, MultipartFile[] imageFiles){
+        long numberImages = checkNumberImages(imageFiles);
+        boolean error = true;
+        if(numberImages <= 4){
+            try{
+                for (MultipartFile file : imageFiles) {
+                    if (!file.isEmpty()) {
+                        byte[] bytes = file.getBytes();
+                        java.sql.Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                        p.getImages().add(blob);
+                    }
+                }
+                error = false;
+                return false;
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return error;
+    }
+
+    public boolean setDocumentation (Product p, MultipartFile doc){
+        boolean error = true;
+        try{
+            if (doc != null && !doc.isEmpty()) {
+                byte[] docBytes = doc.getBytes();
+                java.sql.Blob docBlob = new javax.sql.rowset.serial.SerialBlob(docBytes);
+                p.setDocumentation(docBlob);
+            }
+            error = false;
+            return error;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
