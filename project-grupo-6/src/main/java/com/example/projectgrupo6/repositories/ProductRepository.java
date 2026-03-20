@@ -2,6 +2,7 @@ package com.example.projectgrupo6.repositories;
 
 import java.util.List;
 
+import com.example.projectgrupo6.domain.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.projectgrupo6.domain.Product;

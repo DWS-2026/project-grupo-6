@@ -56,8 +56,10 @@ public class ProductController {
             model.addAttribute("isAdmin", false);
             return "redirect:/";
         }
+
         model.addAttribute("isAdmin", true);
         model.addAttribute("isEdit", false);
+        model.addAttribute("actionUrl", "/product/add");
 
         return "product-form";
     }
