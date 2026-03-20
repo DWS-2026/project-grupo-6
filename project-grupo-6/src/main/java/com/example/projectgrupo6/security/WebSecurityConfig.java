@@ -61,13 +61,13 @@ public class WebSecurityConfig {
                     .anyRequest().authenticated() 
             )
             .formLogin(formLogin -> formLogin
-                    .loginPage("/login") // OJO: Tu ruta real suele ser /user/login, revísalo
-                    .failureUrl("/loginerror")
-                    .defaultSuccessUrl("/")
+                    .loginPage("/user/login")
+                    .failureUrl("/user/loginerror")
+                    .defaultSuccessUrl("/user/profile")
                     .permitAll()
             )
             .logout(logout -> logout
-                    .logoutUrl("/logout") // Igual aquí, suele ser /user/logout
+                    .logoutUrl("/user/logout") // Igual aquí, suele ser /user/logout
                     .logoutSuccessUrl("/")
                     .permitAll()
             );

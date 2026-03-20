@@ -51,6 +51,10 @@ public class UserController {
         public String showlogin(Model model){
             return "login";
         }
+        @GetMapping("/loginerror")
+        public String loginError() {
+            return "login-error";
+        }
 
         @GetMapping ("/logout")
         public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
