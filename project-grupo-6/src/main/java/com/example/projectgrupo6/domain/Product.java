@@ -145,6 +145,17 @@ public class Product {
         return "/css/img/default-product.png";
     }
 
+    @Transient
+        public List<String> getImageUrlList() {
+            List<String> urls = new ArrayList<>();
+            if (this.id != null && this.images != null && !this.images.isEmpty()) {
+                for (int i = 0; i < this.images.size(); i++) {
+                    urls.add("/product/" + this.id + "/image/" + i); 
+                }
+            }
+            return urls;
+        }
+
     public String getPowerSource() {
         return powerSource;
     }

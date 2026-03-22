@@ -2,94 +2,73 @@
 <html lang="en">
 
 <head>
-    <title>Create User - Crossfire Shop</title>
+    <title>Account - Crossfire Shop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="apple-touch-icon" href="../static/css/img/apple-icon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="../static/css/img/favicon.ico">
+    <link rel="apple-touch-icon" href="/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/css/img/favicon.ico">
 
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/templatemo.css">
-    <link rel="stylesheet" href="../static/css/custom.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/templatemo.css">
+    <link rel="stylesheet" href="/css/custom.css">
 
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light">
     {{>header}}
 
-    <!-- Form -->
-    <div class="container py-5">
+    <div class="container py-5 flex-grow-1">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-body">
+                <div class="card shadow border-0 rounded-3">
+                    <div class="card-body p-4">
 
-                        {{#edit}} <h3 class="text-center mb-4">Edit Account</h3> {{/edit}}
-                        {{^edit}} <h3 class="text-center mb-4">Create Account</h3> {{/edit}}
+                        {{#edit}} <h3 class="text-center mb-4 text-success"><i class="fas fa-user-edit"></i> Edit Account</h3> {{/edit}}
+                        {{^edit}} <h3 class="text-center mb-4 text-success"><i class="fas fa-user-plus"></i> Create Account</h3> {{/edit}}
 
                         <div id="errorBox" class="alert alert-danger" style="display:none"></div>
 
                         <form method="post" id="registerForm" enctype="multipart/form-data"
                               action="{{#edit}}/user/update{{/edit}}{{^edit}}/user/new{{/edit}}">
+                            
                             <div class="mb-3">
-                                <label class="form-label">First Name</label>
-                                {{#edit}}
-                                    <input type="text" class="form-control" value="{{user.firstname}}" name="firstname" required>
-                                {{/edit}}
-                                {{^edit}}
-                                    <input type="text" class="form-control" name="firstname" required>
-                                {{/edit}}
+                                <label class="form-label fw-bold">First Name</label>
+                                <input type="text" class="form-control" name="firstname" value="{{#edit}}{{user.firstname}}{{/edit}}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Last Name</label>
-                                {{#edit}}
-                                    <input type="text" class="form-control" value="{{user.lastname}}" name="lastname" required>
-                                {{/edit}}
-                                {{^edit}}
-                                    <input type="text" class="form-control" name="lastname" required>
-                                {{/edit}}
+                                <label class="form-label fw-bold">Last Name</label>
+                                <input type="text" class="form-control" name="lastname" value="{{#edit}}{{user.lastname}}{{/edit}}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Email Address</label>
-                                {{#edit}}
-                                    <input type="email" class="form-control" value="{{user.email}}" name="email" required>
-                                {{/edit}}
-                                {{^edit}}
-                                    <input type="email" class="form-control" name="email" required>
-                                {{/edit}}
+                                <label class="form-label fw-bold">Email Address</label>
+                                <input type="email" class="form-control" name="email" value="{{#edit}}{{user.email}}{{/edit}}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                {{#edit}}
-                                    <input type="text" class="form-control" value="{{user.username}}" name="username" required>
-                                {{/edit}}
-                                {{^edit}}
-                                    <input type="text" class="form-control" name="username" required>
-                                {{/edit}}
+                                <label class="form-label fw-bold">Username</label>
+                                <input type="text" class="form-control" name="username" value="{{#edit}}{{user.username}}{{/edit}}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" class="form-control" name="password" required>
+                                <label class="form-label fw-bold">Password</label>
+                                <input type="password" class="form-control" name="encodedPassword" required>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Confirm Password</label>
+                                <label class="form-label fw-bold">Confirm Password</label>
                                 <input type="password" class="form-control" name="confirmPassword" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="image" class="form-label">Profile image</label>
+                            <div class="mb-4">
+                                <label for="image" class="form-label fw-bold">Profile Image</label>
                                 <input class="form-control" type="file" id="image" name="image" accept=".jpg,.jpeg,.png">
-                                <div class="form-text">
-                                    Upload your profile image (JPG, JPEG, PNG).
+                                <div class="form-text text-muted">
+                                    <i class="fas fa-info-circle"></i> Upload your profile image (JPG, JPEG, PNG). Max 15MB.
                                 </div>
                             </div>
 
@@ -99,21 +78,13 @@
                             </div>
                             {{/error}}
 
-                            <div class="d-grid">
-                                {{#edit}}
-                                    <button type="submit" class="btn btn-success btn-lg" value="Save">
-                                        Edit Account
-                                    </button>
-                                {{/edit}}
-                                {{^edit}}
-                                    <button type="submit" class="btn btn-success btn-lg" value="Save">
-                                        Create Account
-                                    </button>
-                                {{/edit}}
-                            </div>
-
-                            <div class="d-grid mt-3">
-                                <a href="javascript:history.back()" class="btn btn-secondary btn-lg">
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg fw-bold">
+                                    {{#edit}}Save Changes{{/edit}}
+                                    {{^edit}}Register{{/edit}}
+                                </button>
+                                
+                                <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">
                                     Back
                                 </a>
                             </div>
@@ -125,36 +96,39 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="../static/css/js/jquery-1.11.0.min.js"></script>
-    <script src="../static/css/js/bootstrap.bundle.min.js"></script>
+    {{>footer}}
+
+    <script src="/css/js/jquery-1.11.0.min.js"></script>
+    <script src="/css/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.getElementById("registerForm").addEventListener("submit", async function(e) {
-            e.preventDefault(); //avoids refreshing the page
+            e.preventDefault(); 
 
             const form = this;
             const formData = new FormData(form);
 
-            const response = await fetch(form.action, {
-                method: "POST",
-                body: formData
-            });
+            try {
+                const response = await fetch(form.action, {
+                    method: "POST",
+                    body: formData
+                });
 
-            if(response.status === 400){
-                const text = await response.text();
-                const errorBox = document.getElementById("errorBox");
-                errorBox.innerText = text;
-                errorBox.style.display = "block";
-                return;
+                if(response.status === 400){
+                    const text = await response.text();
+                    const errorBox = document.getElementById("errorBox");
+                    errorBox.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>' + text;
+                    errorBox.style.display = "block";
+                    return;
+                }
+
+                // if all fine -> redirect
+                window.location.href = await response.text();
+            } catch (error) {
+                console.error("Error submitting form:", error);
             }
-
-            // if all fine -> redirect
-            window.location.href = await response.text();
         });
     </script>
-
-    {{>footer}}
 
 </body>
 </html>

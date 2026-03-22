@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                     
                     // PUBLIC PAGES
                     .requestMatchers("/").permitAll()
+                    .requestMatchers("/user/new").permitAll()
                     .requestMatchers("/shop/**").permitAll() // <-- Asegúrate de que la tienda es pública
                     .requestMatchers("/product/*/image/*").permitAll() // <-- Tus rutas dinámicas de fotos
                     
@@ -62,6 +63,7 @@ public class WebSecurityConfig {
             )
             .formLogin(formLogin -> formLogin
                     .loginPage("/user/login")
+                    .usernameParameter("email")
                     .failureUrl("/user/loginerror")
                     .defaultSuccessUrl("/user/profile")
                     .permitAll()

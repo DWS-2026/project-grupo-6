@@ -1,5 +1,6 @@
 package com.example.projectgrupo6.controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,9 @@ import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +32,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import org.springframework.core.io.Resource;
+import java.sql.Blob;
+import org.springframework.http.MediaType;
 
 
 @Controller
@@ -76,6 +84,26 @@ public class ShopController {
         } else {
             return "redirect:/shop";
         }
+    }
+    @GetMapping("/product/{id}/image/{index}")
+    public ResponseEntity<Resource> getProductImageByIndex(@PathVariable Long id, @PathVariable int index) throws SQLException {
+        Optional<Product> productOpt = productService.getById(id);
+
+        if (productOpt.isPresent()) {
+            List<Blob> images = productOpt.get().getImages();
+
+            if (images != null && index >= 0 && index < images.size()) {
+                Blob imageBlob = images.get(index);
+                Resource imageResource = new InputStreamResource(imageBlob.getBinaryStream());
+                
+                MediaType mediaType = MediaTypeFactory
+                        .getMediaType(imageResource)
+                        .orElse(MediaType.IMAGE_JPEG);
+
+                return ResponseEntity.ok().contentType(mediaType).body(imageResource);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/shop/{id}/comment")

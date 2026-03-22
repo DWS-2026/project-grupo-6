@@ -41,30 +41,20 @@
             </li>
           </ul>
         </div>
+
         <div class="navbar align-self-center d-flex">
           
           <a class="nav-icon position-relative text-decoration-none" href="/cart">
             <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-            <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">{{cartCount}}</span>
+            <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
           </a>
 
-          {{#loggedUser}}
-          <a class="nav-icon position-relative text-decoration-none" href="/user/profile" title="Mi Perfil">
-            <i class="fa fa-fw fa-user text-dark mr-1"></i>
-            <span class="text-dark">{{username}}</span>
-          </a>
-          <a class="nav-icon position-relative text-decoration-none ml-3" href="/user/logout" title="Cerrar sesión">
-            <i class="fa fa-fw fa-sign-out-alt text-danger"></i>
-          </a>
-          {{/loggedUser}}
-
-          {{^loggedUser}}
           <a class="nav-icon position-relative text-decoration-none" href="/user/login" title="Iniciar sesión">
             <i class="fa fa-fw fa-user text-dark mr-3"></i>
-            </a>
-          {{/loggedUser}}
-
+          </a>
+          
         </div>
+      
       </div>
 
     </div>

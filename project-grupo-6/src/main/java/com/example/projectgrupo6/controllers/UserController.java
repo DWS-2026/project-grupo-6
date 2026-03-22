@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,35 +48,53 @@ public class UserController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
         @GetMapping("/login")
         public String showlogin(Model model){
             return "login";
         }
         @GetMapping("/loginerror")
         public String loginError() {
-            return "login-error";
-        }
-
-        @GetMapping ("/logout")
-        public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
-
-            //logout message
-            redirectAttributes.addFlashAttribute("message", "Has cerrado sesión correctamente.");
-
-            return "redirect:/";
+            return "loginerror";
         }
 
         @GetMapping ("/new")
         public String register (Model model){
             model.addAttribute("user", new User());
-            //model.addAttribute("formAction", "/user/new");
             model.addAttribute("edit", false);
 
             return "user-form";
+        }
+        @PostMapping("/new")
+        public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
+                                                    @RequestParam("confirmPassword") String confirmPassword, 
+                                                    MultipartFile image) throws Exception {
+
+            if (userService.findByEmail(user.getEmail()) != null || userService.findByUsername(user.getUsername()) != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
+            }
+
+            if (!user.getEncodedPassword().equals(confirmPassword)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords don't match");
+            }
+
+            user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
+
+            if (!image.isEmpty()) {
+                try {
+                    Image saved = imageService.createImage(image);
+                    user.setProfileImage(new SerialBlob(saved.getImageFile()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            user.setRol("USER"); 
+            userService.save(user);
+
+            return ResponseEntity.ok("/user/login");
         }
 
         @GetMapping("/profile")
@@ -113,85 +132,6 @@ public class UserController {
             } else {
                 return ResponseEntity.badRequest().build();
             }
-        }
-        
-        @PostMapping("/login")
-        public String processLogin(@RequestParam String email, 
-                                @RequestParam String password, 
-                                HttpSession session, 
-                                Model model) {
-            
-            Optional<User> userDb = userService.findByEmail(email);
-
-            if (userDb.isPresent() && userService.logincheck(userDb.get(), password)) {
-                session.setAttribute("user", userDb.get());
-                return "redirect:/user/profile"; 
-            } else {
-                model.addAttribute("error", "Email o contraseña incorrectos");
-                return "login";
-            }
-        }
-
-        @PostMapping ("/logout")
-        public String logoutSubmit(HttpSession session, RedirectAttributes redirectAttributes){
-            if (session != null) {
-                session.invalidate();
-            }
-
-            redirectAttributes.addFlashAttribute("message", "Has cerrado sesión correctamente.");
-
-            /*  //With Spring Security (?)
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null) {
-                new SecurityContextLogoutHandler().logout(request, response, auth);
-            }*/
-
-            return "redirect:/";
-        }
-
-        @PostMapping ("/new")
-        public ResponseEntity<String> registerSubmit (@ModelAttribute("user") User user, @RequestParam("confirmPassword") String confirmPassword, MultipartFile image, Model model, HttpSession session, HttpStatus status) throws Exception{
-
-            //Search email & username doesn't already exist
-            if (userService.findByEmail(user.getEmail()) != null
-                    || userService.findByUsername(user.getUsername()) != null) {
-                //error
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("User with those credentials already exists");
-            }
-
-            //Then check correct password twice:
-            if(!userService.checkCreatePassword(user.getEncodedPassword(), confirmPassword)){
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body("Passwords don't match");
-            }
-
-            // Set image
-            if(!image.isEmpty()){
-                try {
-                    Image saved = imageService.createImage(image);
-                    user.setProfileImage(new SerialBlob(saved.getImageFile()));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            //Then save:
-            userService.save(user);
-
-            //Redirect:
-            User currentUser = (User) session.getAttribute("user");
-            if (currentUser != null && userService.checkIfAdmin(currentUser)) {
-                return ResponseEntity.ok("/admin/users");
-            } else {
-                //Automathic login
-                session.setAttribute("user", user);
-
-                return ResponseEntity.ok("profile");
-            }
-
         }
 
         @GetMapping("/comments")

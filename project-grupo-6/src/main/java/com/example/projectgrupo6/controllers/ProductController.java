@@ -129,7 +129,7 @@ public class ProductController {
         return "redirect:/admin/products"; 
     }
 
-    @GetMapping("/{id}/image/{index}")
+    /*@GetMapping("/{id}/image/{index}")
     public ResponseEntity<Object> getProductImage(@PathVariable Long id, @PathVariable int index) throws SQLException {
         
         // Search product
@@ -161,5 +161,5 @@ public class ProductController {
         
         // If it fails -> 404
         return ResponseEntity.notFound().build();
-    }
+    }*/
 }
