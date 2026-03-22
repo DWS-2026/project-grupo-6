@@ -195,7 +195,7 @@ public class AdminController {
     }
 
     @GetMapping ("/products/{productId}")
-    public String showProduct (@PathVariable long prodId, HttpSession session, Model model){
+    public String showProduct (@PathVariable long productId, HttpSession session, Model model){
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -206,7 +206,7 @@ public class AdminController {
         }
         model.addAttribute("isAdmin", true);
 
-        Optional <Product> op = productService.getById(prodId);
+        Optional <Product> op = productService.getById(productId);
         if(!op.isPresent()){
             return "redirect:/products";
         }
@@ -217,7 +217,7 @@ public class AdminController {
     }
 
     @GetMapping("/products/{productId}/edit")
-    public String editProduct (@PathVariable long prodId, HttpSession session, Model model){
+    public String editProduct (@PathVariable long productId, HttpSession session, Model model){
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -227,22 +227,30 @@ public class AdminController {
             return "redirect:/";
         }
         model.addAttribute("isAdmin", true);
-        model.addAttribute("isEdit", true);
 
-        Optional<Product> op = productService.getById(prodId);
-        if(op.isPresent()) {
+        Optional<Product> op = productService.getById(productId);
+
+        //So Mustache doesn't crash out
+        model.addAttribute("nameValue", op.isPresent() ? op.get().getName() : "");
+        model.addAttribute("brandValue", op.isPresent() ? op.get().getBrand() : "");
+        model.addAttribute("priceValue", op.isPresent() ? op.get().getPrice() : "");
+
+        if (op.isPresent()) {
             Product p = op.get();
             model.addAttribute("product", p);
+            model.addAttribute("isEdit", true);
+            model.addAttribute("actionUrl", "/admin/products/" + p.getId() + "/edit");
         } else {
-            model.addAttribute("product", null);
-            return "redirect:/admin/product";
+            model.addAttribute("isEdit", false);
+            model.addAttribute("actionUrl", "/product/add");
         }
+        //return "redirect:/admin/products";
 
         return "product-form";
     }
 
     @PostMapping("/products/{productId}/edit")
-    public String editProductSubmit (@PathVariable long prodId,
+    public String editProductSubmit (@PathVariable long productId,
                                      @RequestParam String name,
                                      @RequestParam String brand,
                                      @RequestParam Double price,
@@ -253,8 +261,8 @@ public class AdminController {
                                      @RequestParam List<String> colors,
                                      @RequestParam int stock,
                                      @RequestParam(value = "image", required = false) MultipartFile[] images,
-                                     @RequestParam(value = "image", required = false) MultipartFile documentation,
-                                     RedirectAttributes attributes, HttpSession session, Model model){
+                                     @RequestParam(value = "documentation", required = false) MultipartFile documentation,
+                                     RedirectAttributes attributes, HttpSession session, Model model) throws IOException{
 
         User sessionUser = (User) session.getAttribute("user");
         if(sessionUser == null){
@@ -264,10 +272,9 @@ public class AdminController {
             return "redirect:/";
         }
 
-        Optional<Product> op = productService.getById(prodId);
+        Optional<Product> op = productService.getById(productId);
         if(op.isPresent()){
             Product p = op.get();
-            model.addAttribute("product", p);
 
             productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
             p.setColors(colors != null ? colors : new ArrayList<>());
@@ -275,16 +282,27 @@ public class AdminController {
 
             //images and pdf logic here
             List<java.sql.Blob> productImages = new ArrayList<>();
+            boolean imageError = false;
+            boolean docError = false;
+
+            if(documentation != null && !documentation.isEmpty()) {
+                docError = productService.setDocumentation(p, documentation);
+            }
+
             if(images != null) {
-                boolean imageError = productService.setProductImages(p, images);
-                boolean docError = productService.setDocumentation(p, documentation);
-                if(imageError || docError){
+                imageError = productService.setProductImages(p, images);
+                if(imageError){
                     attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
-                    return "redirect:/admin//products/{productId}/edit";
+                    return "redirect:/admin/products/" + productId + "/edit";
                 }
             } else {
                 imageService.loadImage("default-product.png");
+                if(docError){
+                    attributes.addFlashAttribute("errorMessage", "Error processing the file. Please try again.");
+                    return "redirect:/admin/products/" + productId + "/edit";
+                }
             }
+
             productService.save(p);
             return "redirect:/admin/products";
 
@@ -295,7 +313,7 @@ public class AdminController {
     }
 
     @PostMapping("/products/{productId}/delete")
-    public String deleteProd (@PathVariable long prodId, HttpSession session, Model model){
+    public String deleteProd (@PathVariable long productId, HttpSession session, Model model){
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
@@ -304,12 +322,8 @@ public class AdminController {
         if(userService.checkIfAdmin(sessionUser) == false){
             return "redirect:/";
         }
-
-        List<Comment> comments = commentService.findAllByProductId(prodId);
-        commentService.deleteList(comments);
-
-        productService.delete(prodId);
-        return "admin-product-list";
+        productService.delete(productId);
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/users/{userId}/comments")

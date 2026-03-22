@@ -1,7 +1,10 @@
 package com.example.projectgrupo6.services;
 
 import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.repositories.ImageRepository;
+import com.example.projectgrupo6.repositories.ProductRepository;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -12,12 +15,16 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ImageService {
     @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public Image createImage(MultipartFile imageFile) throws IOException { //save
         Image image = new Image();
@@ -32,6 +39,7 @@ public class ImageService {
         return image;
     }
 
+    //For one image
     public Resource getImageFile(long id) throws SQLException { //show
         Optional<Image> image = imageRepository.findById(id);
 
@@ -41,6 +49,23 @@ public class ImageService {
             throw new RuntimeException("Image file not found");
             //return new ClassPathResource("static/images/default-profile.png");
         }
+    }
+
+    //For multiple images
+    public Resource getImageFile(long productId, int index) throws SQLException {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Depends of the images in Product
+        List<Blob> images = product.getImages();
+
+        if (images == null || images.isEmpty() || index >= images.size()) {
+            return new ClassPathResource("static/css/img/default-product.png");
+        }
+
+        Blob image = images.get(index);
+        return new InputStreamResource(image.getBinaryStream());
     }
 
     public Blob loadImage(String fileName) { //Image by default
@@ -58,4 +83,21 @@ public class ImageService {
         }
         return null; //If it fails, it won't have image
     }
+
+
+    //Documentation
+    public Product uploadDocumentation(long productId, MultipartFile file) throws IOException {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        try {
+            product.setDocumentation(new SerialBlob(file.getBytes()));
+        } catch (Exception e) {
+            throw new IOException("Error saving documentation", e);
+        }
+
+        return productRepository.save(product);
+    }
+
 }
