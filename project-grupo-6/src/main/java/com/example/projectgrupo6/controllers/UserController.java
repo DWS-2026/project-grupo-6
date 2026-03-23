@@ -9,7 +9,6 @@ import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -47,69 +46,23 @@ public class UserController {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-        @GetMapping("/login")
-        public String showlogin(Model model){
-            return "login";
-        }
-        @GetMapping("/loginerror")
-        public String loginError() {
-            return "loginerror";
-        }
-
-        @GetMapping ("/new")
-        public String register (Model model){
-            model.addAttribute("user", new User());
-            model.addAttribute("edit", false);
-
-            return "user-form";
-        }
-        @PostMapping("/new")
-        public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
-                                                    @RequestParam("confirmPassword") String confirmPassword, 
-                                                    MultipartFile image) throws Exception {
-
-            if (userService.findByEmail(user.getEmail()) != null || userService.findByUsername(user.getUsername()) != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
-            }
-
-            if (!user.getEncodedPassword().equals(confirmPassword)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords don't match");
-            }
-
-            user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
-
-            if (!image.isEmpty()) {
-                try {
-                    Image saved = imageService.createImage(image);
-                    user.setProfileImage(new SerialBlob(saved.getImageFile()));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            user.setRol("USER"); 
-            userService.save(user);
-
-            return ResponseEntity.ok("/user/login");
-        }
+        
+        // Método auxiliar para obtener el usuario conectado de forma limpia
+        private User getSessionUser(HttpServletRequest request) {
+            String email = request.getUserPrincipal().getName(); 
+            return userService.findByEmail(email).orElse(null); 
+        }   
 
         @GetMapping("/profile")
-        public String profile(HttpSession session, Model model) {
+        public String profile(HttpServletRequest request, Model model) {
 
-            User sessionUser = (User) session.getAttribute("user");
-            if (sessionUser == null) {
-                return "redirect:/user/login"; 
+            User user = getSessionUser(request);            
+            if(user == null) {
+                return "redirect:/user/login";
             }
 
-            User user = userService.getById(sessionUser.getId()).orElse(sessionUser);
             model.addAttribute("user", user);
-            if(userService.checkIfAdmin(sessionUser)){
-                model.addAttribute("isAdmin", true);
-            }
+            model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
 
             return "profile";
         }
@@ -135,15 +88,13 @@ public class UserController {
         }
 
         @GetMapping("/comments")
-        public String showUserComments(Model model, HttpSession session) {
-            User sessionUser = (User) session.getAttribute("user");
+        public String showUserComments(Model model, HttpServletRequest request) {
+            User sessionUser = getSessionUser(request);            
             if (sessionUser == null) {
                 return "redirect:/user/login";
             }
 
-            if(userService.checkIfAdmin(sessionUser) == true){
-            model.addAttribute("isAdmin", true);
-            }
+            model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
 
             List <Comment> userComments = commentService.findAllByUser(sessionUser.getId());
             model.addAttribute("comments", userComments);
@@ -154,57 +105,36 @@ public class UserController {
         @PostMapping("/comments/update/{commentId}")
         public String updateCommentFromProfile(@PathVariable Long commentId, 
                                             @RequestParam String newContent, 
-                                            HttpSession session) {
+                                            HttpServletRequest request) {
             
-            User sessionUser = (User) session.getAttribute("user");
-            if (sessionUser == null) {
-                return "redirect:/user/login";
-            }
+            User sessionUser = getSessionUser(request);
+            if (sessionUser == null) return "redirect:/user/login";
 
             commentService.editComment(commentId, sessionUser.getId(), newContent);
-
-            return "redirect:/user/comments"; 
+            return "redirect:/user/comments";
         }
 
         @PostMapping("/comments/delete/{commentId}")
         public String deleteCommentFromProfile(@PathVariable Long commentId, 
-                                            HttpSession session) {
+                                            HttpServletRequest request) {
             
-            User sessionUser = (User) session.getAttribute("user");
-            if (sessionUser == null) {
-                return "redirect:/user/login";
-            }
+            User sessionUser = getSessionUser(request);
+            if (sessionUser == null) return "redirect:/user/login";
 
             commentService.deleteComment(commentId, sessionUser.getId());
-
             return "redirect:/user/comments";
         }
         
         @GetMapping("/update")
-        public String showUserProfile(HttpSession session, Model model) {
+        public String showUserProfile(HttpServletRequest request, Model model) {
             
-            User sessionUser = (User) session.getAttribute("user");
-            
-            if (sessionUser == null) {
-                return "redirect:/user/login";
-            }
+            User sessionUser = getSessionUser(request);
+            if (sessionUser == null) return "redirect:/user/login";
 
-            Optional<User> freshUser = userService.getById(sessionUser.getId());
-            
-            if (freshUser.isPresent()) {
-                User user = freshUser.get();
-                
-                model.addAttribute("user", user);
-                
-                session.setAttribute("user", user);
-            } else {
-                session.invalidate(); 
-                return "redirect:/user/login";
-            }
+            model.addAttribute("user", sessionUser);
+            model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
 
-            model.addAttribute("isAdmin", userService.checkIfAdmin(sessionUser));
-
-            return "profile-edit"; 
+            return "profile-edit";
         }
 
         @PostMapping("/update")
@@ -214,77 +144,64 @@ public class UserController {
             @RequestParam String username,
             @RequestParam String email,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, 
-            HttpSession session,
+            HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
-            User sessionUser = (User) session.getAttribute("user");
+            User userToUpdate = getSessionUser(request);
+            if (userToUpdate == null) return "redirect:/user/login";
             
-            if (sessionUser == null) {
-                return "redirect:/user/login";
+            // Comprobamos si el usuario ha cambiado su email
+            boolean emailChanged = !userToUpdate.getEmail().equals(email);
+
+            userToUpdate.setFirstname(firstname);
+            userToUpdate.setLastname(lastname);
+            userToUpdate.setUsername(username);
+            userToUpdate.setEmail(email);
+
+            if (imageFile != null && !imageFile.isEmpty()) {
+                try {
+                    Image saved = imageService.createImage(imageFile);
+                    userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
+                } catch (Exception e) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error updating your profile image.");
+                    return "redirect:/user/profile"; 
+                }
             }
 
-            Optional<User> userOptional = userService.getById(sessionUser.getId());
-            
-            if (userOptional.isPresent()) {
-                User userToUpdate = userOptional.get();
-                
-                userToUpdate.setFirstname(firstname);
-                userToUpdate.setLastname(lastname);
-                userToUpdate.setUsername(username);
-                userToUpdate.setEmail(email);
+            userService.save(userToUpdate);
+            redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
 
-                // --- NUEVA LÓGICA DE IMAGEN ---
-                if (imageFile != null && !imageFile.isEmpty()) {
-                    try {
-                        Image saved = imageService.createImage(imageFile);
-                        userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
-                    } catch (Exception e) {
-                        redirectAttributes.addFlashAttribute("errorMessage", "Error updating your profile image.");
-                        return "redirect:/user/profile"; 
-                    }
-                }
-
-                User savedUser = userService.save(userToUpdate);
-
-                session.setAttribute("user", savedUser);
-
-                redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
-            } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while updating your profile.");
+            // IMPORTANTE: Si cambia el email, el login de Spring Security se vuelve inválido.
+            // Le forzamos a hacer logout para que vuelva a iniciar sesión con el correo nuevo.
+            if(emailChanged){
+                return "redirect:/user/logout";
             }
 
             return "redirect:/user/profile";
         }
 
         @PostMapping ("/delete")
-        public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpSession session){
+        public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpServletRequest request){
             
-                User sessionUser = (User) session.getAttribute("user");
-                
-                if (sessionUser == null) {
-                    return "redirect:/user/login";
-                }
+            User sessionUser = getSessionUser(request);
+            if (sessionUser == null) return "redirect:/user/login";
 
             userService.delete(sessionUser);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
-            session.invalidate();
-            return "redirect:/";
+            
+            // Redirigimos a la ruta mágica de Spring Security para destruir la sesión de verdad
+            return "redirect:/user/logout";
         }
 
         @GetMapping("/orders")
-        public String viewPurchaseHistory(HttpSession session, Model model) {
+        public String viewPurchaseHistory(HttpServletRequest request, Model model) {
             try {
-                User sessionUser = (User) session.getAttribute("user");
-                if (sessionUser == null) {
-                    return "redirect:/user/login";
-                }
+                User sessionUser = getSessionUser(request);
+                if (sessionUser == null) return "redirect:/user/login";
 
-                if(userService.checkIfAdmin(sessionUser) == true){
-                model.addAttribute("isAdmin", true);
-                }
+                model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
 
                 List<Order> userOrders = orderService.findAllByUser(sessionUser);
-                
                 model.addAttribute("orders", userOrders);
                 
                 return "profile-orders"; 

@@ -51,46 +51,24 @@ public class AdminController {
     private OrderService orderService;
 
     @GetMapping("/users")
-    public String listUsers(HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
-
+    public String listUsers(Model model) {
         model.addAttribute("isAdmin", true);
-
+        
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin-user-list";
     }
 
     @GetMapping("/users/edit/{id}")
-    public String editUser(@PathVariable Long id, HttpSession session, Model model) {
+    public String editUser(@PathVariable Long id, Model model) {
         
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
-
         model.addAttribute("isAdmin", true);
 
         Optional<User> userOptional = userService.getById(id);
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            model.addAttribute("user", user);
+            model.addAttribute("user", userOptional.get());
             return "admin-user-edit";
         } else {
-            model.addAttribute("user", null);
             return "redirect:/admin/users";
         }
     }
@@ -104,19 +82,8 @@ public class AdminController {
         @RequestParam String username,
         @RequestParam String rol,
         @RequestParam(value = "image", required = false) MultipartFile image, 
-        HttpSession session,
         RedirectAttributes redirectAttributes) {
         
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
-
         Optional<User> userOptional = userService.getById(id);
         
         if (userOptional.isPresent()) {
@@ -139,54 +106,30 @@ public class AdminController {
             }
 
             userService.save(userToUpdate);
-            
             redirectAttributes.addFlashAttribute("successMessage", "User profile updated successfully!");
-            return "redirect:/admin/users/edit/{id}";
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "User cannot be updated.");
-            return "redirect:/admin/users/edit/{id}";
         }
+        return "redirect:/admin/users/edit/" + id;
     }
 
     @GetMapping("/users/view/{id}")
-    public String viewUser(@PathVariable Long id, HttpSession session, Model model) {
+    public String viewUser(@PathVariable Long id, Model model) {
         
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
-
         model.addAttribute("isAdmin", true);
 
         Optional<User> userOptional = userService.getById(id);
         if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            model.addAttribute("user", user);
+            model.addAttribute("user", userOptional.get());
             return "admin-user-view";
         } else {
-            model.addAttribute("user", null);
             return "redirect:/admin/users";
         }
     }
 
     @GetMapping("/products")
-    public String listProducts(HttpSession session, Model model) {
+    public String listProducts(Model model) {
         
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
-
         model.addAttribute("isAdmin", true);
 
         List<Product> products = productService.getAllProducts();
@@ -195,42 +138,24 @@ public class AdminController {
     }
 
     @GetMapping ("/products/{productId}")
-    public String showProduct (@PathVariable long productId, HttpSession session, Model model){
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
+    public String showProduct (@PathVariable long productId, Model model){
         model.addAttribute("isAdmin", true);
 
         Optional <Product> op = productService.getById(productId);
         if(!op.isPresent()){
-            return "redirect:/products";
+            return "redirect:/admin/products";
         }
 
-        Product prod = op.get();
-        model.addAttribute("product", prod);
+        model.addAttribute("product", op.get());
         return "product1-details";
     }
 
     @GetMapping("/products/{productId}/edit")
-    public String editProduct (@PathVariable long productId, HttpSession session, Model model){
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
+    public String editProduct (@PathVariable long productId, Model model){
         model.addAttribute("isAdmin", true);
 
         Optional<Product> op = productService.getById(productId);
 
-        //So Mustache doesn't crash out
         model.addAttribute("nameValue", op.isPresent() ? op.get().getName() : "");
         model.addAttribute("brandValue", op.isPresent() ? op.get().getBrand() : "");
         model.addAttribute("priceValue", op.isPresent() ? op.get().getPrice() : "");
@@ -242,9 +167,8 @@ public class AdminController {
             model.addAttribute("actionUrl", "/admin/products/" + p.getId() + "/edit");
         } else {
             model.addAttribute("isEdit", false);
-            model.addAttribute("actionUrl", "/product/add");
+            model.addAttribute("actionUrl", "/product/add"); 
         }
-        //return "redirect:/admin/products";
 
         return "product-form";
     }
@@ -262,15 +186,7 @@ public class AdminController {
                                      @RequestParam int stock,
                                      @RequestParam(value = "image", required = false) MultipartFile[] images,
                                      @RequestParam(value = "documentation", required = false) MultipartFile documentation,
-                                     RedirectAttributes attributes, HttpSession session, Model model) throws IOException{
-
-        User sessionUser = (User) session.getAttribute("user");
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
+                                     RedirectAttributes attributes, Model model) throws IOException{
 
         Optional<Product> op = productService.getById(productId);
         if(op.isPresent()){
@@ -279,9 +195,8 @@ public class AdminController {
             productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
             p.setColors(colors != null ? colors : new ArrayList<>());
             p.setReviewCount(0);
+            p.setStock(stock); // Faltaba setear el stock en tu código original
 
-            //images and pdf logic here
-            List<java.sql.Blob> productImages = new ArrayList<>();
             boolean imageError = false;
             boolean docError = false;
 
@@ -289,16 +204,17 @@ public class AdminController {
                 docError = productService.setDocumentation(p, documentation);
             }
 
-            if(images != null) {
+            if(images != null && images.length > 0 && !images[0].isEmpty()) {
                 imageError = productService.setProductImages(p, images);
                 if(imageError){
                     attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
                     return "redirect:/admin/products/" + productId + "/edit";
                 }
-            } else {
+            } else if (p.getImages() == null || p.getImages().isEmpty()) {
+                // Solo cargar imagen por defecto si no enviaron nuevas y el producto no tenía ya fotos
                 imageService.loadImage("default-product.png");
                 if(docError){
-                    attributes.addFlashAttribute("errorMessage", "Error processing the file. Please try again.");
+                    attributes.addFlashAttribute("errorMessage", "Error processing the document. Please try again.");
                     return "redirect:/admin/products/" + productId + "/edit";
                 }
             }
@@ -307,41 +223,25 @@ public class AdminController {
             return "redirect:/admin/products";
 
         } else {
-           model.addAttribute("product", null);
            return "redirect:/admin/products";
         }
     }
 
     @PostMapping("/products/{productId}/delete")
-    public String deleteProd (@PathVariable long productId, HttpSession session, Model model){
-        User sessionUser = (User) session.getAttribute("user");
-
-        if(sessionUser == null){
-            return "redirect:/user/login";
-        }
-        if(userService.checkIfAdmin(sessionUser) == false){
-            return "redirect:/";
-        }
+    public String deleteProd (@PathVariable long productId, Model model){
         productService.delete(productId);
         return "redirect:/admin/products";
     }
 
     @GetMapping("/users/{userId}/comments")
-    public String viewUserCommentsAsAdmin(@PathVariable Long userId, Model model, HttpSession session) {
+    public String viewUserCommentsAsAdmin(@PathVariable Long userId, Model model) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        
-        if (sessionUser == null || !userService.checkIfAdmin(sessionUser)) {
-            return "redirect:/user/login"; 
-        }
-
         model.addAttribute("isAdmin", true);
         
         Optional<User> targetUserOpt = userService.findById(userId); 
         
         if (targetUserOpt.isPresent()) {
             User targetUser = targetUserOpt.get();
-            
             model.addAttribute("targetUser", targetUser); 
             
             List<Comment> userComments = commentService.findAllByUser(targetUser.getId());
@@ -349,8 +249,6 @@ public class AdminController {
             
             return "admin-comment-list";
         } else {
-            model.addAttribute("targetUser", null);
-            model.addAttribute("comments", null);
             return "redirect:/admin/users"; 
         }
     }
@@ -359,18 +257,17 @@ public class AdminController {
     public String updateCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId, 
                                      @RequestParam String newContent, 
-                                     HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        
-        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
-            try {
-                commentService.editComment(commentId, sessionUser.getId(), newContent);
-                redirectAttributes.addFlashAttribute("successMessage", "Review updated successfully!");
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Error updating the review.");
-            }
+        try {
+            // Obtenemos el ID del administrador que está haciendo la edición para que quede registrado
+            String adminEmail = request.getUserPrincipal().getName();
+            User adminUser = userService.findByEmail(adminEmail).orElseThrow();
+            
+            commentService.editComment(commentId, adminUser.getId(), newContent);
+            redirectAttributes.addFlashAttribute("successMessage", "Review updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating the review.");
         }
         
         return "redirect:/admin/users/" + userId + "/comments";
@@ -378,32 +275,25 @@ public class AdminController {
 
     @PostMapping("/users/{userId}/comments/{commentId}/delete")
     public String deleteCommentAdmin(@PathVariable Long userId, 
-                                     @PathVariable Long commentId, 
-                                     HttpSession session,
+                                     @PathVariable Long commentId,
                                      RedirectAttributes redirectAttributes) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        
-        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
-            try {
-                commentService.deleteComment(commentId, sessionUser.getId());
-                redirectAttributes.addFlashAttribute("successMessage", "Review deleted successfully!");
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the review.");
-            }
+        try {
+            String adminEmail = request.getUserPrincipal().getName();
+            User adminUser = userService.findByEmail(adminEmail).orElseThrow();
+
+            commentService.deleteComment(commentId, adminUser.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Review deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the review.");
         }
         
         return "redirect:/admin/users/" + userId + "/comments";
     }
     
     @GetMapping("/users/{userId}/orders")
-    public String viewUserOrdersAsAdmin(@PathVariable Long userId, Model model, HttpSession session) {
+    public String viewUserOrdersAsAdmin(@PathVariable Long userId, Model model) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        if (sessionUser == null || !userService.checkIfAdmin(sessionUser)) {
-            return "redirect:/user/login"; 
-        }
-
         model.addAttribute("isAdmin", true);
         
         Optional<User> targetUserOpt = userService.getById(userId); 
@@ -417,8 +307,6 @@ public class AdminController {
             return "admin-user-orders";
 
         } else {
-            model.addAttribute("targetUser", null);
-            model.addAttribute("orders", null);
             return "redirect:/admin/users"; 
         }
     }
@@ -427,22 +315,18 @@ public class AdminController {
     public String updateOrderStatusAsAdmin(@PathVariable Long userId, 
                                            @PathVariable Long orderId, 
                                            @RequestParam String newStatus, 
-                                           HttpSession session,
                                            RedirectAttributes redirectAttributes) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
-            try {
-                Optional<Order> orderOpt = orderService.findById(orderId);
-                if(orderOpt.isPresent()) {
-                    Order order = orderOpt.get();
-                    order.setStatus(newStatus);
-                    orderService.save(order);
-                    redirectAttributes.addFlashAttribute("successMessage", "Order #" + orderId + " status updated to " + newStatus);
-                }
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Error updating the order status.");
+        try {
+            Optional<Order> orderOpt = orderService.findById(orderId);
+            if(orderOpt.isPresent()) {
+                Order order = orderOpt.get();
+                order.setStatus(newStatus);
+                orderService.save(order);
+                redirectAttributes.addFlashAttribute("successMessage", "Order #" + orderId + " status updated to " + newStatus);
             }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating the order status.");
         }
         return "redirect:/admin/users/" + userId + "/orders";
     }
@@ -450,26 +334,27 @@ public class AdminController {
     @PostMapping("/users/{userId}/orders/{orderId}/delete")
     public String deleteOrderAsAdmin(@PathVariable Long userId, 
                                      @PathVariable Long orderId, 
-                                     HttpSession session,
                                      RedirectAttributes redirectAttributes) {
         
-        User sessionUser = (User) session.getAttribute("user");
-        if (sessionUser != null && userService.checkIfAdmin(sessionUser)) {
-            try {
-                orderService.deleteById(orderId);
-                redirectAttributes.addFlashAttribute("successMessage", "Order deleted successfully.");
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the order.");
-            }
+        try {
+            orderService.deleteById(orderId);
+            redirectAttributes.addFlashAttribute("successMessage", "Order deleted successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting the order.");
         }
         return "redirect:/admin/users/" + userId + "/orders";
     }
 
     @PostMapping ("/users/delete/{id}")
     public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
-        //Add logic
-        userService.delete(user);
-        redirectAttributes.addFlashAttribute("success", "User deleted successfully");
+        Optional<User> optionalUser = userService.getById(id);
+        if(optionalUser.isPresent()){
+            userService.delete(optionalUser.get());
+            redirectAttributes.addFlashAttribute("success", "User deleted successfully");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "User not found.");
+        }
+        
         return "redirect:/admin/users";
     }
 

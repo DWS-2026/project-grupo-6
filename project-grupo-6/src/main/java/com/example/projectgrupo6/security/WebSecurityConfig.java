@@ -40,8 +40,8 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                     // Static resources and error page should be public
                     .requestMatchers(   "/css/**", 
-                                                    "/webfonts/**", 
-                                                    "/error"
+                                        "/webfonts/**", 
+                                        "/error"
                                                 ).permitAll()
                     //imagepaths should be public too, but we have to allow the dynamic ones with wildcards
                     .requestMatchers("/product/*/image/*", "/*/image").permitAll() // Rutas de fotos BD
@@ -50,7 +50,6 @@ public class WebSecurityConfig {
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/user/new").permitAll()
                     .requestMatchers("/shop/**").permitAll() // <-- Asegúrate de que la tienda es pública
-                    .requestMatchers("/product/*/image/*").permitAll() // <-- Tus rutas dinámicas de fotos
                     
                     // PRIVATE PAGES (Ajústalo a tu proyecto real, veo cosas de "books" del profe)
                     .requestMatchers("/product/add").hasAnyRole("ADMIN")
@@ -62,9 +61,9 @@ public class WebSecurityConfig {
                     .anyRequest().authenticated() 
             )
             .formLogin(formLogin -> formLogin
-                    .loginPage("/user/login")
+                    .loginPage("/login")
                     .usernameParameter("email")
-                    .failureUrl("/user/loginerror")
+                    .failureUrl("/loginerror")
                     .defaultSuccessUrl("/user/profile")
                     .permitAll()
             )

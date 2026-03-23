@@ -23,10 +23,10 @@ public class ProjectGrupo6Application {
     }
         */
     
-
+    /* 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    */
 }

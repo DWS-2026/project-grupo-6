@@ -1,6 +1,9 @@
 package com.example.projectgrupo6.controllers;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import com.example.projectgrupo6.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -8,11 +11,16 @@ import jakarta.servlet.http.HttpSession;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.projectgrupo6.domain.CartItem;
+import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.ProductService;
@@ -33,6 +41,9 @@ public class WebController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/") 
     public String greeting(Model model, HttpSession session){
@@ -60,4 +71,53 @@ public class WebController {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String showlogin(Model model){
+        return "login";
+    }
+        
+    @GetMapping("/loginerror")
+    public String loginError() {
+        return "loginerror";
+    }
+
+    @GetMapping ("/new")
+    public String register (Model model){
+        model.addAttribute("user", new User());
+        model.addAttribute("edit", false);
+
+        return "user-form";
+    }
+        
+    @PostMapping("/new")
+    public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
+                                                @RequestParam("confirmPassword") String confirmPassword, 
+                                                MultipartFile image) throws Exception {
+
+        if (userService.findByEmail(user.getEmail()) != null || userService.findByUsername(user.getUsername()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
+        }
+
+        if (!user.getEncodedPassword().equals(confirmPassword)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords don't match");
+        }
+
+        user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
+
+        if (!image.isEmpty()) {
+            try {
+                Image saved = imageService.createImage(image);
+                user.setProfileImage(new SerialBlob(saved.getImageFile()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        user.setRol("USER"); 
+        userService.save(user);
+
+        return ResponseEntity.ok("/user/login");
+    }
+
+    
 }

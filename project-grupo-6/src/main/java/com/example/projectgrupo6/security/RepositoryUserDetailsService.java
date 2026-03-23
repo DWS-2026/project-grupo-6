@@ -26,7 +26,7 @@ public class RepositoryUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail()) // Le pasamos el email como identificador
                 .password(user.getEncodedPassword()) // Le pasamos tu variable exacta
-                .roles(user.getRol()) // Le pasamos el rol (ej: "USER" o "ADMIN")
+                .roles(user.getRol().toUpperCase()) // Le pasamos el rol (ej: "USER" o "ADMIN")
                 .build();
     }
 }
