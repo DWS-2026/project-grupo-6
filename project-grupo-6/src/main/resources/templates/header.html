@@ -43,17 +43,41 @@
         </div>
 
         <div class="navbar align-self-center d-flex">
-          
-          <a class="nav-icon position-relative text-decoration-none" href="/cart">
-            <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-            <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-          </a>
+  
+        <a class="nav-icon position-relative text-decoration-none" href="/cart">
+          <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+          <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">
+            {{cartCount}}
+          </span>
+        </a>
 
+        {{#loggedUser}}
+          <div class="nav-item dropdown">
+            <a class="nav-icon position-relative text-decoration-none dropdown-toggle" href="#" id="userMenu" data-bs-toggle="dropdown">
+              <i class="fa fa-fw fa-user text-success mr-3"></i>
+              <span class="text-dark">{{username}}</span> </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+              <li><a class="dropdown-item" href="/user/profile">Mi Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form action="/logout" method="post" class="m-0">
+                  <button type="submit" class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
+                    Cerrar Sesión
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        {{/loggedUser}}
+
+        {{^loggedUser}}
           <a class="nav-icon position-relative text-decoration-none" href="/login" title="Iniciar sesión">
             <i class="fa fa-fw fa-user text-dark mr-3"></i>
+            <small class="text-dark">Login</small>
           </a>
-          
-        </div>
+        {{/loggedUser}}
+
+      </div>
       
       </div>
 
