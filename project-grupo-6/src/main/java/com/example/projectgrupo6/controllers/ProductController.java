@@ -49,7 +49,7 @@ public class ProductController {
         User sessionUser = (User) session.getAttribute("user");
 
         if(sessionUser == null){
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
 
         if(userService.checkIfAdmin(sessionUser) == false){

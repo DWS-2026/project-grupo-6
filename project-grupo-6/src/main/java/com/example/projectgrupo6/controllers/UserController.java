@@ -58,7 +58,7 @@ public class UserController {
 
             User user = getSessionUser(request);            
             if(user == null) {
-                return "redirect:/user/login";
+                return "redirect:/login";
             }
 
             model.addAttribute("user", user);
@@ -91,7 +91,7 @@ public class UserController {
         public String showUserComments(Model model, HttpServletRequest request) {
             User sessionUser = getSessionUser(request);            
             if (sessionUser == null) {
-                return "redirect:/user/login";
+                return "redirect:/login";
             }
 
             model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
@@ -108,7 +108,7 @@ public class UserController {
                                             HttpServletRequest request) {
             
             User sessionUser = getSessionUser(request);
-            if (sessionUser == null) return "redirect:/user/login";
+            if (sessionUser == null) return "redirect:/login";
 
             commentService.editComment(commentId, sessionUser.getId(), newContent);
             return "redirect:/user/comments";
@@ -119,7 +119,7 @@ public class UserController {
                                             HttpServletRequest request) {
             
             User sessionUser = getSessionUser(request);
-            if (sessionUser == null) return "redirect:/user/login";
+            if (sessionUser == null) return "redirect:/login";
 
             commentService.deleteComment(commentId, sessionUser.getId());
             return "redirect:/user/comments";
@@ -129,7 +129,7 @@ public class UserController {
         public String showUserProfile(HttpServletRequest request, Model model) {
             
             User sessionUser = getSessionUser(request);
-            if (sessionUser == null) return "redirect:/user/login";
+            if (sessionUser == null) return "redirect:/login";
 
             model.addAttribute("user", sessionUser);
             model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
@@ -148,7 +148,7 @@ public class UserController {
             RedirectAttributes redirectAttributes) {
 
             User userToUpdate = getSessionUser(request);
-            if (userToUpdate == null) return "redirect:/user/login";
+            if (userToUpdate == null) return "redirect:/login";
             
             // Check if user has changed its email
             boolean emailChanged = !userToUpdate.getEmail().equals(email);
@@ -184,7 +184,7 @@ public class UserController {
         public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpServletRequest request){
             
             User sessionUser = getSessionUser(request);
-            if (sessionUser == null) return "redirect:/user/login";
+            if (sessionUser == null) return "redirect:/login";
 
             userService.delete(sessionUser);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
@@ -197,7 +197,7 @@ public class UserController {
         public String viewPurchaseHistory(HttpServletRequest request, Model model) {
             try {
                 User sessionUser = getSessionUser(request);
-                if (sessionUser == null) return "redirect:/user/login";
+                if (sessionUser == null) return "redirect:/login";
 
                 model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
 
@@ -207,7 +207,7 @@ public class UserController {
                 return "profile-orders"; 
                 
             } catch (RuntimeException e) {
-                return "redirect:/user/login";
+                return "redirect:/login";
             }
         }
 
