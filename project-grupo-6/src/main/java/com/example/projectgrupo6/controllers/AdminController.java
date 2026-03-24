@@ -150,14 +150,10 @@ public class AdminController {
 
     @GetMapping("/products/{productId}/edit")
     public String editProduct (@PathVariable long productId, Model model){
+
         model.addAttribute("isAdmin", true);
 
         Optional<Product> op = productService.getById(productId);
-
-        model.addAttribute("nameValue", op.isPresent() ? op.get().getName() : "");
-        model.addAttribute("brandValue", op.isPresent() ? op.get().getBrand() : "");
-        model.addAttribute("priceValue", op.isPresent() ? op.get().getPrice() : "");
-
         if (op.isPresent()) {
             Product p = op.get();
             model.addAttribute("product", p);
