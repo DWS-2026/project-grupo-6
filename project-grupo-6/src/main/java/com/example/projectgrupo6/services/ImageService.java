@@ -84,20 +84,4 @@ public class ImageService {
         return null; //If it fails, it won't have image
     }
 
-
-    //Documentation
-    public Product uploadDocumentation(long productId, MultipartFile file) throws IOException {
-
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        try {
-            product.setDocumentation(new SerialBlob(file.getBytes()));
-        } catch (Exception e) {
-            throw new IOException("Error saving documentation", e);
-        }
-
-        return productRepository.save(product);
-    }
-
 }
