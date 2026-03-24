@@ -257,6 +257,7 @@ public class AdminController {
     public String updateCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId, 
                                      @RequestParam String newContent, 
+                                     HttpServletRequest request,
                                      RedirectAttributes redirectAttributes) {
         
         try {
@@ -276,6 +277,7 @@ public class AdminController {
     @PostMapping("/users/{userId}/comments/{commentId}/delete")
     public String deleteCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId,
+                                     HttpServletRequest request,
                                      RedirectAttributes redirectAttributes) {
         
         try {
