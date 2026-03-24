@@ -94,7 +94,7 @@ public class WebController {
                                                 @RequestParam("confirmPassword") String confirmPassword, 
                                                 MultipartFile image) throws Exception {
 
-        if (userService.findByEmail(user.getEmail()) != null || userService.findByUsername(user.getUsername()) != null) {
+        if (userService.findByEmail(user.getEmail()).isPresent() || userService.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
         }
 
