@@ -24,22 +24,22 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    // Guardar un pedido
+    // Save an order
     public Order save(Order order) {
         return orderRepository.save(order);
     }
 
-    // Obtener todos los pedidos (útil para admin.html)
+    // Get all orders (useful to admin.html)
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
-    // Buscar un pedido por ID
+    // Search by id
     public Optional<Order> findById(Long id) {
         return orderRepository.findById(id);
     }
 
-    // Borrar un pedido
+    // Delete an order
     public void deleteById(Long id) {
         orderRepository.deleteById(id);
     }
@@ -60,20 +60,20 @@ public class OrderService {
         order.setTotalAmount(totalAmount);
         order.setStatus("COMPLETED"); 
         
-        // Recorremos la cesta y creamos la "foto fija" (OrderItem) por cada cosa
+        // Travel through the cart and create the "pinned image" for every thing
         for (CartItem cartItem : cartItems) {
             
             OrderItem orderItem = new OrderItem(
                 order, 
                 cartItem.getProduct(), 
                 cartItem.getQuantity(), 
-                cartItem.getProduct().getPrice() // ¡Congelamos el precio!
+                cartItem.getProduct().getPrice() // Freeze the price
             );
             
             order.addOrderItem(orderItem); 
         }
         
-        // Al guardar el Order, gracias al CascadeType.ALL, se guardan todos los OrderItems solos
+        // When saving Order, thanks to CascadeType.ALL, saves all OrderItems by themselves
         return orderRepository.save(order);
     }
 }

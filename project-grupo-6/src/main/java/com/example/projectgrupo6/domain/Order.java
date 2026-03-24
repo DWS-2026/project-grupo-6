@@ -21,11 +21,11 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // --- EL GRAN CAMBIO: Pasamos de Product a OrderItem ---
+    // --- BIG CHANGE: We change from Product to OrderItem ---
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    // Constructores
+    // Constructors
     public Order() {
         this.orderDate = LocalDateTime.now();
     }
@@ -49,7 +49,7 @@ public class Order {
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
     
-    // Método de ayuda para añadir items y enlazar ambos lados
+    // Helpful method to add items and link
     public void addOrderItem(OrderItem item) {
         this.items.add(item);
         item.setOrder(this);

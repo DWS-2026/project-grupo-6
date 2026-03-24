@@ -38,25 +38,5 @@ public class ImageController {
                 .contentType(mediaType)
                 .body(imageFile);
     }
-
-    @GetMapping("/{id}/documentation")
-    public ResponseEntity<Resource> getDocumentation(@PathVariable long id) throws SQLException {
-
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        if (product.getDocumentation() == null) {
-            throw new RuntimeException("No documentation available");
-        }
-
-        Resource resource = new InputStreamResource(
-                product.getDocumentation().getBinaryStream()
-        );
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"documentation.pdf\"")
-                .body(resource);
-    }
     
 }

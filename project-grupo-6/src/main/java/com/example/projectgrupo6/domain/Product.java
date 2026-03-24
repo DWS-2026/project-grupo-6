@@ -34,10 +34,6 @@ public class Product {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Blob> images = new ArrayList<>();
 
-    //add documentation on .pdf file
-    @Lob
-    private Blob documentation;
-
     private String category; 
 
     private String powerSource; 
@@ -75,17 +71,17 @@ public class Product {
         this.specification = specification;
     }
 
+    //Getters and setters
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
-    }               
+    }
+
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -100,39 +96,41 @@ public class Product {
     public Double getPrice() {
         return price;
     }
-
     public void setPrice(Double price) {
         this.price = price;
     }
+
     public String getCategory() {
         return category;
     }
-
     public void setCategory(String category) {
         this.category = category;
     }
+
     public String getBrand() {
         return brand;
     }
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
     public List<String> getColors() {
         return colors;
     }
     public void setColors(List<String> colors) {
         this.colors = colors;
     }
+
     public void addColor(String color) {
         this.colors.add(color);
     }
     public void removeColor(String color) {
         this.colors.remove(color);
     }
+
     public List<Blob> getImages() {
         return images;
     }
-
     public void setImages(List<Blob> images) {
         this.images = images;
     }
@@ -159,7 +157,6 @@ public class Product {
     public String getPowerSource() {
         return powerSource;
     }
-
     public void setPowerSource(String powerSource) {
         this.powerSource = powerSource;
     }
@@ -167,14 +164,13 @@ public class Product {
     public int getReviewCount() {
         return reviewCount;
     }
-
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
+
     public int getStock() {
         return stock;
     }
-
     public void setStock(int stock) {
         this.stock = stock;
     }
@@ -182,7 +178,6 @@ public class Product {
     public List<Comment> getComments() {
         return comments;
     }
-
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
@@ -190,22 +185,8 @@ public class Product {
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
-
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
-    }
-
-    //@Transient
-    //public String getImageUrl(){
-      //  return images.isEmpty() ? "/img/default.png" : images.get(0);
-    //}
-
-
-    public Blob getDocumentation() {
-        return documentation;
-    }
-    public void setDocumentation(Blob documentation) {
-        this.documentation = documentation;
     }
 
     public String getSpecification() {

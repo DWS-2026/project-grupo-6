@@ -44,8 +44,6 @@ public class AdminController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private CartService cartService;
-    @Autowired
     private CommentService commentService;
     @Autowired
     private OrderService orderService;
@@ -186,7 +184,7 @@ public class AdminController {
                                      @RequestParam int stock,
                                      @RequestParam(value = "image", required = false) MultipartFile[] images,
                                      @RequestParam(value = "documentation", required = false) MultipartFile documentation,
-                                     RedirectAttributes attributes, Model model) throws IOException{
+                                     RedirectAttributes attributes) throws IOException{
 
         Optional<Product> op = productService.getById(productId);
         if(op.isPresent()){
@@ -195,14 +193,9 @@ public class AdminController {
             productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
             p.setColors(colors != null ? colors : new ArrayList<>());
             p.setReviewCount(0);
-            p.setStock(stock); // Faltaba setear el stock en tu código original
+            p.setStock(stock);
 
             boolean imageError = false;
-            boolean docError = false;
-
-            if(documentation != null && !documentation.isEmpty()) {
-                docError = productService.setDocumentation(p, documentation);
-            }
 
             if(images != null && images.length > 0 && !images[0].isEmpty()) {
                 imageError = productService.setProductImages(p, images);
@@ -211,12 +204,8 @@ public class AdminController {
                     return "redirect:/admin/products/" + productId + "/edit";
                 }
             } else if (p.getImages() == null || p.getImages().isEmpty()) {
-                // Solo cargar imagen por defecto si no enviaron nuevas y el producto no tenía ya fotos
+                // Default image only if there are no new ones and there was no prior image
                 imageService.loadImage("default-product.png");
-                if(docError){
-                    attributes.addFlashAttribute("errorMessage", "Error processing the document. Please try again.");
-                    return "redirect:/admin/products/" + productId + "/edit";
-                }
             }
 
             productService.save(p);
@@ -228,7 +217,7 @@ public class AdminController {
     }
 
     @PostMapping("/products/{productId}/delete")
-    public String deleteProd (@PathVariable long productId, Model model){
+    public String deleteProd (@PathVariable long productId){
         productService.delete(productId);
         return "redirect:/admin/products";
     }
@@ -261,7 +250,7 @@ public class AdminController {
                                      RedirectAttributes redirectAttributes) {
         
         try {
-            // Obtenemos el ID del administrador que está haciendo la edición para que quede registrado
+            // Get the ID of the admin doing the edition
             String adminEmail = request.getUserPrincipal().getName();
             User adminUser = userService.findByEmail(adminEmail).orElseThrow();
             
@@ -348,7 +337,7 @@ public class AdminController {
     }
 
     @PostMapping ("/users/delete/{id}")
-    public String deleteUser (@PathVariable Long id, Model model, User user, RedirectAttributes redirectAttributes){
+    public String deleteUser (@PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<User> optionalUser = userService.getById(id);
         if(optionalUser.isPresent()){
             userService.delete(optionalUser.get());

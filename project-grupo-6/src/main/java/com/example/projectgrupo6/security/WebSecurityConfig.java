@@ -44,20 +44,21 @@ public class WebSecurityConfig {
                                         "/error"
                                                 ).permitAll()
                     //imagepaths should be public too, but we have to allow the dynamic ones with wildcards
-                    .requestMatchers("/product/*/image/*", "/*/image").permitAll() // Rutas de fotos BD
+                    .requestMatchers("/product/*/image/*", "/*/image").permitAll() // Routes of BD images
                     
                     // PUBLIC PAGES
                     .requestMatchers("/").permitAll()
                     .requestMatchers("/user/new").permitAll()
-                    .requestMatchers("/shop/**").permitAll() // <-- Asegúrate de que la tienda es pública
+					.requestMatchers("/user/*/image").permitAll() //User image picture should be public too
+                    .requestMatchers("/shop/**").permitAll() // <-- Make sure that the store is public
                     
-                    // PRIVATE PAGES (Ajústalo a tu proyecto real, veo cosas de "books" del profe)
+                    // PRIVATE PAGES
                     .requestMatchers("/product/add").hasAnyRole("ADMIN")
                     .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                     .requestMatchers("/cart/**").hasAnyRole("USER", "ADMIN")
-                    .requestMatchers("/user/profile").hasAnyRole("USER", "ADMIN")
+					.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // <-- The rest of user pages
                     
-                    // IMPORTANTE: El resto de peticiones que no coincidan arriba, exigimos login
+                    // IMPORTANT: The rest of petitions need login
                     .anyRequest().authenticated() 
             )
             .formLogin(formLogin -> formLogin
@@ -68,7 +69,7 @@ public class WebSecurityConfig {
                     .permitAll()
             )
             .logout(logout -> logout
-                    .logoutUrl("/user/logout") // Igual aquí, suele ser /user/logout
+                    .logoutUrl("/user/logout") // Same here, is usually /user/logout
                     .logoutSuccessUrl("/")
                     .permitAll()
             );

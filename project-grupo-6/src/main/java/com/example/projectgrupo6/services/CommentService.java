@@ -113,7 +113,7 @@ public class CommentService {
         for (Comment comment : comments) {
             Map<String, Object> map = new HashMap<>();
             
-            // Metemos los datos puros del comentario
+            // We put in pure data of the comment
             map.put("id", comment.getId());
             map.put("content", comment.getContent());
             map.put("productId", productId);

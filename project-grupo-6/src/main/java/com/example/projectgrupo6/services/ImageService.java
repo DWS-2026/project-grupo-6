@@ -57,7 +57,7 @@ public class ImageService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // Depends of the images in Product
+        // Depends on the images in Product
         List<Blob> images = product.getImages();
 
         if (images == null || images.isEmpty() || index >= images.size()) {
