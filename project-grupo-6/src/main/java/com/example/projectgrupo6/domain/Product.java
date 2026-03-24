@@ -34,10 +34,6 @@ public class Product {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Blob> images = new ArrayList<>();
 
-    //add documentation on .pdf file
-    @Lob
-    private Blob documentation;
-
     private String category; 
 
     private String powerSource; 
@@ -191,13 +187,6 @@ public class Product {
     }
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
-    }
-
-    public Blob getDocumentation() {
-        return documentation;
-    }
-    public void setDocumentation(Blob documentation) {
-        this.documentation = documentation;
     }
 
     public String getSpecification() {

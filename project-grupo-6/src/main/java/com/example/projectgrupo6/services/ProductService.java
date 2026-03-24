@@ -95,19 +95,4 @@ public class ProductService {
         return error;
     }
 
-    public boolean setDocumentation (Product p, MultipartFile doc){
-        boolean error = true;
-        try{
-            if (doc != null && !doc.isEmpty()) {
-                byte[] docBytes = doc.getBytes();
-                java.sql.Blob docBlob = new javax.sql.rowset.serial.SerialBlob(docBytes);
-                p.setDocumentation(docBlob);
-            }
-            error = false;
-            return error;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }

@@ -113,12 +113,6 @@ public class ProductController {
             }
             p.setImages(productImages);
 
-            // 2. Logic of PDF
-            if (documentation != null && !documentation.isEmpty()) {
-                byte[] docBytes = documentation.getBytes();
-                java.sql.Blob docBlob = new javax.sql.rowset.serial.SerialBlob(docBytes);
-                p.setDocumentation(docBlob);
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
