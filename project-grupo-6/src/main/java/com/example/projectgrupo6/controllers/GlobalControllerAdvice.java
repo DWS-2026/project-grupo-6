@@ -32,61 +32,37 @@ public class GlobalControllerAdvice {
     private CartService cartService;
 
     @ModelAttribute
-<<<<<<< HEAD
-    public void addGlobalAttributes(Model model, HttpServletRequest request) {
-        // 1. Valores por defecto (Reset)
-        model.addAttribute("loggedUser", false);
-        model.addAttribute("cartCount", 0);
-=======
-    public void addGlobalAttributes(Model model, HttpSession session) {
+    public void addGlobalAttributes(Model model, HttpSession session, HttpServletRequest request) {
         
         // 1. SAVIOUR: ALWAYS defect values at the beginning
         // Mustache will never be empty here
         model.addAttribute("cartCount", 0);
         model.addAttribute("loggedUser", false); // Mustache prefers false booleans to null for blocks {{# ...}}
->>>>>>> fa90733dbdafedf0b695358d2c0a7b687978303c
 
-        // 2. Obtener el usuario de Spring Security (la forma más fiable)
+        // 2. Obtain the user from Spring Security
         Principal principal = request.getUserPrincipal();
 
         if (principal != null) {
-            // El principal.getName() nos da el "username" que se usó para loguear
+            // The principal.getName() gives us the "username" used to log in
             String username = principal.getName();
-            
-<<<<<<< HEAD
-            // Buscamos el objeto User completo para que Mustache lo use
+
+            // Search the object User so Mustache uses it
             Optional<User> userOpt = userService.findByUsername(username);
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
                 
-                // INYECTAMOS EL OBJETO REAL
+                // INJECT THE REAL OBJECT
                 model.addAttribute("loggedUser", user);
                 
-                // CARGAMOS EL CARRITO USANDO EL ID DEL USUARIO ENCONTRADO
+                // LOAD THE CART USING THE FOUND ID OF USER
                 int items = cartService.getCartTotalItems(user.getId());
                 model.addAttribute("cartCount", items);
                 
-                // Log para Fedora (mira tu terminal al recargar la página)
+                // Log zto Fedora (search your terminal to refresh the page)
                 // System.out.println("DEBUG: Header cargado para: " + username);
             }
-=======
-            // Check Id not null
-            if (userId != null) {
-                Optional<User> userOpt = userService.getById(userId);
-                
-                if (userOpt.isPresent()) {
-                    // 2. If user exists, overwrite values by default
-                    model.addAttribute("loggedUser", userOpt.get());
-                    int cartCount = cartService.getCartTotalItems(userId);
-                    model.addAttribute("cartCount", cartCount);
-                }
-            }
-        } catch (Exception e) {
-            // If it jumps to any error we don't care, in line 1 we put cartCount to 0
-            // Optional: print error to debug
-            // System.err.println("Error al cargar atributos globales: " + e.getMessage());
->>>>>>> fa90733dbdafedf0b695358d2c0a7b687978303c
+
         }
     }
 
