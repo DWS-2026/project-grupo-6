@@ -141,7 +141,7 @@ public class CartService {
     }
 
     
-    @Transactional(readOnly = true)
+    @Transactional
     public List<CartItem> getCartItems(Long userId) {
         Cart cart = getOrCreateCartForUser(userId);
         cart.getItems().size();    

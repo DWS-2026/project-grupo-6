@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.projectgrupo6.domain.CartItem;
+
+import java.security.Principal;
 import java.util.List;
 
 import com.example.projectgrupo6.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.ImageService;
@@ -46,94 +50,91 @@ public class CartController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("")
-    public String showCart(HttpSession session, Model model) {
-        try {
-            Long userId = userService.getCurrentUserId(session);
-            List<CartItem> cartItems = cartService.getCartItems(userId);
-            double total = cartService.getCartTotal(userId);
-            int totalItems = cartService.getCartTotalItems(userId);
-            model.addAttribute("cartItems", cartItems);
-            model.addAttribute("total", total);
-            model.addAttribute("totalItems", totalItems);
-            return "shopping-cart";
-        } catch (RuntimeException e) {
-            return "redirect:/login";
+    private User getSessionUser(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        if (principal == null) {
+            return null;
         }
+        return userService.findByEmail(principal.getName()).orElse(null);
+    }
+
+    @GetMapping("")
+    public String showCart(HttpServletRequest request, Model model) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
+        Long userId = user.getId();
+        List<CartItem> cartItems = cartService.getCartItems(userId);
+        double total = cartService.getCartTotal(userId);
+        int totalItems = cartService.getCartTotalItems(userId);
+        
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("total", total);
+        model.addAttribute("totalItems", totalItems);
+        
+        return "shopping-cart";
     }
 
     @PostMapping("/add/{productId}")
-    public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
-        try {
-            Long userId = userService.getCurrentUserId(session);
-            cartService.addProductToCart(userId, productId, quantity);
-            return "redirect:/cart";
-        } catch (RuntimeException e) {
-            return "redirect:/login";
-        }
+    public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpServletRequest request) {
+        
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
+        cartService.addProductToCart(user.getId(), productId, quantity);
+        return "redirect:/cart";
     }
 
     @PostMapping("/remove/{productId}")
-    public String removeFromCart(@PathVariable Long productId, HttpSession session) {
-        try{
-            Long userId = userService.getCurrentUserId(session);
-            cartService.removeProductFromCart(userId, productId);
-            return "redirect:/cart";
-        }catch(RuntimeException e){
-            return "redirect:/login";
-        }
+    public String removeFromCart(@PathVariable Long productId, HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
+        cartService.removeProductFromCart(user.getId(), productId);
+        return "redirect:/cart";
     }
 
     @PostMapping("/update/{productId}")
-    public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpSession session) {
-        try{
-            Long userId = userService.getCurrentUserId(session);
-            cartService.updateProductQuantity(userId, productId, quantity);
-            return "redirect:/cart";
-        }catch(RuntimeException e){
-            return "redirect:/login";
-        }
+    public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
+        cartService.updateProductQuantity(user.getId(), productId, quantity);
+        return "redirect:/cart";
         
     }
 
     @PostMapping("/clear")
-    public String clearCart(HttpSession session) {
-        try {
-            Long userId = userService.getCurrentUserId(session);
-            cartService.clearCart(userId);
-            return "redirect:/cart";
-        } catch (RuntimeException e) {
-            return "redirect:/login";
-        }
+    public String clearCart(HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
+        cartService.clearCart(user.getId());
+        return "redirect:/cart";
     }
 
     @PostMapping("/checkout")
-    public String checkout(HttpSession session, RedirectAttributes redirectAttributes) {
-        try {
+    public String checkout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
 
-            Long userId = userService.getCurrentUserId(session);
-            User user = userService.getById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-
-            List<CartItem> cartItems = cartService.getCartItems(userId);
-            
-            if (cartItems.isEmpty()) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Your cart is empty. Add some products first!");
-                return "redirect:/cart"; 
-            }
-
-            double total = cartService.getCartTotal(userId);
-
-            orderService.createOrderFromCart(user, cartItems, total);
-
-            cartService.clearCart(userId);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Purchase completed successfully! Thank you for your order.");
-            return "redirect:/user/orders"; 
-
-        } catch (RuntimeException e) {
-            return "redirect:/login";
+        Long userId = user.getId();
+        List<CartItem> cartItems = cartService.getCartItems(userId);
+        
+        if (cartItems.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Your cart is empty. Add some products first!");
+            return "redirect:/cart"; 
         }
+
+        double total = cartService.getCartTotal(userId);
+
+        orderService.createOrderFromCart(user, cartItems, total);
+        cartService.clearCart(userId);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Purchase completed successfully! Thank you for your order.");
+        
+        // ¡Ojo! Asegúrate de que esta ruta existe en tu UserController o donde manejes los pedidos del usuario
+        return "redirect:/user/orders";
     }
 
 }
