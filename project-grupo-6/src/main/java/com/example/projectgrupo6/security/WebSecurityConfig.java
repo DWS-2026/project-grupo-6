@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                                         "/error"
                                                 ).permitAll()
                     //imagepaths should be public too, but we have to allow the dynamic ones with wildcards
-                    .requestMatchers("/product/*/image/*", "/*/image").permitAll() // Routes of BD images
+                    .requestMatchers("/product/*/image/*", "/*/image", "/*/image/*").permitAll() // Routes of BD images
                     
                     // PUBLIC PAGES
                     .requestMatchers("/").permitAll()

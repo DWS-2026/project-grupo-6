@@ -58,7 +58,7 @@ public class CartController {
             model.addAttribute("totalItems", totalItems);
             return "shopping-cart";
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -69,7 +69,7 @@ public class CartController {
             cartService.addProductToCart(userId, productId, quantity);
             return "redirect:/cart";
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -80,7 +80,7 @@ public class CartController {
             cartService.removeProductFromCart(userId, productId);
             return "redirect:/cart";
         }catch(RuntimeException e){
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -91,7 +91,7 @@ public class CartController {
             cartService.updateProductQuantity(userId, productId, quantity);
             return "redirect:/cart";
         }catch(RuntimeException e){
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
         
     }
@@ -103,7 +103,7 @@ public class CartController {
             cartService.clearCart(userId);
             return "redirect:/cart";
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -132,7 +132,7 @@ public class CartController {
             return "redirect:/user/orders"; 
 
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 

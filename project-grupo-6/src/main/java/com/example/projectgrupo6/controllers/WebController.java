@@ -116,7 +116,7 @@ public class WebController {
         user.setRol("USER"); 
         userService.save(user);
 
-        return ResponseEntity.ok("/user/login");
+        return ResponseEntity.ok("/login");
     }
 
     
