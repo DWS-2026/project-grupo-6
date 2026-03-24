@@ -29,28 +29,27 @@ public class GlobalControllerAdvice {
     public void addGlobalAttributes(Model model, HttpSession session) {
         
         // 1. SAVIOUR: ALWAYS defect values at the beginning
-        // Así, pase lo que pase, Mustache nunca se quedará en blanco.
+        // Mustache will never be empty here
         model.addAttribute("cartCount", 0);
-        model.addAttribute("loggedUser", false); // Mustache prefiere booleanos falsos a nulos para los bloques {{#...}}
+        model.addAttribute("loggedUser", false); // Mustache prefers false booleans to null for blocks {{# ...}}
 
         try {
             Long userId = userService.getCurrentUserId(session);
             
-            // Comprobamos que el ID no sea null antes de buscar en la BD
+            // Check Id not null
             if (userId != null) {
                 Optional<User> userOpt = userService.getById(userId);
                 
                 if (userOpt.isPresent()) {
-                    // 2. Si el usuario existe de verdad, SOBREESCRIBIMOS los valores por defecto
+                    // 2. If user exists, overwrite values by default
                     model.addAttribute("loggedUser", userOpt.get());
                     int cartCount = cartService.getCartTotalItems(userId);
                     model.addAttribute("cartCount", cartCount);
                 }
             }
         } catch (Exception e) {
-            // Si salta cualquier error (ya sea RuntimeException o cualquier otro), 
-            // no nos importa, porque en la línea 1 ya le pusimos el cartCount a 0.
-            // Opcional: imprimir el error para depurar si falla algo raro.
+            // If it jumps to any error we don't care, in line 1 we put cartCount to 0
+            // Optional: print error to debug
             // System.err.println("Error al cargar atributos globales: " + e.getMessage());
         }
     }
@@ -62,10 +61,10 @@ public class GlobalControllerAdvice {
 //    @ExceptionHandler(MultipartException.class)
 //    public String handleMultipartException(MultipartException exc, RedirectAttributes redirectAttributes) {
 //
-//        // Le mandamos el mensaje rojo al formulario
+//        // Broken message to form
 //        redirectAttributes.addFlashAttribute("errorMessage", "Error: The uploaded files are too large or invalid. Maximum 15MB per file.");
 //
-//        // Lo devolvemos a la página de añadir producto
+//        // Return to addProduct page
 //        return "redirect:/product/add";
 //    }
 }

@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class RepositoryUserDetailsService implements UserDetailsService {
 
-    // Inyectamos TU repositorio de siempre
+    // Inject our repository
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         
-        // 1. Usamos tu código para buscar al usuario por email
+        // 1. Find user by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con email: " + email));
 
-        // 2. Construimos el objeto que Spring Security entiende
+        // 2. Construct the object
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail()) // Le pasamos el email como identificador
-                .password(user.getEncodedPassword()) // Le pasamos tu variable exacta
-                .roles(user.getRol().toUpperCase()) // Le pasamos el rol (ej: "USER" o "ADMIN")
+                .username(user.getEmail()) // Email as identifier
+                .password(user.getEncodedPassword()) // Password
+                .roles(user.getRol().toUpperCase()) // Rol (ex: "USER" o "ADMIN")
                 .build();
     }
 }

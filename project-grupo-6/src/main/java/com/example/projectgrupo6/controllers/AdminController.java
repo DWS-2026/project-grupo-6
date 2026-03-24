@@ -195,7 +195,7 @@ public class AdminController {
             productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
             p.setColors(colors != null ? colors : new ArrayList<>());
             p.setReviewCount(0);
-            p.setStock(stock); // Faltaba setear el stock en tu código original
+            p.setStock(stock);
 
             boolean imageError = false;
             boolean docError = false;
@@ -211,7 +211,7 @@ public class AdminController {
                     return "redirect:/admin/products/" + productId + "/edit";
                 }
             } else if (p.getImages() == null || p.getImages().isEmpty()) {
-                // Solo cargar imagen por defecto si no enviaron nuevas y el producto no tenía ya fotos
+                // Default image only if there are no new ones and there was no prior image
                 imageService.loadImage("default-product.png");
                 if(docError){
                     attributes.addFlashAttribute("errorMessage", "Error processing the document. Please try again.");
@@ -260,7 +260,7 @@ public class AdminController {
                                      RedirectAttributes redirectAttributes) {
         
         try {
-            // Obtenemos el ID del administrador que está haciendo la edición para que quede registrado
+            // Get the ID of the admin doing the edition
             String adminEmail = request.getUserPrincipal().getName();
             User adminUser = userService.findByEmail(adminEmail).orElseThrow();
             

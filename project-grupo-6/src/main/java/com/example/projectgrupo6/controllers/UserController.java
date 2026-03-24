@@ -47,7 +47,7 @@ public class UserController {
     @Autowired
     private OrderService orderService;
         
-        // Método auxiliar para obtener el usuario conectado de forma limpia
+        // Helpful method to get user in a cleaner way
         private User getSessionUser(HttpServletRequest request) {
             String email = request.getUserPrincipal().getName(); 
             return userService.findByEmail(email).orElse(null); 
@@ -150,7 +150,7 @@ public class UserController {
             User userToUpdate = getSessionUser(request);
             if (userToUpdate == null) return "redirect:/user/login";
             
-            // Comprobamos si el usuario ha cambiado su email
+            // Check if user has changed its email
             boolean emailChanged = !userToUpdate.getEmail().equals(email);
 
             userToUpdate.setFirstname(firstname);
@@ -171,8 +171,8 @@ public class UserController {
             userService.save(userToUpdate);
             redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
 
-            // IMPORTANTE: Si cambia el email, el login de Spring Security se vuelve inválido.
-            // Le forzamos a hacer logout para que vuelva a iniciar sesión con el correo nuevo.
+            // IMPORTANT: If email changes, Spring's login becomes invalid
+            // We force to log out and login again with the new email
             if(emailChanged){
                 return "redirect:/user/logout";
             }
@@ -189,7 +189,7 @@ public class UserController {
             userService.delete(sessionUser);
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
             
-            // Redirigimos a la ruta mágica de Spring Security para destruir la sesión de verdad
+            // Redirect to the magic route of Spring Security to destroy the session
             return "redirect:/user/logout";
         }
 

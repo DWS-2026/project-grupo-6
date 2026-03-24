@@ -17,7 +17,7 @@ public class OrderItem {
 
     private int quantity;
     
-    // El atributo más importante de todos:
+    // Most important attribute
     private Double priceAtPurchase; 
 
     public OrderItem() {}
