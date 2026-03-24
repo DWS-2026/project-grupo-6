@@ -32,19 +32,10 @@ public class GlobalControllerAdvice {
     private CartService cartService;
 
     @ModelAttribute
-<<<<<<< HEAD
     public void addGlobalAttributes(Model model, HttpServletRequest request) {
         // 1. Valores por defecto (Reset)
         model.addAttribute("loggedUser", false);
         model.addAttribute("cartCount", 0);
-=======
-    public void addGlobalAttributes(Model model, HttpSession session, HttpServletRequest request) {
-        
-        // 1. SAVIOUR: ALWAYS defect values at the beginning
-        // Mustache will never be empty here
-        model.addAttribute("cartCount", 0);
-        model.addAttribute("loggedUser", false); // Mustache prefers false booleans to null for blocks {{# ...}}
->>>>>>> 722cf0c4996364c9b501bc19e8afce38f9ed5c04
 
         // 2. Obtain the user from Spring Security
         Principal principal = request.getUserPrincipal();
@@ -52,13 +43,8 @@ public class GlobalControllerAdvice {
         if (principal != null) {
             // The principal.getName() gives us the "username" used to log in
             String username = principal.getName();
-<<<<<<< HEAD
             
             // Buscamos el objeto User completo para que Mustache lo use
-=======
-
-            // Search the object User so Mustache uses it
->>>>>>> 722cf0c4996364c9b501bc19e8afce38f9ed5c04
             Optional<User> userOpt = userService.findByUsername(username);
 
             if (userOpt.isPresent()) {
@@ -74,10 +60,6 @@ public class GlobalControllerAdvice {
                 // Log zto Fedora (search your terminal to refresh the page)
                 // System.out.println("DEBUG: Header cargado para: " + username);
             }
-<<<<<<< HEAD
-=======
-
->>>>>>> 722cf0c4996364c9b501bc19e8afce38f9ed5c04
         }
     }
 

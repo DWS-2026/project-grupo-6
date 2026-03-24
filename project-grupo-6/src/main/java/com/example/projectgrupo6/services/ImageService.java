@@ -84,8 +84,4 @@ public class ImageService {
         return null; //If it fails, it won't have image
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 722cf0c4996364c9b501bc19e8afce38f9ed5c04
 }

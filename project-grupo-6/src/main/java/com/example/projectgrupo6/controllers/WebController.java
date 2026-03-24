@@ -6,6 +6,8 @@ import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 
 import com.example.projectgrupo6.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.projectgrupo6.services.ImageService;
@@ -72,7 +74,12 @@ public class WebController {
     }
 
     @GetMapping("/login")
-    public String showlogin(Model model){
+    public String showlogin(HttpServletRequest request ,Model model){
+        
+        if(request.getUserPrincipal() != null){
+            return "redirect:/user/profile";
+        }
+
         return "login";
     }
         
