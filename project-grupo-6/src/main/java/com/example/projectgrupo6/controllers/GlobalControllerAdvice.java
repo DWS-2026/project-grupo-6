@@ -1,6 +1,7 @@
 package com.example.projectgrupo6.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +13,13 @@ import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.services.CartService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.security.Principal;
 import java.util.Optional;
 
 @ControllerAdvice
@@ -24,34 +31,35 @@ public class GlobalControllerAdvice {
     @Autowired
     private CartService cartService;
 
-    //Executes BEFORE rendering any view (HTML)
     @ModelAttribute
-    public void addGlobalAttributes(Model model, HttpSession session) {
-        
-        // 1. SAVIOUR: ALWAYS defect values at the beginning
-        // Así, pase lo que pase, Mustache nunca se quedará en blanco.
+    public void addGlobalAttributes(Model model, HttpServletRequest request) {
+        // 1. Valores por defecto (Reset)
+        model.addAttribute("loggedUser", false);
         model.addAttribute("cartCount", 0);
-        model.addAttribute("loggedUser", false); // Mustache prefiere booleanos falsos a nulos para los bloques {{#...}}
 
-        try {
-            Long userId = userService.getCurrentUserId(session);
+        // 2. Obtener el usuario de Spring Security (la forma más fiable)
+        Principal principal = request.getUserPrincipal();
+
+        if (principal != null) {
+            // El principal.getName() nos da el "username" que se usó para loguear
+            String username = principal.getName();
             
-            // Comprobamos que el ID no sea null antes de buscar en la BD
-            if (userId != null) {
-                Optional<User> userOpt = userService.getById(userId);
+            // Buscamos el objeto User completo para que Mustache lo use
+            Optional<User> userOpt = userService.findByUsername(username);
+
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
                 
-                if (userOpt.isPresent()) {
-                    // 2. Si el usuario existe de verdad, SOBREESCRIBIMOS los valores por defecto
-                    model.addAttribute("loggedUser", userOpt.get());
-                    int cartCount = cartService.getCartTotalItems(userId);
-                    model.addAttribute("cartCount", cartCount);
-                }
+                // INYECTAMOS EL OBJETO REAL
+                model.addAttribute("loggedUser", user);
+                
+                // CARGAMOS EL CARRITO USANDO EL ID DEL USUARIO ENCONTRADO
+                int items = cartService.getCartTotalItems(user.getId());
+                model.addAttribute("cartCount", items);
+                
+                // Log para Fedora (mira tu terminal al recargar la página)
+                // System.out.println("DEBUG: Header cargado para: " + username);
             }
-        } catch (Exception e) {
-            // Si salta cualquier error (ya sea RuntimeException o cualquier otro), 
-            // no nos importa, porque en la línea 1 ya le pusimos el cartCount a 0.
-            // Opcional: imprimir el error para depurar si falla algo raro.
-            // System.err.println("Error al cargar atributos globales: " + e.getMessage());
         }
     }
 
