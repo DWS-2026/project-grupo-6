@@ -113,7 +113,7 @@ public class ShopController {
             commentService.addComment(userId, id, content);
             return "redirect:/shop/" + id;
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -124,7 +124,7 @@ public class ShopController {
             commentService.editComment(commentId, userId, newContent);
             return "redirect:/shop/" + productId;
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -135,7 +135,7 @@ public class ShopController {
             commentService.deleteComment(commentId, userId);
             return "redirect:/shop/" + productId;
         } catch (RuntimeException e) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
     }
 
@@ -150,7 +150,7 @@ public class ShopController {
             redirectAttributes.addFlashAttribute("successMessage", "Product added successfully to cart.");        
         } catch (RuntimeException e) {
             if (e.getMessage().equals("Usuario no autenticado")) {
-                return "redirect:/user/login";
+                return "redirect:/login";
             }
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
