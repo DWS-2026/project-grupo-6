@@ -128,6 +128,19 @@ public class CartService {
     }
 
     
+    public int getCartItemCount(Long userId) {
+        Optional<Cart> existingCart = cartRepository.findByUserId(userId);
+        
+        if (existingCart.isPresent()) {
+            return existingCart.get().getItems().stream()
+                    .mapToInt(CartItem::getQuantity)
+                    .sum();
+        }
+        
+        return 0; 
+    }
+
+    
     @Transactional(readOnly = true)
     public List<CartItem> getCartItems(Long userId) {
         Cart cart = getOrCreateCartForUser(userId);

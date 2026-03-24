@@ -33,33 +33,28 @@ public class GlobalControllerAdvice {
 
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpServletRequest request) {
-        // 1. Valores por defecto (Reset)
-        model.addAttribute("loggedUser", false);
-        model.addAttribute("cartCount", 0);
-
-        // 2. Obtain the user from Spring Security
+        
         Principal principal = request.getUserPrincipal();
 
         if (principal != null) {
-            // The principal.getName() gives us the "username" used to log in
-            String username = principal.getName();
+            // ¡El usuario ha iniciado sesión!
+            model.addAttribute("loggedUser", true);
             
-            // Buscamos el objeto User completo para que Mustache lo use
-            Optional<User> userOpt = userService.findByUsername(username);
-
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
+            // Buscamos su nombre de usuario en la BD (usando su email)
+            String email = principal.getName();
+            User user = userService.findByEmail(email).orElse(null);
+            
+            if (user != null) {
+                // Pasamos el username para que Mustache pinte {{username}}
+                model.addAttribute("username", user.getUsername()); 
                 
-                // INJECT THE REAL OBJECT
-                model.addAttribute("loggedUser", user);
-                
-                // LOAD THE CART USING THE FOUND ID OF USER
-                int items = cartService.getCartTotalItems(user.getId());
-                model.addAttribute("cartCount", items);
-                
-                // Log zto Fedora (search your terminal to refresh the page)
-                // System.out.println("DEBUG: Header cargado para: " + username);
+                // EXTRA: Si tienes un método para contar su carrito, puedes meterlo aquí también
+                model.addAttribute("cartCount", cartService.getCartItemCount(user.getId())); 
             }
+        } else {
+            // Usuario anónimo (visitante)
+            model.addAttribute("loggedUser", false);
+            model.addAttribute("cartCount", 0);
         }
     }
 
