@@ -81,7 +81,7 @@ public class WebController {
         return "loginerror";
     }
 
-    @GetMapping ("/new")
+    @GetMapping ("/user/new")
     public String register (Model model){
         model.addAttribute("user", new User());
         model.addAttribute("edit", false);
@@ -89,7 +89,7 @@ public class WebController {
         return "user-form";
     }
         
-    @PostMapping("/new")
+    @PostMapping("/user/new")
     public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
                                                 @RequestParam("confirmPassword") String confirmPassword, 
                                                 MultipartFile image) throws Exception {
