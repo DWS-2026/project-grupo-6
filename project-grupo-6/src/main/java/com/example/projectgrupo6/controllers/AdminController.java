@@ -113,7 +113,7 @@ public class AdminController {
 
     @GetMapping("/users/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
-        
+
         model.addAttribute("isAdmin", true);
 
         Optional<User> userOptional = userService.getById(id);
@@ -125,6 +125,10 @@ public class AdminController {
         }
     }
 
+
+
+    //PRODUCTS:
+
     @GetMapping("/products")
     public String listProducts(Model model) {
         
@@ -135,17 +139,22 @@ public class AdminController {
         return "admin-product-list";
     }
 
-    @GetMapping ("/products/{productId}")
-    public String showProduct (@PathVariable long productId, Model model){
-        model.addAttribute("isAdmin", true);
+    @GetMapping("/products/{id}")
+    public String showProductDetail(@PathVariable long id, Model model) {
 
-        Optional <Product> op = productService.getById(productId);
-        if(!op.isPresent()){
+        Optional<Product> op = productService.getById(id);
+        if (op.isEmpty()) {
             return "redirect:/admin/products";
         }
 
-        model.addAttribute("product", op.get());
-        return "product1-details";
+        Product product = op.get();
+
+        //Optional
+        if (product.getSpecification() == null || product.getSpecification().isBlank()) {
+            product.setSpecification(null); // Or null
+        }
+        model.addAttribute("product", product);
+        return "product-details";
     }
 
     @GetMapping("/products/{productId}/edit")
@@ -188,20 +197,23 @@ public class AdminController {
 
             productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
             p.setColors(colors != null ? colors : new ArrayList<>());
-            p.setReviewCount(0);
+            //p.setReviewCount(0);
             p.setStock(stock);
 
-            boolean imageError = false;
 
             if(images != null && images.length > 0 && !images[0].isEmpty()) {
-                imageError = productService.setProductImages(p, images);
+                boolean imageError = productService.setProductImages(p, images);
                 if(imageError){
                     attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
                     return "redirect:/admin/products/" + productId + "/edit";
                 }
-            } else if (p.getImages() == null || p.getImages().isEmpty()) {
-                // Default image only if there are no new ones and there was no prior image
-                imageService.loadImage("default-product.png");
+            } else {
+                //We don't do anything, maintains its images
+                if (p.getImages() == null || p.getImages().isEmpty()){
+                    // Default image only if there are no new ones and there was no prior image
+                    Blob defaultImage = imageService.loadImage("default-product.png");
+                    p.setImages(List.of(defaultImage));
+                }
             }
 
             productService.save(p);

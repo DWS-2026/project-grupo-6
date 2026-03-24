@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Details of Product 1</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="../static/css/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/css/img/favicon.ico">
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/templatemo.css">
+    <link rel="stylesheet" href="../static/css/custom.css">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+</head>
+
+<body>
+    {{>header}}
+
+    <section class="bg-light">
+        <div class="container pb-5">
+            <div class="row">
+                <!-- IMAGES -->
+                <div class="col-lg-5 mt-5">
+                    <div class="card mb-3">
+                        <img class="card-img img-fluid" src="{{product.mainImage}}" alt="Product image">
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                {{#product.imageUrlList}}
+                                <div class="col-4 mb-2">
+                                    <img class="card-img img-fluid" src="{{.}}" alt="Product Image">
+                                </div>
+                                {{/product.imageUrlList}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO -->
+                <div class="col-lg-7 mt-5">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h1 class="h2">{{product.name}}</h1>
+                            <p class="h3 py-2">{{product.price}}€</p>
+
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><h6>Brand:</h6></li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted"><strong>{{product.brand}}</strong></p>
+                                </li>
+                            </ul>
+
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><h6>Category:</h6></li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted"><strong>{{product.category}}</strong></p>
+                                </li>
+                            </ul>
+
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><h6>Power Source:</h6></li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted"><strong>{{product.powerSource}}</strong></p>
+                                </li>
+                            </ul>
+
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><h6>Stock:</h6></li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted">
+                                        <strong>{{product.stock}}</strong>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <h6>Description:</h6>
+                            <p>{{product.description}}</p>
+
+                            {{#product.specification}}
+                                <h6>Technical Specifications:</h6>
+                                <p>{{product.specification}}</p>
+                            {{/product.specification}}
+
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><h6>Available Colors:</h6></li>
+                                <li class="list-inline-item">
+                                    <p class="text-muted">
+                                        <strong>{{#product.colors}}{{.}} {{/product.colors}}</strong>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <div class="mt-4">
+                                <button onclick="history.back()" class="btn btn-success">
+                                    Back
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{>footer}}
+
+    <!-- Start Slider Script -->
+    <script src="../static/css/js/slick.min.js"></script>
+    <script>
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: true,
+            responsive: [{
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 3
+                    }
+                }
+            ]
+        });
+    </script>
+
+</body>
+</html>
