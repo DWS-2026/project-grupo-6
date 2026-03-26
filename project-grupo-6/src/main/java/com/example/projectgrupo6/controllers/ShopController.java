@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import jakarta.servlet.http.HttpServletRequest;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Comment;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.core.io.Resource;
+
+import java.security.Principal;
 import java.sql.Blob;
 import org.springframework.http.MediaType;
 
@@ -50,13 +53,15 @@ public class ShopController {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private UserService userService;
 
-    private Long getCurrentUserId(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            throw new RuntimeException("Usuario no autenticado");
+    private User getSessionUser(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        if (principal == null) {
+            return null;
         }
-        return user.getId();
+        return userService.findByEmail(principal.getName()).orElse(null);
     }
 
     @GetMapping("/shop") 
@@ -68,14 +73,16 @@ public class ShopController {
     
     
     @GetMapping("/shop/{id}")
-    public String showProduct(@PathVariable Long id, Model model, HttpSession session) {
+    public String showProduct(@PathVariable Long id, Model model, HttpServletRequest request) {
+        
         Optional<Product> productOpt = productService.getById(id);
 
         if (productOpt.isPresent()) {
             model.addAttribute("product", productOpt.get());
 
-            User sessionUser = (User) session.getAttribute("user");
-            Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+            
+            User user = getSessionUser(request);
+            Long userId = (user != null) ? user.getId() : null;
 
             List<Map<String, Object>> commentsView = commentService.getCommentsForProductView(id, userId);
             model.addAttribute("productComments", commentsView);
@@ -85,6 +92,7 @@ public class ShopController {
             return "redirect:/shop";
         }
     }
+
     @GetMapping("/product/{id}/image/{index}")
     public ResponseEntity<Resource> getProductImageByIndex(@PathVariable Long id, @PathVariable int index) throws SQLException {
         Optional<Product> productOpt = productService.getById(id);
@@ -107,56 +115,52 @@ public class ShopController {
     }
 
     @PostMapping("/shop/{id}/comment")
-    public String addComment(@PathVariable Long id, @RequestParam String content, HttpSession session) {
-        try {
-            Long userId = getCurrentUserId(session);
-            commentService.addComment(userId, id, content);
-            return "redirect:/shop/" + id;
-        } catch (RuntimeException e) {
-            return "redirect:/login";
-        }
+    public String addComment(@PathVariable Long id, @RequestParam String content, HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+        
+        commentService.addComment(user.getId(), id, content);
+        return "redirect:/shop/" + id;
     }
 
     @PostMapping("/shop/{productId}/comment/edit/{commentId}")
-    public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpSession session) {
-        try {
-            Long userId = getCurrentUserId(session);
-            commentService.editComment(commentId, userId, newContent);
-            return "redirect:/shop/" + productId;
-        } catch (RuntimeException e) {
-            return "redirect:/login";
-        }
+    public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+        
+        commentService.editComment(commentId, user.getId(), newContent);
+        return "redirect:/shop/" + productId;
     }
 
     @PostMapping("/shop/{productId}/comment/delete/{commentId}")
-    public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpSession session) {
-        try {
-            Long userId = getCurrentUserId(session);
-            commentService.deleteComment(commentId, userId);
-            return "redirect:/shop/" + productId;
-        } catch (RuntimeException e) {
-            return "redirect:/login";
-        }
+    public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpServletRequest request) {
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+        
+        commentService.deleteComment(commentId, user.getId());
+        return "redirect:/shop/" + productId;
     }
 
     @PostMapping("/add-to-cart")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
                             RedirectAttributes redirectAttributes, 
-                            HttpSession session) {
+                            HttpServletRequest request) {
+        
+        User user = getSessionUser(request);
+        if (user == null) return "redirect:/login";
+
         try {
-            Long userId = getCurrentUserId(session);
-            cartService.addProductToCart(userId, productId, quantity);
+            cartService.addProductToCart(user.getId(), productId, quantity);
             redirectAttributes.addFlashAttribute("successMessage", "Product added successfully to cart.");        
-        } catch (RuntimeException e) {
-            if (e.getMessage().equals("Usuario no autenticado")) {
-                return "redirect:/login";
-            }
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
         
-        String referer = session.getAttribute("previousPage") != null ? session.getAttribute("previousPage").toString() : "/cart";
-        return "redirect:" + referer;
+        // Magia: request.getHeader("Referer") nos dice en qué URL estaba el usuario (ej. /shop/2)
+        // Si por algún motivo el navegador no lo manda, lo redirigimos al carrito por defecto.
+        String referer = request.getHeader("Referer");
+        return "redirect:" + (referer != null ? referer : "/cart");
     }
     
 

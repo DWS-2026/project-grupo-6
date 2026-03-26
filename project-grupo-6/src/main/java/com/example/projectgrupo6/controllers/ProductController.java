@@ -46,18 +46,8 @@ public class ProductController {
 
     @GetMapping("/add")
     public String renderProductForm(HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute("user");
 
-        if(sessionUser == null){
-            return "redirect:/login";
-        }
-
-        if(userService.checkIfAdmin(sessionUser) == false){
-            model.addAttribute("isAdmin", false);
-            return "redirect:/";
-        }
-
-        model.addAttribute("isAdmin", true);
+        model.addAttribute("isAdmin", true); 
         model.addAttribute("isEdit", false);
         model.addAttribute("actionUrl", "/product/add");
 
@@ -76,14 +66,12 @@ public class ProductController {
             @RequestParam(required = false) String specification,
             @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles,
             @RequestParam(value = "documentation", required = false) MultipartFile documentation,
-            RedirectAttributes attributes // <-- MAGIC to send messages of error to the view
+            RedirectAttributes attributes 
     ) {
         
         // --- SECURITY VALIDATION OF BACKEND ---
-        // Count how many real archives are sent (not empty)
         long validImagesCount = productService.checkNumberImages(imageFiles);
         
-        // If more than 4, block
         if (validImagesCount > 4) {
             attributes.addFlashAttribute("errorMessage", "Security Error: Maximum 4 images allowed.");
             return "redirect:/product/add";
@@ -113,10 +101,8 @@ public class ProductController {
             }
             p.setImages(productImages);
 
-
         } catch (Exception e) {
             e.printStackTrace();
-            // If something fails to process, warn admin
             attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");
             return "redirect:/product/add";
         }
@@ -124,38 +110,4 @@ public class ProductController {
         productService.save(p); 
         return "redirect:/admin/products"; 
     }
-
-    /*@GetMapping("/{id}/image/{index}")
-    public ResponseEntity<Object> getProductImage(@PathVariable Long id, @PathVariable int index) throws SQLException {
-        
-        // Search product
-        Optional<Product> productOpt = productService.getById(id); 
-        
-        if (productOpt.isPresent()) {
-            Product product = productOpt.get();
-            List<java.sql.Blob> images = product.getImages();
-            
-            // Check if it has images
-            if (images != null && index >= 0 && index < images.size()) {
-                
-                java.sql.Blob imageBlob = images.get(index);
-                
-                // Change to Resource
-                Resource imageFile = new InputStreamResource(imageBlob.getBinaryStream());
-                
-                // Guess the type (JPEG, PNG...)
-                MediaType mediaType = MediaTypeFactory
-                        .getMediaType(imageFile)
-                        .orElse(MediaType.IMAGE_JPEG);
-
-                // Send to view
-                return ResponseEntity.ok()
-                        .contentType(mediaType)
-                        .body(imageFile);
-            }
-        }
-        
-        // If it fails -> 404
-        return ResponseEntity.notFound().build();
-    }*/
 }

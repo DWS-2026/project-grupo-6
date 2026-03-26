@@ -52,13 +52,17 @@
                                 </li>
                             </ul>
                             
-                            <form action="/add-to-cart" method="POST">
-                                <input type="hidden" name="productId" value="{{product.id}}">
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn btn-success btn-lg w-100">
-                                    Buy Now
-                                </button>
-                            </form>
+                            {{#loggedUser}}
+                                <form action="/add-to-cart" method="post">
+                                    <input type="hidden" name="productId" value="{{product.id}}">
+                                    <input type="number" name="quantity" value="1" min="1">
+                                    <button type="submit" class="btn btn-success">Añadir al carrito</button>
+                                </form>
+                            {{/loggedUser}}
+
+                            {{^loggedUser}}
+                                <a href="/login" class="btn btn-secondary disabled" aria-disabled="true">Inicia sesión para comprar</a>
+                            {{/loggedUser}}
                         </div>
                     </div>
                 </div>
@@ -122,12 +126,19 @@
                     {{/productComments}}
 
                     <h3 class="h3 pb-2 mt-5">Write a Review</h3>
-                    <form action="/shop/{{product.id}}/comment" method="POST">
-                        <div class="mb-3">
-                            <textarea name="content" class="form-control" rows="4" placeholder="Your experience..." required></textarea>
+                    {{#loggedUser}}
+                        <form action="/shop/{{product.id}}/comment" method="post">
+                            <textarea class="form-control" name="content" placeholder="Escribe tu review..." required></textarea>
+                            <button type="submit" class="btn btn-success mt-2">Enviar Comentario</button>
+                        </form>
+                    {{/loggedUser}}
+
+                    {{^loggedUser}}
+                        <div class="alert alert-info">
+                            <p>¿Ya has probado esta arma?</p>
+                            <a href="/login" class="btn btn-primary">Inicia sesión para dejar una review</a>
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg">Submit Review</button>
-                    </form>
+                    {{/loggedUser}}
                 </div>
             </div>
         </div>

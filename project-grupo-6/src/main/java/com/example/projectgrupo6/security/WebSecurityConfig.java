@@ -54,6 +54,7 @@ public class WebSecurityConfig {
                     
                     // PRIVATE PAGES
                     .requestMatchers("/product/add").hasAnyRole("ADMIN")
+                    .requestMatchers("/shop/*/comment/**", "/add-to-cart", "/cart/**", "/cart/add/**", "/cart/remove/**").authenticated()
                     .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                     .requestMatchers("/cart/**").hasAnyRole("USER", "ADMIN")
 					.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // <-- The rest of user pages
