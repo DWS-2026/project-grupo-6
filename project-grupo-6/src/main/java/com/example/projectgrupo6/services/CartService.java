@@ -8,6 +8,7 @@ import com.example.projectgrupo6.repositories.CartRepository;
 import com.example.projectgrupo6.repositories.ProductRepository;
 import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,14 +30,25 @@ public class CartService {
     
     @Transactional
     public Cart getOrCreateCartForUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + userId));
         Optional<Cart> existingCart = cartRepository.findByUserId(userId);
+        
         if (existingCart.isPresent()) {
             return existingCart.get();
-        } else {
-            Cart newCart = new Cart(user);
-            return cartRepository.save(newCart);
+        } 
+        
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + userId));
+
+        Cart newCart = new Cart(user);
+        
+        newCart.setUser(user);
+        user.setCart(newCart); 
+
+        try {
+            return cartRepository.saveAndFlush(newCart);
+            
+        } catch (DataIntegrityViolationException e) {
+            return cartRepository.findByUserId(userId).get();
         }
     }
 

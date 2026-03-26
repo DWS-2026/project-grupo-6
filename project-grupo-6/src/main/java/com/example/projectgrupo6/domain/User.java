@@ -35,6 +35,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
     //Constructor
     public User(Long id, String firstname, String lastname, String username, String email, String encodedPassword, Blob profileImage, String rol, List<Comment> review) {
         this.id = id;
@@ -127,6 +130,13 @@ public class User {
     }
     public void removeReview(Comment comment) {
         this.review.remove(comment);
+    }
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     //To String:

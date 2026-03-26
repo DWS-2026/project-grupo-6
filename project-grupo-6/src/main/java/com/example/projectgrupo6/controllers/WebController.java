@@ -99,9 +99,11 @@ public class WebController {
     @PostMapping("/user/new")
     public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
                                                 @RequestParam("confirmPassword") String confirmPassword, 
-                                                MultipartFile image) throws Exception {
+                                                @RequestParam(value = "image", required = false) MultipartFile image) throws Exception {
 
-        if (userService.findByEmail(user.getEmail()).isPresent() || userService.findByUsername(user.getUsername()).isPresent()) {
+        //if (userService.findByEmail(user.getEmail()).isPresent() || userService.findByUsername(user.getUsername()).isPresent()) {
+        // An user can be regsitred with same username? In case not, uncomment the line above and add the username check
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
         }
 
@@ -111,13 +113,15 @@ public class WebController {
 
         user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
 
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             try {
                 Image saved = imageService.createImage(image);
                 user.setProfileImage(new SerialBlob(saved.getImageFile()));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error processing uploaded image", e);
             }
+        } else {
+            user.setProfileImage(imageService.loadImage("defaultUserImage.png"));
         }
 
         user.setRol("USER"); 
