@@ -135,7 +135,7 @@
 
                             <div class="mb-4">
                                 <label for="specification" class="form-label text-muted small">Technical Specifications (FPS, Weight, Material...)</label>
-                                <textarea class="form-control" id="specification" name="specification" rows="4">{{#product}}{{specification}}{{/product}}{{^product}}{{/product}}</textarea>
+                                <textarea class="form-control" id="specification" name="specification" rows="4" required></textarea>
                             </div>
 
                             <div class="mb-4">
@@ -152,7 +152,7 @@
 
                             <div class="mb-3 p-3 border rounded bg-light">
                                 <label for="images" class="form-label text-muted small">Product Images (Max 4)</label>
-                                <input class="form-control mb-2" type="file" id="images" name="images[]" accept="image/png, image/jpeg" multiple>
+                                <input class="form-control mb-2" type="file" id="images" name="images" accept="image/png, image/jpeg" multiple>
                                 <small class="text-muted"><i class="fas fa-images me-1"></i> Select up to 4 images. Hold Ctrl (or Cmd) to select multiple.</small>
                             </div>
 
@@ -174,12 +174,13 @@
     {{>footer}}
 
     <script>
-        function limitFiles(input, maxFiles) {
-            if (input.files.length > maxFiles) {
-                alert("You can only upload a maximum of " + maxFiles + " images.");
-                input.value = ""; // Resets input so it chooses again
+        document.querySelector('form').addEventListener('submit', function(e) {
+        const input = document.querySelector('input[type=file][name=images]');
+        if(input.files.length > 4){
+             alert("You can only upload a maximum of 4 images.");
+            e.preventDefault(); // stops submit
             }
-        }
+        });
     </script>
 </body>
 </html>

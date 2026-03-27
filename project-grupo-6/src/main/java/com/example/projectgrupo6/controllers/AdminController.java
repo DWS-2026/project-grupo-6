@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -187,7 +188,7 @@ public class AdminController {
                                      @RequestParam String powerSource,
                                      @RequestParam (value = "colors", required = false) List<String> colors,
                                      @RequestParam int stock,
-                                     @RequestParam(value = "images[]", required = false) MultipartFile[] images,
+                                     @RequestParam(value = "images", required = false) MultipartFile[] images,
                                      RedirectAttributes attributes) throws IOException{
 
         Optional<Product> op = productService.getById(productId);
@@ -200,7 +201,7 @@ public class AdminController {
             p.setStock(stock);
 
 
-            if(images != null && images.length > 0 && !images[0].isEmpty()) {
+            if(images != null && Arrays.stream(images).anyMatch(f -> !f.isEmpty())) {
                 boolean imageError = productService.setProductImages(p, images);
                 if(imageError){
                     attributes.addFlashAttribute("errorMessage", "Error processing the files. Please try again.");

@@ -66,8 +66,7 @@ public class ProductController {
             @RequestParam(required = false) List<String> colors,
             @RequestParam String description,
             @RequestParam(required = false) String specification,
-            @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles,
-            @RequestParam(value = "documentation", required = false) MultipartFile documentation,
+            @RequestParam(value = "images", required = false) MultipartFile[] imageFiles,
             RedirectAttributes attributes 
     ) {
         
