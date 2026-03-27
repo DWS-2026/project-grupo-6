@@ -185,10 +185,9 @@ public class AdminController {
                                      @RequestParam String description,
                                      @RequestParam String specification,
                                      @RequestParam String powerSource,
-                                     @RequestParam List<String> colors,
+                                     @RequestParam (value = "colors", required = false) List<String> colors,
                                      @RequestParam int stock,
-                                     @RequestParam(value = "image", required = false) MultipartFile[] images,
-                                     @RequestParam(value = "documentation", required = false) MultipartFile documentation,
+                                     @RequestParam(value = "images[]", required = false) MultipartFile[] images,
                                      RedirectAttributes attributes) throws IOException{
 
         Optional<Product> op = productService.getById(productId);

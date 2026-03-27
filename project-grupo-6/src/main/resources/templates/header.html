@@ -91,6 +91,21 @@
   <script src="/css/js/bootstrap.bundle.min.js"></script>
   <script src="/css/js/templatemo.js"></script>
   <script src="/css/js/custom.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const userMenu = document.getElementById('userMenu');
+      if (userMenu) {
+        // Force initializer
+        const dropdown = bootstrap.Dropdown.getOrCreateInstance(userMenu);
+
+        // Option: make sure it toggles when click
+        userMenu.addEventListener('click', function(e) {
+          e.preventDefault();
+          dropdown.toggle();
+        });
+      }
+    });
+  </script>
   <!-- End Script -->
 </body>
 </html>

@@ -133,7 +133,7 @@ public class CartController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Purchase completed successfully! Thank you for your order.");
         
-        // ¡Ojo! Asegúrate de que esta ruta existe en tu UserController o donde manejes los pedidos del usuario
+        // ¡Watch out! Make sure that the route exists in UserController or wherever you manage the orders
         return "redirect:/user/orders";
     }
 

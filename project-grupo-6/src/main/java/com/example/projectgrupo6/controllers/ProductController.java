@@ -50,6 +50,8 @@ public class ProductController {
         model.addAttribute("isAdmin", true); 
         model.addAttribute("isEdit", false);
         model.addAttribute("actionUrl", "/product/add");
+        //For Mustache, it must have an object even if it's empty
+        model.addAttribute("product", new Product());
 
         return "product-form";
     }

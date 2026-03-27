@@ -64,6 +64,7 @@ public class SampleDataInitializer {
             imageService.loadImage("HX416AssaultAEG_3.png"), 
             imageService.loadImage("HX416AssaultAEG_4.png")
         ));
+        p1.setStock(50);
         productService.save(p1);
 
         // 2. Specter M4 CQB 
@@ -82,6 +83,7 @@ public class SampleDataInitializer {
             imageService.loadImage("SpecterM4CQBpng_3.png"), 
             imageService.loadImage("SpecterM4CQBpng_4.png")
         ));
+        p2.setStock(25);
         productService.save(p2);
 
         // 3. AKR74 Tactical 
@@ -100,6 +102,7 @@ public class SampleDataInitializer {
             imageService.loadImage("AKR74Tactical_3.png"), 
             imageService.loadImage("AKR74Tactical_4.png")
         ));
+        p3.setStock(30);
         productService.save(p3);
 
         // 4. Raptor G17 GBB 
@@ -117,6 +120,7 @@ public class SampleDataInitializer {
             imageService.loadImage("RaptorG17GBB_3.png"), 
             imageService.loadImage("RaptorG17GBB_4.png")
         ));
+        p4.setStock(35);
         productService.save(p4);
 
 

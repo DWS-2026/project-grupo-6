@@ -61,10 +61,16 @@ public class WebController {
 
         List<Product> randomFeatured = productService.getThreeRandomProducts();
         model.addAttribute("featuredProducts", randomFeatured);
+
         try {
         Long userId = userService.getCurrentUserId(session);
         int cartCount = cartService.getCartTotalItems(userId);
         model.addAttribute("cartCount", cartCount);
+
+        // Adding variables for the dropdown
+        model.addAttribute("loggedUser", true);
+        model.addAttribute("username", userService.getCurrentUserId(session));
+
         } catch (RuntimeException e) {
         // Not authenticated user, don't show counter
         model.addAttribute("cartCount", 0);

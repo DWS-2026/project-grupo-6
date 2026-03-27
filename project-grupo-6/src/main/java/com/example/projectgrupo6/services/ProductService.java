@@ -78,6 +78,7 @@ public class ProductService {
         boolean error = true;
         if(numberImages <= 4){
             try{
+                p.setImages(new ArrayList<>()); //Deletes prior images
                 for (MultipartFile file : imageFiles) {
                     if (!file.isEmpty()) {
                         byte[] bytes = file.getBytes();
@@ -85,7 +86,6 @@ public class ProductService {
                         p.getImages().add(blob);
                     }
                 }
-                error = false;
                 return false;
 
             } catch (Exception e) {
