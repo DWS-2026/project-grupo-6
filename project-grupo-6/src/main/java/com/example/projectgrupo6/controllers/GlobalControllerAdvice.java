@@ -37,22 +37,26 @@ public class GlobalControllerAdvice {
         Principal principal = request.getUserPrincipal();
 
         if (principal != null) {
-            // ¡El usuario ha iniciado sesión!
+            // Logged user!
             model.addAttribute("loggedUser", true);
             
-            // Buscamos su nombre de usuario en la BD (usando su email)
+            // Search by username in DB (using its email)
             String email = principal.getName();
             User user = userService.findByEmail(email).orElse(null);
             
             if (user != null) {
-                // Pasamos el username para que Mustache pinte {{username}}
+                // Send username to Mustache {{username}}
                 model.addAttribute("username", user.getUsername()); 
                 
-                // EXTRA: Si tienes un método para contar su carrito, puedes meterlo aquí también
+                // EXTRA: Method to count its CartItems
                 model.addAttribute("cartCount", cartService.getCartItemCount(user.getId())); 
+            } else {
+                //IMPORTANT: consistent fallback
+                model.addAttribute("loggedUser", false);
+                model.addAttribute("cartCount", 0);
             }
         } else {
-            // Usuario anónimo (visitante)
+            // Anonymous user (visitor)
             model.addAttribute("loggedUser", false);
             model.addAttribute("cartCount", 0);
         }
