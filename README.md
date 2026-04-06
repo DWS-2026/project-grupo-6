@@ -191,7 +191,7 @@ Product creation/editing form for administrators with fields for product name, d
 
 #### **Diagrama de Navegación**
 
-Solo si ha cambiado.
+No ha cambiado.
 
 #### **Capturas de Pantalla Actualizadas**
 
@@ -214,10 +214,21 @@ Solo si han cambiado.
    ```
 
 2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
+   Configurar la base de datos con los datos del application.properties:
+     spring.datasource.url=jdbc:mysql://localhost:3306/crossfire_db?serverTimezone=UTC
+     spring.datasource.username=user
+     spring.datasource.password=root
+   
+   - Nombre: crossfire_db
+   - Usuario: user
+   - Contraseña: root
+  
+   A continuación, levantar la base de datos e iniciar la aplicación.
+   
 
 #### **Credenciales de prueba**
-- **Usuario Admin**: usuario: `admin`, contraseña: `admin`
-- **Usuario Registrado**: usuario: `user`, contraseña: `user`
+- **Usuario Admin**: usuario: `lex_murph@airsoft.com`, contraseña: `1234`
+- **Usuario Registrado**: usuario: `charlie.brown@mailcute.com`, contraseña: `5678`.
 
 ### **Diagrama de Entidades de Base de Datos**
 
