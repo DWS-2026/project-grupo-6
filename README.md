@@ -278,17 +278,20 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - [Alejandro Terrazas Vargas]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Responsable de la implementacion de gran parte de la seguridad en Spring]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Implement CSRF protection across forms and update security configuration
+](https://github.com/DWS-2026/project-grupo-6/commit/8b23cd7abbc8c5f6d855922fb1315f32dda18141)  | [CSRFHandlerConfiguration.java](project-grupo-6/src/main/java/com/example/projectgrupo6/security/CSRFHandlerConfiguration.java)   |
+|2| [Implement user comments management: add functionality to view, update, and delete comments in user profile
+](https://github.com/DWS-2026/project-grupo-6/commit/94814e51e07a5220775cb01e3eee054c016eeee4)  | [UserController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/UserController.java)   |
+|3| [Refactor ProductController and ShopController to use HttpServletRequest for user session management; update WebSecurityConfig to secure cart and comment endpoints; enhance shop-single.html to conditionally display forms based on user authentication](https://github.com/DWS-2026/project-grupo-6/commit/9acf2f9a94a6306075e510ca1e28c57241cb4ea6)  | [ProductController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/ProductController.java)   |
+|4| [Refactor user authentication and session handling, update login routes, and enhance user registration process
+](https://github.com/DWS-2026/project-grupo-6/commit/4c2c680d76daf454e1134792f1f57cf68a9569fc)  | [ProyectGrupo6Application.java](project-grupo-6/src/main/java/com/example/projectgrupo6/ProjectGrupo6Application.java)   |
+|5| [First try to move to mysql](https://github.com/DWS-2026/project-grupo-6/commit/7afa0e521c2a7e2d0fef4b1a56b2edf3f0583f9d)  | [docker-compose.yml](https://github.com/DWS-2026/project-grupo-6/blob/7afa0e521c2a7e2d0fef4b1a56b2edf3f0583f9d/docker-compose.yml)   |
 
 ---
 
