@@ -284,8 +284,7 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Implement CSRF protection across forms and update security configuration
-](https://github.com/DWS-2026/project-grupo-6/commit/8b23cd7abbc8c5f6d855922fb1315f32dda18141)  | [CSRFHandlerConfiguration.java](project-grupo-6/src/main/java/com/example/projectgrupo6/security/CSRFHandlerConfiguration.java)   |
+|1| [Implement CSRF protection across forms and update security configuration](https://github.com/DWS-2026/project-grupo-6/commit/8b23cd7abbc8c5f6d855922fb1315f32dda18141)  | [CSRFHandlerConfiguration.java](project-grupo-6/src/main/java/com/example/projectgrupo6/security/CSRFHandlerConfiguration.java)   |
 |2| [Implement user comments management: add functionality to view, update, and delete comments in user profile
 ](https://github.com/DWS-2026/project-grupo-6/commit/94814e51e07a5220775cb01e3eee054c016eeee4)  | [UserController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/UserController.java)   |
 |3| [Refactor ProductController and ShopController to use HttpServletRequest for user session management; update WebSecurityConfig to secure cart and comment endpoints; enhance shop-single.html to conditionally display forms based on user authentication](https://github.com/DWS-2026/project-grupo-6/commit/9acf2f9a94a6306075e510ca1e28c57241cb4ea6)  | [ProductController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/ProductController.java)   |
