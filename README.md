@@ -194,8 +194,10 @@ Product creation/editing form for administrators with fields for product name, d
 No ha cambiado.
 
 #### **Capturas de Pantalla Actualizadas**
-
-Solo si han cambiado.
+El resto de clases se ven o iguales o muy parecidas (cambia por ejemplo el color de un rótulo)
+![Formulario de creación/edición de usuarios](images/index.png)
+![Formulario de creación/edición de productos](images/index.png)
+![Visualización de productos individuales](images/index.png)
 
 ### **Instrucciones de Ejecución**
 
