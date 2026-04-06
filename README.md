@@ -194,7 +194,7 @@ Product creation/editing form for administrators with fields for product name, d
 No ha cambiado.
 
 #### **Capturas de Pantalla Actualizadas**
-El resto de clases se ven o iguales o muy parecidas (cambia por ejemplo el color de un rótulo)
+El resto de clases y capturas no presentan mas que leves cambios esteticos, la navegación de la web no ha sido alterada solo aspectos menores estéticos (cambia por ejemplo el color de un rótulo)
 ![Formulario de creación/edición de usuarios](images/index.png)
 ![Formulario de creación/edición de productos](images/index.png)
 ![Visualización de productos individuales](images/index.png)
@@ -211,8 +211,8 @@ El resto de clases se ven o iguales o muy parecidas (cambia por ejemplo el color
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/DWS-2026/project-grupo-6.git
+   cd project-grupo-6/
    ```
 
 2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
@@ -285,11 +285,9 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
 |1| [Implement CSRF protection across forms and update security configuration](https://github.com/DWS-2026/project-grupo-6/commit/8b23cd7abbc8c5f6d855922fb1315f32dda18141)  | [CSRFHandlerConfiguration.java](project-grupo-6/src/main/java/com/example/projectgrupo6/security/CSRFHandlerConfiguration.java)   |
-|2| [Implement user comments management: add functionality to view, update, and delete comments in user profile
-](https://github.com/DWS-2026/project-grupo-6/commit/94814e51e07a5220775cb01e3eee054c016eeee4)  | [UserController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/UserController.java)   |
+|2| [Implement user comments management: add functionality to view, update, and delete comments in user profile](https://github.com/DWS-2026/project-grupo-6/commit/94814e51e07a5220775cb01e3eee054c016eeee4)  | [UserController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/UserController.java)   |
 |3| [Refactor ProductController and ShopController to use HttpServletRequest for user session management; update WebSecurityConfig to secure cart and comment endpoints; enhance shop-single.html to conditionally display forms based on user authentication](https://github.com/DWS-2026/project-grupo-6/commit/9acf2f9a94a6306075e510ca1e28c57241cb4ea6)  | [ProductController.java](project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/ProductController.java)   |
-|4| [Refactor user authentication and session handling, update login routes, and enhance user registration process
-](https://github.com/DWS-2026/project-grupo-6/commit/4c2c680d76daf454e1134792f1f57cf68a9569fc)  | [ProyectGrupo6Application.java](project-grupo-6/src/main/java/com/example/projectgrupo6/ProjectGrupo6Application.java)   |
+|4| [Refactor user authentication and session handling, update login routes, and enhance user registration process](https://github.com/DWS-2026/project-grupo-6/commit/4c2c680d76daf454e1134792f1f57cf68a9569fc)  | [ProyectGrupo6Application.java](project-grupo-6/src/main/java/com/example/projectgrupo6/ProjectGrupo6Application.java)   |
 |5| [First try to move to mysql](https://github.com/DWS-2026/project-grupo-6/commit/7afa0e521c2a7e2d0fef4b1a56b2edf3f0583f9d)  | [docker-compose.yml](https://github.com/DWS-2026/project-grupo-6/blob/7afa0e521c2a7e2d0fef4b1a56b2edf3f0583f9d/docker-compose.yml)   |
 
 ---
