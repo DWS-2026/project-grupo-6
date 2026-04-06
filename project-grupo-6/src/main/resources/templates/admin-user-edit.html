@@ -73,7 +73,7 @@
                     <div class="card-body">
                         
                         <form action="/admin/users/edit/{{user.id}}" method="POST" enctype="multipart/form-data">
-                            
+                            <input type="hidden" name="_csrf" value="{{token}}"/>
                             <div class="text-center mb-4">
                                 <div class="profile-photo-container mb-3">
                                     <img src="/user/{{user.id}}/image" alt="Profile Photo" class="profile-photo" id="profile-img" onerror="this.style.display='none';document.querySelector('.profile-fallback').style.display='flex'">

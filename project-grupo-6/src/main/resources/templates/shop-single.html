@@ -54,6 +54,7 @@
                             
                             {{#loggedUser}}
                                 <form action="/add-to-cart" method="post">
+                                    <input type="hidden" name="_csrf" value="{{token}}"/>
                                     <input type="hidden" name="productId" value="{{product.id}}">
                                     <input type="number" name="quantity" value="1" min="1">
                                     <button type="submit" class="btn btn-success">Añadir al carrito</button>
@@ -95,11 +96,13 @@
 
                                     {{#isMine}}
                                         <form action="/shop/{{productId}}/comment/edit/{{id}}" method="POST" id="update-form-{{id}}" class="mt-2">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <input type="hidden" name="productId" value="{{productId}}">
                                             <textarea name="newContent" class="form-control mb-2" rows="2" required>{{content}}</textarea>
                                         </form>
                                         
                                         <form action="/shop/{{productId}}/comment/delete/{{id}}" method="POST" id="delete-form-{{id}}">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <input type="hidden" name="productId" value="{{productId}}">
                                         </form>
 
@@ -128,6 +131,7 @@
                     <h3 class="h3 pb-2 mt-5">Write a Review</h3>
                     {{#loggedUser}}
                         <form action="/shop/{{product.id}}/comment" method="post">
+                            <input type="hidden" name="_csrf" value="{{token}}"/>
                             <textarea class="form-control" name="content" placeholder="Escribe tu review..." required></textarea>
                             <button type="submit" class="btn btn-success mt-2">Enviar Comentario</button>
                         </form>

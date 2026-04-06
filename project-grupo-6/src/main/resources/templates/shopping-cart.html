@@ -52,6 +52,7 @@
 
                                 <div class="col-md-2">
                                     <form action="/cart/update/{{product.id}}" method="post">
+                                        <input type="hidden" name="_csrf" value="{{token}}"/>
                                         <input type="number"
                                                name="quantity"
                                                class="form-control"
@@ -69,6 +70,7 @@
 
                                 <div class="col-md-2 text-end">
                                     <form action="/cart/remove/{{product.id}}" method="post">
+                                        <input type="hidden" name="_csrf" value="{{token}}"/>
                                         <button class="btn btn-outline-danger btn-sm">
                                             Delete
                                         </button>
@@ -116,6 +118,7 @@
                             </div>
 
                             <form action="/cart/checkout" method="post">
+                                <input type="hidden" name="_csrf" value="{{token}}"/>
                                 <button class="btn btn-success w-100">
                                     Complete purchase
                                 </button>

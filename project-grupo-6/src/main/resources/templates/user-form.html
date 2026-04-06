@@ -33,7 +33,7 @@
 
                         <form method="post" id="registerForm" enctype="multipart/form-data"
                               action="{{#edit}}/user/update{{/edit}}{{^edit}}/user/new{{/edit}}">
-                            
+                            <input type="hidden" name="_csrf" value="{{token}}"/>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">First Name</label>
                                 <input type="text" class="form-control" name="firstname" value="{{#edit}}{{user.firstname}}{{/edit}}" required>

@@ -55,6 +55,7 @@
 
                 <div class="card-body">
                     <form action="/user/update" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="_csrf" value="{{token}}"/>
                         
                         <div class="text-center mb-4">
                             <div class="profile-photo-container mb-3">

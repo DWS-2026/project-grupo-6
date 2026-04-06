@@ -8,6 +8,8 @@ import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.UserService;
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -173,10 +176,18 @@ public class UserController {
 
             // IMPORTANT: If email changes, Spring's login becomes invalid
             // We force to log out and login again with the new email
-            if(emailChanged){
-                return "redirect:/user/logout";
-            }
+            if (emailChanged) {
+                try {
+                    request.logout();
+                } catch (ServletException e) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Error logging out after email change. Please log in again.");
+                }
 
+                SecurityContextHolder.clearContext();
+
+                redirectAttributes.addFlashAttribute("successMessage", "Email actualizado. Por favor, inicia sesión de nuevo.");
+                return "redirect:/login";
+            }
             return "redirect:/user/profile";
         }
 

@@ -45,6 +45,7 @@
                                         </a>
                                         
                                         <form action="/admin/products/{{id}}/delete" method="post" onsubmit="return confirm('Delete this product?');">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>

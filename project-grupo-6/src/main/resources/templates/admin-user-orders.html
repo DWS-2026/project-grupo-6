@@ -83,6 +83,7 @@
                                 </div>
                                 
                                 <form action="/admin/users/{{targetUser.id}}/orders/{{id}}/status" method="POST" class="d-flex align-items-center gap-2">
+                                    <input type="hidden" name="_csrf" value="{{token}}"/>
                                     <span class="badge bg-secondary">Current: {{status}}</span>
                                     <select name="newStatus" class="form-select form-select-sm border-primary" style="width: auto;" required>
                                         <option value="PENDING">PENDING</option>
@@ -112,6 +113,7 @@
 
                                 <div class="d-flex justify-content-between align-items-end mt-4">
                                     <form action="/admin/users/{{targetUser.id}}/orders/{{id}}/delete" method="POST">
+                                        <input type="hidden" name="_csrf" value="{{token}}"/>
                                         <button type="submit" class="btn btn-outline-danger btn-sm">
                                             <i class="fas fa-trash me-1"></i> Delete Order
                                         </button>

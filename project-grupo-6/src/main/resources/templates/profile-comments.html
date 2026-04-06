@@ -45,6 +45,7 @@
                                     </h6>
                                     
                                     <form action="/user/comments/update/{{id}}" method="POST" id="update-form-{{id}}">
+                                        <input type="hidden" name="_csrf" value="{{token}}"/>
                                         <textarea name="newContent" class="form-control" rows="3" required>{{content}}</textarea>
                                     </form>
                                     <small class="text-muted mt-1 d-block">Edit your text and click Update.</small>
@@ -57,6 +58,7 @@
                                         </button>
                                         
                                         <form action="/user/comments/delete/{{id}}" method="POST" class="w-100">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash me-1"></i> Delete
                                             </button>

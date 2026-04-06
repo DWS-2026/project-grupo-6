@@ -73,6 +73,7 @@
                                         </div>
                                         
                                         <form action="/admin/users/delete/{{id}}" method="post" class="m-0">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
