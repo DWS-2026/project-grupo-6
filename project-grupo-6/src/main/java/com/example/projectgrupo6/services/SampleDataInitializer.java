@@ -172,16 +172,13 @@ public class SampleDataInitializer {
 
         // CREATE SAMPLE COMMENTS
         // Comment of Alex (Admin) about HX416
-        Comment c1 = new Comment("Amazing rifle! The precision is top-notch for an AEG.", u1.getUsername(), u1, p1);
-        commentService.save(c1);
+        commentService.addComment(u1.getId(), p1.getId(), "Amazing rifle! The precision is top-notch for an AEG.");
 
         // Comment of Charlie about G17
-        Comment c2 = new Comment("Realistic recoil and very reliable sidearm in the field.", u2.getUsername(), u2, p4);
-        commentService.save(c2);
+        commentService.addComment(u2.getId(), p4.getId(), "Realistic recoil and very reliable sidearm in the field.");
 
         // Comment of Pandora about HX416
-        Comment c3 = new Comment("The build quality is impressive, though it feels a bit heavy after a long day.", u3.getUsername(), u3, p1);
-        commentService.save(c3);
+        commentService.addComment(u3.getId(), p1.getId(), "The build quality is impressive, though it feels a bit heavy after a long day.");
         }
     }
 }

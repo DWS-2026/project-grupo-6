@@ -58,6 +58,7 @@ public class CommentService {
             Comment comment = new Comment(content, user.getUsername(), user, product);
             
             product.addComment(comment);
+            product.setReviewCount(product.getReviewCount() + 1);
 
             user.addReview(comment);
 
