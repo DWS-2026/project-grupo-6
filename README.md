@@ -264,17 +264,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Aarón Alameda Alcaide]**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Refactor Cart and CartItem classes; add CartService and CartRepository for cart management](https://github.com/DWS-2026/dws-2026-project-base/commit/c27784df488284c6ae0fb98191b6abc5c817e89e)  | [Cart.java](project-grupo-6/src/main/java/com/example/projectgrupo6/domain/Cart.java)   |
+|2| [Implement functionality for shop page buttons](https://github.com/DWS-2026/dws-2026-project-base/commit/8fe24b4e41dbd07b0847cedf28331af0926feacc)  | [CartItem.java](project-grupo-6/src/main/java/com/example/projectgrupo6/domain/CartItem.java)   |
+|3| [Implement validation service for product and user inputs, including image validation](https://github.com/DWS-2026/dws-2026-project-base/commit/cbf1dc9f4ecc9fbc9cf04094f007713baa2b731d)  | [CartService.java](project-grupo-6/src/main/java/com/example/projectgrupo6/services/CartService.java)   |
+|4| [Add new dependencies in pom.xml and update ShopController to handle user sessions](https://github.com/DWS-2026/dws-2026-project-base/commit/ed208933078208ef8cdbe17ec8a157abdb1373a3)  | [CartRepository.java](project-grupo-6/src/main/java/com/example/projectgrupo6/repositories/CartRepository.java)   |
+|5| [Add and configure error page](https://github.com/DWS-2026/dws-2026-project-base/commit/f3622aeb54ea280b45fbd51155b72d26fda4fa3d)  | [error.html](project-grupo-6/src/main/resources/templates/error.html)   |
 
 ---
 
