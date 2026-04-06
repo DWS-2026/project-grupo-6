@@ -225,7 +225,7 @@ Diagrama mostrando las entidades, sus campos y relaciones:
 
 ![Diagrama Entidad-Relación](images/database-diagram.png)
 
-> [Descripción opcional: Ej: "El diagrama muestra las 4 entidades principales: Usuario, Producto, Pedido y Categoría, con sus respectivos atributos y relaciones 1:N y N:M."]
+> ["El diagrama muestra las 4 entidades principales: Usuario, Producto, Comentario y Pedido, con sus respectivos atributos y relaciones 1:N y N:M."]
 
 ### **Diagrama de Clases y Templates**
 
@@ -279,17 +279,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Alumno 4 - [Elena Arcaz Cejas]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Responsable de la gestión de usuarios, productos y panel de administración. Así como de revisar la implementación de la base de datos y el manejo de imágenes en esta. Además de verificar el uso de una arquitectura adecuada y la resolución de incidencias relacionadas con plantillas Mustache.]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [First adjustments to create a Java Project with Spring and Maven]([URL_commit_1](https://github.com/DWS-2026/dws-2026-project-base/commit/d0fa563cb8de81260f5db4592223f40bed982ea2))  | [pom.xml]([URL_archivo_1](https://github.com/DWS-2026/project-grupo-6/blob/main/project-grupo-6/pom.xml))   |
+|2| [Adding User Entity]([URL_commit_2](https://github.com/DWS-2026/dws-2026-project-base/commit/a7044905d7aa8f4da08e473a5b13e0a980d10aee))  | [User.java]([URL_archivo_2](https://github.com/DWS-2026/project-grupo-6/blob/main/project-grupo-6/src/main/java/com/example/projectgrupo6/domain/User.java))   |
+|3| [Adding UserController, creating basic methods for login, changing login template to use Mustache]([URL_commit_3](https://github.com/DWS-2026/dws-2026-project-base/commit/fa45069ef3a0747cb5786ff4f0574e044c5d211e#diff-9d8feab8136ae95182e090449211d0fd7116edc6feee2baf66b5a4152c0d853f))  | [UserController.java]([URL_archivo_3](https://github.com/DWS-2026/project-grupo-6/blob/main/project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/UserController.java))   |
+|4| [Adding clases and methods to manage images in Database]([URL_commit_4](https://github.com/DWS-2026/dws-2026-project-base/commit/15cde8192b3afd2b6ecc69bf5ad32175c62b9461))  | [ImageService.java]([URL_archivo_4](https://github.com/DWS-2026/project-grupo-6/blob/main/project-grupo-6/src/main/java/com/example/projectgrupo6/services/ImageService.java))   |
+|5| [Creating methods for CRUD operations of Products in Admin Panel]([URL_commit_5](https://github.com/DWS-2026/dws-2026-project-base/commit/6960b464b3b34ddc4e9856495ee4d4067bccabcb))  | [AdminController.java]([URL_archivo_5](https://github.com/DWS-2026/project-grupo-6/blob/main/project-grupo-6/src/main/java/com/example/projectgrupo6/controllers/AdminController.java))   |
 
 ---
 
