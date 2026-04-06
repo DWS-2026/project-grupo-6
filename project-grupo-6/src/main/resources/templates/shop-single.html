@@ -95,6 +95,7 @@
                                     {{/isMine}}
 
                                     {{#isMine}}
+                                        
                                         <form action="/shop/{{productId}}/comment/edit/{{id}}" method="POST" id="update-form-{{id}}" class="mt-2">
                                             <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <input type="hidden" name="productId" value="{{productId}}">

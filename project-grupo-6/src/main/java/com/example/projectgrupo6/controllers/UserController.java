@@ -1,5 +1,29 @@
 package com.example.projectgrupo6.controllers;
 
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.sql.rowset.serial.SerialBlob;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Order;
@@ -11,28 +35,6 @@ import com.example.projectgrupo6.services.UserService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -105,7 +107,7 @@ public class UserController {
             return "profile-comments";
         }
 
-        @PostMapping("/comments/update/{commentId}")
+        @PostMapping("/comments/edit/{commentId}")
         public String updateCommentFromProfile(@PathVariable Long commentId, 
                                             @RequestParam String newContent, 
                                             HttpServletRequest request) {
@@ -153,13 +155,15 @@ public class UserController {
             User userToUpdate = getSessionUser(request);
             if (userToUpdate == null) return "redirect:/login";
             
+            String newEmail = email.trim();    
+
             // Check if user has changed its email
-            boolean emailChanged = !userToUpdate.getEmail().equals(email);
+            boolean emailChanged = !userToUpdate.getEmail().equalsIgnoreCase(newEmail);
 
             userToUpdate.setFirstname(firstname);
             userToUpdate.setLastname(lastname);
             userToUpdate.setUsername(username);
-            userToUpdate.setEmail(email);
+            userToUpdate.setEmail(newEmail);
 
             if (imageFile != null && !imageFile.isEmpty()) {
                 try {
@@ -177,6 +181,10 @@ public class UserController {
             // IMPORTANT: If email changes, Spring's login becomes invalid
             // We force to log out and login again with the new email
             if (emailChanged) {
+                System.out.println("DEBUG PROFILE UPDATE:");
+            System.out.println("Email en DB: [" + userToUpdate.getEmail() + "]");
+            System.out.println("Email del Form: [" + email + "]");
+            System.out.println("¿Detecta cambio?: " + emailChanged);
                 try {
                     request.logout();
                 } catch (ServletException e) {

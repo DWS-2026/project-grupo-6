@@ -124,7 +124,10 @@ public class ShopController {
     }
 
     @PostMapping("/shop/{productId}/comment/edit/{commentId}")
-    public String editComment(@PathVariable Long productId, @PathVariable Long commentId, @RequestParam String newContent, HttpServletRequest request) {
+    public String editComment(@PathVariable Long productId, 
+                            @PathVariable Long commentId, 
+                            @RequestParam String newContent, 
+                            HttpServletRequest request) {
         User user = getSessionUser(request);
         if (user == null) return "redirect:/login";
         

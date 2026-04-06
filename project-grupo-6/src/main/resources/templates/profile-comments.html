@@ -43,21 +43,22 @@
                                     <h6 class="card-title mb-2">
                                         <a href="/shop-single/{{product.id}}" class="text-decoration-none text-success fw-bold">{{product.name}}</a>
                                     </h6>
-                                    
-                                    <form action="/user/comments/update/{{id}}" method="POST" id="update-form-{{id}}">
-                                        <input type="hidden" name="_csrf" value="{{token}}"/>
-                                        <textarea name="newContent" class="form-control" rows="3" required>{{content}}</textarea>
-                                    </form>
-                                    <small class="text-muted mt-1 d-block">Edit your text and click Update.</small>
+
+                                   <small class="text-muted mt-1 d-block">Edit your text and click Update.</small>
                                 </div>
 
                                 <div class="col-md-3 p-3">
                                     <div class="d-flex flex-column gap-2">
-                                        <button type="submit" form="update-form-{{id}}" class="btn btn-secondary btn-sm w-100">
-                                            <i class="fas fa-save me-1"></i> Update
-                                        </button>
                                         
-                                        <form action="/user/comments/delete/{{id}}" method="POST" class="w-100">
+                                        <form action="/user/comments/edit/{{id}}" method="POST">
+                                            <input type="hidden" name="_csrf" value="{{token}}"/>
+                                            <textarea name="newContent" class="form-control" rows="3" required>{{content}}</textarea>
+                                            <button type="submit" class="btn btn-secondary btn-sm w-100">
+                                                <i class="fas fa-save me-1"></i> Update
+                                            </button>
+                                        </form>
+                                        
+                                        <form action="/user/comments/delete/{{id}}" method="POST">
                                             <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                                 <i class="fas fa-trash me-1"></i> Delete
