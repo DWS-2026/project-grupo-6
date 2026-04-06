@@ -50,8 +50,10 @@
             </button>
         </form>
         
-        <a href="/user/logout" class="btn btn-outline-danger btn-lg">
-            <i class="fas fa-sign-out-alt me-2"></i>Log out
-        </a>
+        <form action="/user/logout" method="post" class="w-100">
+            <input type="hidden" name="_csrf" value="{{token}}"/>
+            <button type="submit" class="btn btn-outline-danger btn-lg w-100">
+                <i class="fas fa-sign-out-alt me-2"></i>Log out
+            </button>
     </div>
 </aside>
