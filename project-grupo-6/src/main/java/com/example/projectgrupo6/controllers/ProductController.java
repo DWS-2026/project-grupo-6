@@ -65,6 +65,7 @@ public class ProductController {
             @RequestParam String powerSource,
             @RequestParam(required = false) List<String> colors,
             @RequestParam String description,
+            @RequestParam int stock,
             @RequestParam(required = false) String specification,
             @RequestParam(value = "images", required = false) MultipartFile[] imageFiles,
             RedirectAttributes attributes 
@@ -81,6 +82,7 @@ public class ProductController {
         Product p = new Product();
         productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
         p.setColors(colors != null ? colors : new ArrayList<>());
+        p.setStock(stock);
         p.setReviewCount(0);
 
         List<java.sql.Blob> productImages = new ArrayList<>();

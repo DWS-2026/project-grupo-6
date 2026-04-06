@@ -50,9 +50,9 @@ public class AdminController {
     private OrderService orderService;
 
     @GetMapping("/users")
-    public String listUsers(Model model) {
-        model.addAttribute("isAdmin", true);
-        
+    public String listUsers(Model model, HttpServletRequest request) {
+        model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));
+
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin-user-list";
