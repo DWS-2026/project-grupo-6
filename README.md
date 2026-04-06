@@ -250,17 +250,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ### **Participación de Miembros en la Práctica 2**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - [Jorge Antonio Arjona Rico]**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Error fixed in Product.java](https://github.com/DWS-2026/dws-2026-project-base/commit/122d3b00538707b68fdaca565e8fb7406e5dc3ee)  | [Product.java](project-grupo-6/src/main/java/com/example/projectgrupo6/domain/Product.java)   |
+|2| [Added relation User Order](https://github.com/DWS-2026/dws-2026-project-base/commit/316ab4b5a52614adfa7bbf1b2c51ee608db5f058)  | [Order.java, User.java](project-grupo-6/src/main/java/com/example/projectgrupo6/domain/Order.java)   |
+|3| [Order entity added in services](https://github.com/DWS-2026/dws-2026-project-base/commit/fad43bd6380c5b5d26e7ea061b5df1b8e1f89565)  | [Order.java](project-grupo-6/src/main/java/com/example/projectgrupo6/domain/Order.java)   |
+|4| [Order entity added in repositories ](https://github.com/DWS-2026/dws-2026-project-base/commit/fad43bd6380c5b5d26e7ea061b5df1b8e1f89565)  | [OrderRepository.java](project-grupo-6/src/main/java/com/example/projectgrupo6/repositories/OrderRepository.java)   |
+|5| [Order entity added in domain](https://github.com/DWS-2026/dws-2026-project-base/commit/fad43bd6380c5b5d26e7ea061b5df1b8e1f89565)  | [OrderService.java](project-grupo-6/src/main/java/com/example/projectgrupo6/services/OrderService.java)   |
 
 ---
 
