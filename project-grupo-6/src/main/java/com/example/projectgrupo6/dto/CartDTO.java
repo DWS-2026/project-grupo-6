@@ -1,6 +1,9 @@
 package com.example.projectgrupo6.dto;
 
-public record CartDTO (
-       Long id
+import java.util.List;
 
+public record CartDTO (
+       Long id,
+       UserDTO user,
+       List<CartItemDTO> items
 ){}
