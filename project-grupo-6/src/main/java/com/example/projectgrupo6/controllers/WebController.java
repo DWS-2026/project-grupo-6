@@ -47,6 +47,7 @@ public class WebController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //change
     @GetMapping("/") 
     public String greeting(Model model, HttpSession session){
         
@@ -101,7 +102,8 @@ public class WebController {
 
         return "user-form";
     }
-        
+
+    //change
     @PostMapping("/user/new")
     public ResponseEntity<String> registerSubmit(@ModelAttribute("user") User user, 
                                                 @RequestParam("confirmPassword") String confirmPassword, 

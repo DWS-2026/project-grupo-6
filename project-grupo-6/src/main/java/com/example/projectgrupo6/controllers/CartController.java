@@ -50,6 +50,7 @@ public class CartController {
     @Autowired
     private OrderService orderService;
 
+    //move to service
     private User getSessionUser(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         if (principal == null) {
@@ -58,6 +59,7 @@ public class CartController {
         return userService.findByEmail(principal.getName()).orElse(null);
     }
 
+    //change
     @GetMapping("")
     public String showCart(HttpServletRequest request, Model model) {
         User user = getSessionUser(request);
@@ -75,6 +77,7 @@ public class CartController {
         return "shopping-cart";
     }
 
+    //change
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpServletRequest request) {
         
@@ -85,6 +88,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    //change
     @PostMapping("/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId, HttpServletRequest request) {
         User user = getSessionUser(request);
@@ -94,6 +98,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    //change
     @PostMapping("/update/{productId}")
     public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpServletRequest request) {
         User user = getSessionUser(request);
@@ -104,6 +109,7 @@ public class CartController {
         
     }
 
+    //change
     @PostMapping("/clear")
     public String clearCart(HttpServletRequest request) {
         User user = getSessionUser(request);
@@ -113,6 +119,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    //change
     @PostMapping("/checkout")
     public String checkout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         User user = getSessionUser(request);

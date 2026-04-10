@@ -56,6 +56,7 @@ public class ProductController {
         return "product-form";
     }
 
+    //change
     @PostMapping("/add")
     public String addProduct(
             @RequestParam String name,

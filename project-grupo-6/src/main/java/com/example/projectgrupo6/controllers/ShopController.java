@@ -56,6 +56,7 @@ public class ShopController {
     @Autowired
     private UserService userService;
 
+    //move to service
     private User getSessionUser(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
         if (principal == null) {
@@ -71,7 +72,7 @@ public class ShopController {
         return "shop";
     }
     
-    
+    //change
     @GetMapping("/shop/{id}")
     public String showProduct(@PathVariable Long id, Model model, HttpServletRequest request) {
         
@@ -93,6 +94,7 @@ public class ShopController {
         }
     }
 
+    //change
     @GetMapping("/product/{id}/image/{index}")
     public ResponseEntity<Resource> getProductImageByIndex(@PathVariable Long id, @PathVariable int index) throws SQLException {
         Optional<Product> productOpt = productService.getById(id);
@@ -114,6 +116,7 @@ public class ShopController {
         return ResponseEntity.notFound().build();
     }
 
+    //change
     @PostMapping("/shop/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam String content, HttpServletRequest request) {
         User user = getSessionUser(request);
@@ -123,6 +126,7 @@ public class ShopController {
         return "redirect:/shop/" + id;
     }
 
+    //change
     @PostMapping("/shop/{productId}/comment/edit/{commentId}")
     public String editComment(@PathVariable Long productId, 
                             @PathVariable Long commentId, 
@@ -135,6 +139,7 @@ public class ShopController {
         return "redirect:/shop/" + productId;
     }
 
+    //change
     @PostMapping("/shop/{productId}/comment/delete/{commentId}")
     public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpServletRequest request) {
         User user = getSessionUser(request);
@@ -144,6 +149,7 @@ public class ShopController {
         return "redirect:/shop/" + productId;
     }
 
+    //change
     @PostMapping("/add-to-cart")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
@@ -160,8 +166,8 @@ public class ShopController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }
         
-        // Magia: request.getHeader("Referer") nos dice en qué URL estaba el usuario (ej. /shop/2)
-        // Si por algún motivo el navegador no lo manda, lo redirigimos al carrito por defecto.
+        // Magic: request.getHeader("Referer") says in which URL was the user (ej. /shop/2)
+        // Redirect to Cart by default
         String referer = request.getHeader("Referer");
         return "redirect:" + (referer != null ? referer : "/cart");
     }

@@ -51,13 +51,15 @@ public class UserController {
 
     @Autowired
     private OrderService orderService;
-        
+
+    //move to service
         // Helpful method to get user in a cleaner way
         private User getSessionUser(HttpServletRequest request) {
             String email = request.getUserPrincipal().getName(); 
             return userService.findByEmail(email).orElse(null); 
-        }   
+        }
 
+        //change
         @GetMapping("/profile")
         public String profile(HttpServletRequest request, Model model) {
 
@@ -72,6 +74,7 @@ public class UserController {
             return "profile";
         }
 
+        //change
         @GetMapping("/{id}/image")
         public ResponseEntity<Object> getImageFile(@PathVariable long id) throws SQLException {
             Optional<User> op_user = userService.findById(id);
@@ -92,6 +95,7 @@ public class UserController {
             }
         }
 
+        //cahnge
         @GetMapping("/comments")
         public String showUserComments(Model model, HttpServletRequest request) {
             User sessionUser = getSessionUser(request);            
@@ -107,6 +111,7 @@ public class UserController {
             return "profile-comments";
         }
 
+        //change
         @PostMapping("/comments/edit/{commentId}")
         public String updateCommentFromProfile(@PathVariable Long commentId, 
                                             @RequestParam String newContent, 
@@ -119,6 +124,7 @@ public class UserController {
             return "redirect:/user/comments";
         }
 
+        //change
         @PostMapping("/comments/delete/{commentId}")
         public String deleteCommentFromProfile(@PathVariable Long commentId, 
                                             HttpServletRequest request) {
@@ -129,7 +135,8 @@ public class UserController {
             commentService.deleteComment(commentId, sessionUser.getId());
             return "redirect:/user/comments";
         }
-        
+
+        //change
         @GetMapping("/update")
         public String showUserProfile(HttpServletRequest request, Model model) {
             
@@ -142,6 +149,7 @@ public class UserController {
             return "profile-edit";
         }
 
+        //change
         @PostMapping("/update")
         public String updateUserProfile(
             @RequestParam String firstname,
@@ -199,6 +207,7 @@ public class UserController {
             return "redirect:/user/profile";
         }
 
+        //change
         @PostMapping ("/delete")
         public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpServletRequest request){
             
@@ -212,6 +221,7 @@ public class UserController {
             return "redirect:/user/logout";
         }
 
+        //change
         @GetMapping("/orders")
         public String viewPurchaseHistory(HttpServletRequest request, Model model) {
             try {

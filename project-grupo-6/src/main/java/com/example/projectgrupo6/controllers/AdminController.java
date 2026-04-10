@@ -72,6 +72,7 @@ public class AdminController {
         }
     }
 
+    //change
     @PostMapping("/users/edit/{id}")
     public String editUserPost(
         @PathVariable Long id, 
@@ -129,7 +130,6 @@ public class AdminController {
 
 
     //PRODUCTS:
-
     @GetMapping("/products")
     public String listProducts(Model model) {
         
@@ -140,6 +140,7 @@ public class AdminController {
         return "admin-product-list";
     }
 
+    //to change
     @GetMapping("/products/{id}")
     public String showProductDetail(@PathVariable long id, Model model) {
 
@@ -150,7 +151,7 @@ public class AdminController {
 
         Product product = op.get();
 
-        //Optional
+        //Optional -> change
         if (product.getSpecification() == null || product.getSpecification().isBlank()) {
             product.setSpecification(null); // Or null
         }
@@ -177,6 +178,7 @@ public class AdminController {
         return "product-form";
     }
 
+    //change
     @PostMapping("/products/{productId}/edit")
     public String editProductSubmit (@PathVariable long productId,
                                      @RequestParam String name,
@@ -230,6 +232,7 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    //change
     @GetMapping("/users/{userId}/comments")
     public String viewUserCommentsAsAdmin(@PathVariable Long userId, Model model) {
         
@@ -250,6 +253,7 @@ public class AdminController {
         }
     }
 
+    //change
     @PostMapping("/users/{userId}/comments/{commentId}/edit")
     public String updateCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId, 
@@ -271,6 +275,7 @@ public class AdminController {
         return "redirect:/admin/users/" + userId + "/comments";
     }
 
+    //change
     @PostMapping("/users/{userId}/comments/{commentId}/delete")
     public String deleteCommentAdmin(@PathVariable Long userId, 
                                      @PathVariable Long commentId,
@@ -289,7 +294,8 @@ public class AdminController {
         
         return "redirect:/admin/users/" + userId + "/comments";
     }
-    
+
+    //change
     @GetMapping("/users/{userId}/orders")
     public String viewUserOrdersAsAdmin(@PathVariable Long userId, Model model) {
         
@@ -310,6 +316,7 @@ public class AdminController {
         }
     }
 
+    //change
     @PostMapping("/users/{userId}/orders/{orderId}/status")
     public String updateOrderStatusAsAdmin(@PathVariable Long userId, 
                                            @PathVariable Long orderId, 
@@ -330,6 +337,7 @@ public class AdminController {
         return "redirect:/admin/users/" + userId + "/orders";
     }
 
+    //change
     @PostMapping("/users/{userId}/orders/{orderId}/delete")
     public String deleteOrderAsAdmin(@PathVariable Long userId, 
                                      @PathVariable Long orderId, 
@@ -344,6 +352,7 @@ public class AdminController {
         return "redirect:/admin/users/" + userId + "/orders";
     }
 
+    //change
     @PostMapping ("/users/delete/{id}")
     public String deleteUser (@PathVariable Long id, RedirectAttributes redirectAttributes){
         Optional<User> optionalUser = userService.getById(id);
