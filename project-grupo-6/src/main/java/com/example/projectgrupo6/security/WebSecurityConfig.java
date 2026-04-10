@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                     .requestMatchers("/shop/**").permitAll() // <-- Make sure that the store is public
                     
                     // PRIVATE PAGES
+					.requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/product/add").hasAnyRole("ADMIN")
                     .requestMatchers("/shop/*/comment/**", "/add-to-cart", "/cart/**", "/cart/add/**", "/cart/remove/**").authenticated()
                     .requestMatchers("/admin/**").hasAnyRole("ADMIN")

@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.domain;
+package com.example.projectgrupo6.dto;
 
 public record ProductDTO(
         Long id,
