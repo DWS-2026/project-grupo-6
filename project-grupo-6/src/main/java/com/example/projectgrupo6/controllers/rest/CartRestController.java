@@ -59,11 +59,15 @@ public class CartRestController {
     }
     @PostMapping("/add/{productId}")
     public ResponseEntity<Void> addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpServletRequest request){
+        try{
         User user = getSessionUser(request);
         if (user == null) return ResponseEntity.status(401).build();
 
         cartService.addProductToCart(user.getId(), productId, quantity);
         return ResponseEntity.ok().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
     @DeleteMapping("/remove/{productId}")
     public ResponseEntity<Void> removeFromCart(@PathVariable Long productId, HttpServletRequest request){
@@ -75,11 +79,15 @@ public class CartRestController {
     }
     @PutMapping("/update/{productId}")
     public ResponseEntity<Void> updateCartItem(@PathVariable Long productId, @RequestParam int quantity, HttpServletRequest request){
+        try{
         User user = getSessionUser(request);
         if (user == null) return ResponseEntity.status(401).build();
 
         cartService.updateProductQuantity(user.getId(), productId, quantity);
         return ResponseEntity.ok().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
     @DeleteMapping("/clear")
     public ResponseEntity<Void> clearCart(HttpServletRequest request){
