@@ -1,7 +1,8 @@
 package com.example.projectgrupo6.dto.basicDtos;
+import com.example.projectgrupo6.dto.ProductCartDTO;
 
 public record CartItemBasicDTO (
         Long id,
-        ProductBasicDTO product,
+        ProductCartDTO product,
         int quantity
 ) {}
