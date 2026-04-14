@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ProductMapper.class})
 public interface CartItemMapper {
     CartItemDTO toDTO(CartItem cartItem);
     CartItemBasicDTO toBasicDTO (CartItem cartItem);

@@ -8,5 +8,4 @@ public record UserBasicDTO (
         String lastname,
         String email,
         List<String> roles
-        //image (?)
 ) {}

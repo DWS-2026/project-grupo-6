@@ -14,5 +14,4 @@ public record ProductBasicDTO (
         int reviewCount,
         int stock,
         String specification
-        //images (?)
 ) {}

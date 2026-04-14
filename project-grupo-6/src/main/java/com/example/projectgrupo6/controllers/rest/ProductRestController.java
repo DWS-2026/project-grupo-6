@@ -33,6 +33,4 @@ public class ProductRestController {
         productService.delete(id);
     }
 
-
-
 }
