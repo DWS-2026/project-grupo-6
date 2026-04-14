@@ -113,24 +113,32 @@ public class UserService {
         return password.equals(confirmPassword);
     }
 
-    public void updateDataUser(User oldUser, User newUser){
-        oldUser.setFirstname(newUser.getFirstname());
-        oldUser.setLastname(newUser.getLastname());
-        oldUser.setUsername(newUser.getUsername());
-        oldUser.setEmail(newUser.getEmail());
-        oldUser.setEncodedPassword(newUser.getEncodedPassword());
-        oldUser.setProfileImage(newUser.getProfileImage());
-        oldUser.setRoles(newUser.getRoles());
-
-        userRepository.save(oldUser);
+    public User updateUser(User user, String firstName,String lastName, String email, String password, MultipartFile imageFile) throws IOException {
+        if (!firstName.isEmpty()) {
+            user.setFirstname(firstName);
+        }
+        if (!lastName.isEmpty()) {
+            user.setLastname(lastName);
+        }
+        if (!email.isEmpty()) {
+            user.setEmail(email);
+        }
+        if (!password.isEmpty()) {
+            user.setEncodedPassword(password);
+        }
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                user.setProfileImage(new SerialBlob(imageFile.getBytes()));
+            } catch (Exception e) {
+                throw new IOException("Failed to create image blob", e);
+            }
+        }
+        return userRepository.save(user);
     }
 
-    public Long getCurrentUserId(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            throw new RuntimeException("Unauthenticated user");
-        }
-        return user.getId();
+    public Long getCurrentUserId(HttpServletRequest session) {
+        User user = getSessionUser(session);
+        return (user != null) ? user.getId() : null;
     }
 
     public boolean validateSession (User sessionUser, Long sessionId){
@@ -150,5 +158,6 @@ public class UserService {
         }
         return findByEmail(principal.getName()).orElse(null);
     }
+
 
 }

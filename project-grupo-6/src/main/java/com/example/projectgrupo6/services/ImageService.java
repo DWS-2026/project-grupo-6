@@ -84,4 +84,9 @@ public class ImageService {
         return null; //If it fails, it won't have image
     }
 
+    //For an specific product image given an index, if it doesn't exist, it will return the default image
+    public Resource getImageResources(List<Blob> images, int index) throws SQLException{
+        Blob imageBlob = images.get(index);
+        return new InputStreamResource(imageBlob.getBinaryStream());
+    }
 }

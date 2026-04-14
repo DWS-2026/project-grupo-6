@@ -49,7 +49,7 @@ public class WebController {
 
     //change
     @GetMapping("/") 
-    public String greeting(Model model, HttpSession session){
+    public String greeting(Model model, HttpServletRequest session){
         
         List<Product> products = productService.getAllProducts();
         
