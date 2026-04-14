@@ -1,5 +1,9 @@
 package com.example.projectgrupo6.controllers.rest;
 
+import com.example.projectgrupo6.services.CartService;
+import com.example.projectgrupo6.services.CommentService;
+import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
