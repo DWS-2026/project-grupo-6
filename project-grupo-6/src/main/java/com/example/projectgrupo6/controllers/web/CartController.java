@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,19 +50,10 @@ public class CartController {
     @Autowired
     private OrderService orderService;
 
-    //move to service
-    private User getSessionUser(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) {
-            return null;
-        }
-        return userService.findByEmail(principal.getName()).orElse(null);
-    }
-
     //change
     @GetMapping("")
     public String showCart(HttpServletRequest request, Model model) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         Long userId = user.getId();
@@ -81,7 +72,7 @@ public class CartController {
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpServletRequest request) {
         
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         cartService.addProductToCart(user.getId(), productId, quantity);
@@ -91,7 +82,7 @@ public class CartController {
     //change
     @PostMapping("/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId, HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         cartService.removeProductFromCart(user.getId(), productId);
@@ -101,7 +92,7 @@ public class CartController {
     //change
     @PostMapping("/update/{productId}")
     public String updateCart(@PathVariable Long productId, @RequestParam int quantity, HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         cartService.updateProductQuantity(user.getId(), productId, quantity);
@@ -112,7 +103,7 @@ public class CartController {
     //change
     @PostMapping("/clear")
     public String clearCart(HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         cartService.clearCart(user.getId());
@@ -122,7 +113,7 @@ public class CartController {
     //change
     @PostMapping("/checkout")
     public String checkout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         Long userId = user.getId();
