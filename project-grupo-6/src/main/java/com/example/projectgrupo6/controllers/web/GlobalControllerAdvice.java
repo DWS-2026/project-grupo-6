@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

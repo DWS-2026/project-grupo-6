@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -52,18 +52,11 @@ public class UserController {
     @Autowired
     private OrderService orderService;
 
-    //move to service
-        // Helpful method to get user in a cleaner way
-        private User getSessionUser(HttpServletRequest request) {
-            String email = request.getUserPrincipal().getName(); 
-            return userService.findByEmail(email).orElse(null); 
-        }
-
         //change
         @GetMapping("/profile")
         public String profile(HttpServletRequest request, Model model) {
 
-            User user = getSessionUser(request);            
+            User user = userService.getSessionUser(request);            
             if(user == null) {
                 return "redirect:/login";
             }
@@ -98,7 +91,7 @@ public class UserController {
         //cahnge
         @GetMapping("/comments")
         public String showUserComments(Model model, HttpServletRequest request) {
-            User sessionUser = getSessionUser(request);            
+            User sessionUser = userService.getSessionUser(request);            
             if (sessionUser == null) {
                 return "redirect:/login";
             }
@@ -117,7 +110,7 @@ public class UserController {
                                             @RequestParam String newContent, 
                                             HttpServletRequest request) {
             
-            User sessionUser = getSessionUser(request);
+            User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
             commentService.editComment(commentId, sessionUser.getId(), newContent);
@@ -129,7 +122,7 @@ public class UserController {
         public String deleteCommentFromProfile(@PathVariable Long commentId, 
                                             HttpServletRequest request) {
             
-            User sessionUser = getSessionUser(request);
+            User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
             commentService.deleteComment(commentId, sessionUser.getId());
@@ -140,7 +133,7 @@ public class UserController {
         @GetMapping("/update")
         public String showUserProfile(HttpServletRequest request, Model model) {
             
-            User sessionUser = getSessionUser(request);
+            User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
             model.addAttribute("user", sessionUser);
@@ -160,7 +153,7 @@ public class UserController {
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
-            User userToUpdate = getSessionUser(request);
+            User userToUpdate = userService.getSessionUser(request);
             if (userToUpdate == null) return "redirect:/login";
             
             String newEmail = email.trim();    
@@ -211,7 +204,7 @@ public class UserController {
         @PostMapping ("/delete")
         public String deleteUser (Model model, User user, RedirectAttributes redirectAttributes, HttpServletRequest request){
             
-            User sessionUser = getSessionUser(request);
+            User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
             userService.delete(sessionUser);
@@ -225,7 +218,7 @@ public class UserController {
         @GetMapping("/orders")
         public String viewPurchaseHistory(HttpServletRequest request, Model model) {
             try {
-                User sessionUser = getSessionUser(request);
+                User sessionUser = userService.getSessionUser(request);
                 if (sessionUser == null) return "redirect:/login";
 
                 model.addAttribute("isAdmin", request.isUserInRole("ADMIN"));

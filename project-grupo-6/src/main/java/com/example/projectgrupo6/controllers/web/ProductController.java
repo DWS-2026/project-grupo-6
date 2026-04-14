@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

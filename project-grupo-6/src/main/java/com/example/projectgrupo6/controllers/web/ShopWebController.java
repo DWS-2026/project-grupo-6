@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import org.springframework.http.MediaType;
 
 
 @Controller
-public class ShopController {
+public class ShopWebController {
 
     @Autowired
     private ProductService productService;
@@ -55,15 +55,6 @@ public class ShopController {
 
     @Autowired
     private UserService userService;
-
-    //move to service
-    private User getSessionUser(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) {
-            return null;
-        }
-        return userService.findByEmail(principal.getName()).orElse(null);
-    }
 
     @GetMapping("/shop") 
     public String showshop(Model model) {
@@ -82,7 +73,7 @@ public class ShopController {
             model.addAttribute("product", productOpt.get());
 
             
-            User user = getSessionUser(request);
+            User user = userService.getSessionUser(request);
             Long userId = (user != null) ? user.getId() : null;
 
             List<Map<String, Object>> commentsView = commentService.getCommentsForProductView(id, userId);
@@ -119,7 +110,7 @@ public class ShopController {
     //change
     @PostMapping("/shop/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam String content, HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
         
         commentService.addComment(user.getId(), id, content);
@@ -132,7 +123,7 @@ public class ShopController {
                             @PathVariable Long commentId, 
                             @RequestParam String newContent, 
                             HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
         
         commentService.editComment(commentId, user.getId(), newContent);
@@ -142,7 +133,7 @@ public class ShopController {
     //change
     @PostMapping("/shop/{productId}/comment/delete/{commentId}")
     public String deleteComment(@PathVariable Long productId, @PathVariable Long commentId, HttpServletRequest request) {
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
         
         commentService.deleteComment(commentId, user.getId());
@@ -156,7 +147,7 @@ public class ShopController {
                             RedirectAttributes redirectAttributes, 
                             HttpServletRequest request) {
         
-        User user = getSessionUser(request);
+        User user = userService.getSessionUser(request);
         if (user == null) return "redirect:/login";
 
         try {
