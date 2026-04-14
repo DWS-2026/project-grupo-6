@@ -1,5 +1,7 @@
 package com.example.projectgrupo6.dto;
 
+import com.example.projectgrupo6.dto.basicDtos.CommentBasicDTO;
+
 import java.util.List;
 
 public record UserDTO(
@@ -12,7 +14,7 @@ public record UserDTO(
 
         //necessary (?)
         List<String> roles,
-        List<CommentDTO> review,
+        List<CommentBasicDTO> review,
         List<OrderDTO> orders,
         CartDTO cart
 ) {}
