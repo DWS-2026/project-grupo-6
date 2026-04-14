@@ -1,4 +1,4 @@
-package com.example.projectgrupo6.controllers;
+package com.example.projectgrupo6.controllers.web;
 
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;

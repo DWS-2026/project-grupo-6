@@ -3,6 +3,9 @@ package com.example.projectgrupo6.services;
 import com.example.projectgrupo6.domain.*;
 import com.example.projectgrupo6.repositories.CartRepository;
 import com.example.projectgrupo6.repositories.UserRepository;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,16 +143,12 @@ public class UserService {
                         .anyMatch(r -> r.equalsIgnoreCase("ADMIN"));
     }
 
-    /*  //With Spring Security (?)
-    private Long getCurrentUserId() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || !auth.isAuthenticated()) {
-            throw new RuntimeException("Unauthenticated user");
+    public User getSessionUser(HttpServletRequest request) {
+        Principal principal = request.getUserPrincipal();
+        if (principal == null) {
+            return null;
         }
-
-        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-        return userDetails.getId();
-    }*/
+        return findByEmail(principal.getName()).orElse(null);
+    }
 
 }
