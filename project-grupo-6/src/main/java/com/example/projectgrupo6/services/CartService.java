@@ -163,4 +163,7 @@ public class CartService {
         cart.getItems().size();    
         return cart.getItems();
     }
+    public Cart getCartByUserId(Long userId) {
+        return getOrCreateCartForUser(userId);
+    }
 }
