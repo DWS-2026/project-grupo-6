@@ -61,7 +61,9 @@ public class ProductRestController {
 
     //DELETE
     @DeleteMapping("/{id}")
-    public void deleteProduct (@PathVariable long id){
+    public ResponseEntity<ProductBasicDTO> deleteProduct (@PathVariable long id){
+        ProductBasicDTO prod = productMapper.toBasicDTO(productService.getById(id).orElseThrow());
         productService.delete(id);
+        return ResponseEntity.ok(prod);
     }
 }

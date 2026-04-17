@@ -1,8 +1,13 @@
 package com.example.projectgrupo6.controllers.rest;
 
+import com.example.projectgrupo6.domain.Product;
+import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
+import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
+import com.example.projectgrupo6.dto.mappers.CartItemMapper;
+import com.example.projectgrupo6.dto.mappers.ProductMapper;
+import com.example.projectgrupo6.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.UserService;
@@ -11,82 +16,86 @@ import com.example.projectgrupo6.dto.CartDTO;
 import com.example.projectgrupo6.dto.mappers.CartMapper;
 import com.example.projectgrupo6.domain.Cart;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.net.URI;
 import java.security.Principal;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import javax.ws.rs.Path;
+
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 
 @RestController
 @RequestMapping("/api/v1/carts")
 public class CartRestController {
-        @Autowired
-        private CartService cartService;
-        @Autowired
-        private UserService userService;
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
 
-        @Autowired
-        private CartMapper cartMapper;
-    
-    private User getSessionUser(HttpServletRequest request) {
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) return null;
-        return userService.findByUsername(principal.getName()).orElse(null);
-    }
-    @GetMapping("")
-    public ResponseEntity<CartDTO> getCart(HttpServletRequest request){
-        User user = getSessionUser(request);
-        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        Cart cart = cartService.getCartByUserId(user.getId());
+    @Autowired
+    private CartMapper cartMapper;
+    @Autowired
+    private CartItemMapper cartItemMapper;
+    @Autowired
+    private ProductMapper productMapper;
+
+    //GET
+    @GetMapping("/user/{id}")
+    public ResponseEntity<CartDTO> getCart(@PathVariable long id){
+        Cart cart = cartService.getCartByUserId(id);
         if(cart == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cartMapper.toDTO(cart));
     }
-    @PostMapping("/add/{productId}")
-    public ResponseEntity<Void> addToCart(@PathVariable Long productId, @RequestParam(defaultValue = "1") int quantity, HttpServletRequest request) {
-        try{
-            User user = getSessionUser(request);
-            if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            cartService.addProductToCart(user.getId(), productId, quantity);
+
+    //POST
+    @PostMapping("/user/{id}/product/{productId}")
+    public ResponseEntity<ProductBasicDTO> addToCart(@PathVariable long id, @PathVariable long productId, @RequestParam(defaultValue = "1") int quantity, @RequestBody ProductBasicDTO productBasicDTO) {
+        cartService.addProductToCart(id, productId, quantity);
+
+        Product prod = productService.getById(productId).orElseThrow();
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();;
+        return ResponseEntity.created(location).body(productMapper.toBasicDTO(prod));
+    }
+
+    //PUT
+    /// ///////////////////////////
+    @PutMapping("/user/{id}/product/{productId}")
+    public ResponseEntity<CartItemBasicDTO> updateCartItem(@PathVariable long id, @PathVariable Long productId, @RequestParam int quantity) {
+        if(productService.getById(productId).isPresent()) {
+            cartService.updateProductQuantity(id, productId, quantity);
+
             return ResponseEntity.ok().build();
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(null);
+        } else {
+            throw new NoSuchElementException();
         }
     }
-    @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<Void> removeFromCart(@PathVariable Long productId, HttpServletRequest request) {
-        try{
-            User user = getSessionUser(request);
-            if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            cartService.removeProductFromCart(user.getId(), productId);
-            return ResponseEntity.ok().build();
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(null);
+    ///  ///////////////
+
+    //DELETE
+    //Delete Cart
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<CartDTO> clearCart(@PathVariable long id) {
+        if(userService.getById(id).isPresent()) {
+            CartDTO cart = cartMapper.toDTO(cartService.getCartByUserId(id));
+            cartService.clearCart(id);
+            return ResponseEntity.ok(cart);
+        } else {
+            throw new NoSuchElementException();
         }
     }
-    @PutMapping("/update/{productId}")
-    public ResponseEntity<Void> updateCartItem(@PathVariable Long productId, @RequestParam int quantity, HttpServletRequest request) {
+
+    //Delete Product From Cart
+    @DeleteMapping("/user/{id}/product/{productId}")
+    public ResponseEntity<ProductBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long productId) {
         try{
-            User user = getSessionUser(request);
-            if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            cartService.updateProductQuantity(user.getId(), productId, quantity);
-            return ResponseEntity.ok().build();
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(null);
-        }
-    }
-    @DeleteMapping("/clear")
-    public ResponseEntity<Void> clearCart(HttpServletRequest request) {
-        try{
-            User user = getSessionUser(request);
-            if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            cartService.clearCart(user.getId());
+            cartService.removeProductFromCart(id, productId);
             return ResponseEntity.ok().build();
         }catch(RuntimeException e){
             return ResponseEntity.status(400).body(null);
