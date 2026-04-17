@@ -49,11 +49,8 @@ public class ProductService {
 
     public List<Product> getThreeRandomProducts() {
         List<Product> allProducts = repository.findAll();
-        
         List<Product> randomList = new ArrayList<>(allProducts);
-        
         Collections.shuffle(randomList);
-        
         return randomList.subList(0, Math.min(3, randomList.size()));
     }
 
