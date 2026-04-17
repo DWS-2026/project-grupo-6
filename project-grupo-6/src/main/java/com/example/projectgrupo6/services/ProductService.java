@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import com.example.projectgrupo6.domain.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.projectgrupo6.domain.Product;
@@ -22,6 +24,8 @@ public class ProductService {
     public List<Product> getAllProducts() {
         return repository.findAll();
     }
+
+    public Page<Product> getAll(Pageable page){return repository.findAll(page);}
 
     public List<Product> filterByPowerSource(String source) {
         return repository.findByPowerSource(source);

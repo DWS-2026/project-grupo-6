@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,6 +140,9 @@ public class CartService {
         return cart.getItems().stream().mapToInt(CartItem::getQuantity).sum();
     }
 
+    public Collection<Cart> getAllItems(){
+        return cartRepository.findAll();
+    }
     
     public int getCartItemCount(Long userId) {
         Optional<Cart> existingCart = cartRepository.findByUserId(userId);

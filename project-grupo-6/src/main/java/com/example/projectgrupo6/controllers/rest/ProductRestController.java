@@ -5,6 +5,8 @@ import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -18,9 +20,10 @@ public class ProductRestController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("")
-    public Collection<ProductBasicDTO> getAllBasicProducts (){
-        return productMapper.toBasicDTOs(productService.getAllProducts());
+    //GET
+    @GetMapping("/")
+    public Page<ProductBasicDTO> getAllBasicProducts (Pageable pageable){
+        return (productService.getAll(pageable).map(productMapper::toBasicDTO));
     }
 
     @GetMapping("/{id}")
@@ -28,6 +31,11 @@ public class ProductRestController {
         return productMapper.toDTO(productService.getById(id).orElseThrow());
     }
 
+    //POST
+
+    //PUT
+
+    //DELETE
     @DeleteMapping("/{id}")
     public void deleteProduct (@PathVariable long id){
         productService.delete(id);

@@ -1,5 +1,6 @@
 package com.example.projectgrupo6.controllers.rest;
 
+import com.example.projectgrupo6.dto.mappers.CartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +27,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/v1/carts")
 public class CartRestController {
-        @Autowired
-        private CartService cartService;
-        @Autowired
-        private UserService userService;
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private CartMapper cartMapper;
+
+    @Autowired
+    private UserService userService;
     
     private User getSessionUser(HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
@@ -89,6 +94,7 @@ public class CartRestController {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @DeleteMapping("/clear")
     public ResponseEntity<Void> clearCart(HttpServletRequest request){
         User user = getSessionUser(request);
