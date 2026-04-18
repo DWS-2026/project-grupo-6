@@ -9,6 +9,8 @@ import com.example.projectgrupo6.repositories.ProductRepository;
 import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class CartService {
     @Autowired
     private UserRepository userRepository;
 
-    
+
     @Transactional
     public Cart getOrCreateCartForUser(Long userId) {
         Optional<Cart> existingCart = cartRepository.findByUserId(userId);
@@ -92,9 +94,6 @@ public class CartService {
         return cart;
     }
 
-
-
-    
     @Transactional
     public Cart updateProductQuantity(Long userId, Long productId, int newQuantity) {
         Cart cart = getOrCreateCartForUser(userId);
@@ -165,7 +164,18 @@ public class CartService {
         cart.getItems().size();    
         return cart.getItems();
     }
+
+    public CartItem getCartItem(long userId, long prodId){
+        return getCartItems(userId).stream()
+                .filter(item -> item.getId() == prodId)
+                .findFirst()
+                .orElse(null);
+    }
+
     public Cart getCartByUserId(Long userId) {
         return getOrCreateCartForUser(userId);
+    }
+    public Page<Cart> getCartPage(Pageable pageable){
+        return cartRepository.findAll(pageable);
     }
 }

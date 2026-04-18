@@ -1,5 +1,6 @@
 package com.example.projectgrupo6.controllers.rest;
 
+import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
 import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
@@ -7,6 +8,8 @@ import com.example.projectgrupo6.dto.mappers.CartItemMapper;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.projectgrupo6.services.CartService;
@@ -47,6 +50,13 @@ public class CartRestController {
     private ProductMapper productMapper;
 
     //GET
+    //Get all
+    @GetMapping("/")
+    public Page<CartDTO> getCarts(Pageable pageable){
+        return cartService.getCartPage(pageable).map(cartMapper::toDTO);
+    }
+
+    //Get by user
     @GetMapping("/user/{id}")
     public ResponseEntity<CartDTO> getCart(@PathVariable long id){
         Cart cart = cartService.getCartByUserId(id);
@@ -55,6 +65,9 @@ public class CartRestController {
     }
 
     //POST
+    //Add product to cart
+    /// ///////////////////////// FIX
+    // Use cartItem and get quantity instead of RequestParam
     @PostMapping("/user/{id}/product/{productId}")
     public ResponseEntity<ProductBasicDTO> addToCart(@PathVariable long id, @PathVariable long productId, @RequestParam(defaultValue = "1") int quantity, @RequestBody ProductBasicDTO productBasicDTO) {
         cartService.addProductToCart(id, productId, quantity);
@@ -65,18 +78,18 @@ public class CartRestController {
     }
 
     //PUT
-    /// ///////////////////////////
+    //Change product in cart
     @PutMapping("/user/{id}/product/{productId}")
-    public ResponseEntity<CartItemBasicDTO> updateCartItem(@PathVariable long id, @PathVariable Long productId, @RequestParam int quantity) {
+    public CartItemBasicDTO updateCartItem(@PathVariable long id, @PathVariable Long productId, @RequestParam int quantity) {
         if(productService.getById(productId).isPresent()) {
             cartService.updateProductQuantity(id, productId, quantity);
-
-            return ResponseEntity.ok().build();
+            CartItem cartItem = cartService.getCartItem(id, productId);
+            return cartItemMapper.toBasicDTO(cartItem);
         } else {
             throw new NoSuchElementException();
         }
     }
-    ///  ///////////////
+    /// ////////////////////////////////
 
     //DELETE
     //Delete Cart
@@ -94,11 +107,12 @@ public class CartRestController {
     //Delete Product From Cart
     @DeleteMapping("/user/{id}/product/{productId}")
     public ResponseEntity<ProductBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long productId) {
-        try{
+        if(userService.getById(id).isPresent()) {
+            ProductBasicDTO prod = productMapper.toBasicDTO(productService.getById(productId).orElseThrow());
             cartService.removeProductFromCart(id, productId);
-            return ResponseEntity.ok().build();
-        }catch(RuntimeException e){
-            return ResponseEntity.status(400).body(null);
+            return ResponseEntity.ok(prod);
+        } else {
+            throw new NoSuchElementException();
         }
     }
 }
