@@ -6,8 +6,6 @@ import com.example.projectgrupo6.dto.UserDTO;
 import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
 import com.example.projectgrupo6.dto.mappers.UserMapper;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;

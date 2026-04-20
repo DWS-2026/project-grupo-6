@@ -54,4 +54,12 @@ public class Order {
         this.items.add(item);
         item.setOrder(this);
     }
+
+    public void updateItem(Long itemId, int quantity){
+        OrderItem item = this.items.stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+        item.setQuantity(quantity);
+    }
 }

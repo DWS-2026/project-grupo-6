@@ -95,6 +95,19 @@ public class CartService {
     }
 
     @Transactional
+    public Cart removeItemFromCart (Long userId, Long itemId){
+        Cart cart = getOrCreateCartForUser(userId);
+        cart.getItems().removeIf(item -> {
+            if (item.getId().equals(itemId)) {
+                item.setCart(null);
+                return true;
+            }
+            return false;
+        });
+        return cart;
+    }
+
+    @Transactional
     public CartItem updateProductQuantity(Long userId, Long productId, int newQuantity) {
         Cart cart = getOrCreateCartForUser(userId);
         Optional<CartItem> existingItem = cart.getItems().stream()
@@ -171,9 +184,9 @@ public class CartService {
         return cart.getItems();
     }
 
-    public CartItem getCartItem(long userId, long prodId){
+    public CartItem getCartItem(long userId, long itemId){
         return getCartItems(userId).stream()
-                .filter(item -> item.getProduct().getId().equals(prodId))
+                .filter(item -> item.getId().equals(itemId))
                 .findFirst()
                 .orElse(null);
     }

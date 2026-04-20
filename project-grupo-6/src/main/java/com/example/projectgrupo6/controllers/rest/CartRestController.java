@@ -97,12 +97,12 @@ public class CartRestController {
     }
 
     //Delete Product From Cart
-    @DeleteMapping("/user/{id}/product/{productId}")
-    public ResponseEntity<ProductBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long productId) {
+    @DeleteMapping("/user/{id}/item/{itemId}")
+    public ResponseEntity<CartItemBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long itemId) {
         if(userService.getById(id).isPresent()) {
-            ProductBasicDTO prod = productMapper.toBasicDTO(productService.getById(productId).orElseThrow());
-            cartService.removeProductFromCart(id, productId);
-            return ResponseEntity.ok(prod);
+            CartItemBasicDTO item = cartItemMapper.toBasicDTO(cartService.getCartItem(id, itemId));
+            cartService.removeItemFromCart(id, itemId);
+            return ResponseEntity.ok(item);
         } else {
             throw new NoSuchElementException();
         }

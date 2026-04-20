@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.projectgrupo6.domain.Order;
@@ -34,14 +36,49 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public Page<Order> findAllPaged (Pageable pageable){
+        return orderRepository.findAll(pageable);
+    }
+
     // Search by id
     public Optional<Order> findById(Long id) {
         return orderRepository.findById(id);
     }
 
+    public Optional<OrderItem> findItemById (Long ordId, Long itemId){
+        return orderRepository.findByIdAndOrderId(itemId, ordId);
+    }
+
     // Delete an order
     public void deleteById(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    //Delete an item
+    public Order removeItemFromOrder(Long orderId, Long itemId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order no encontrada"));
+
+        order.getItems().removeIf(item -> {
+            boolean match = item.getId().equals(itemId);
+            if (match) {
+                item.setOrder(null);
+            }
+            return match;
+        });
+        return order;
+    }
+
+    public OrderItem updateOrderItem(Long orderId, Long itemId, OrderItem item){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow();
+
+        order.updateItem(itemId, item.getQuantity());
+        orderRepository.save(order);
+        return order.getItems().stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow();
     }
 
     public List<Order> findAllByUser (User user){
