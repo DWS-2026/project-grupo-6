@@ -66,30 +66,22 @@ public class CartRestController {
 
     //POST
     //Add product to cart
-    /// ///////////////////////// FIX
-    // Use cartItem and get quantity instead of RequestParam
-    @PostMapping("/user/{id}/product/{productId}")
-    public ResponseEntity<ProductBasicDTO> addToCart(@PathVariable long id, @PathVariable long productId, @RequestParam(defaultValue = "1") int quantity, @RequestBody ProductBasicDTO productBasicDTO) {
-        cartService.addProductToCart(id, productId, quantity);
-
-        Product prod = productService.getById(productId).orElseThrow();
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();;
-        return ResponseEntity.created(location).body(productMapper.toBasicDTO(prod));
+    @PostMapping("/user/{id}/cart")
+    public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
+        CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getProduct().getId()).toUri();;
+        return ResponseEntity.created(location).body(cartItemMapper.toBasicDTO(item));
     }
 
     //PUT
     //Change product in cart
-    @PutMapping("/user/{id}/product/{productId}")
-    public CartItemBasicDTO updateCartItem(@PathVariable long id, @PathVariable Long productId, @RequestParam int quantity) {
-        if(productService.getById(productId).isPresent()) {
-            cartService.updateProductQuantity(id, productId, quantity);
-            CartItem cartItem = cartService.getCartItem(id, productId);
-            return cartItemMapper.toBasicDTO(cartItem);
-        } else {
-            throw new NoSuchElementException();
-        }
+    @PutMapping("/user/{id}/cart")
+    public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
+        CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        cartService.updateProductQuantity(id, item.getProduct().getId(), item.getQuantity());
+        return cartItemMapper.toBasicDTO(item);
     }
-    /// ////////////////////////////////
 
     //DELETE
     //Delete Cart

@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +37,10 @@ public class UserService {
 
     public List<User> getAllUsers (){
         return userRepository.findAll();
+    }
+
+    public Page<User> getAllPaged(Pageable pageable){
+        return userRepository.findAll(pageable);
     }
 
     public User save(User user){

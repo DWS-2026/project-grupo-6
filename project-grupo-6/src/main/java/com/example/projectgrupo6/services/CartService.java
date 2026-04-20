@@ -95,7 +95,7 @@ public class CartService {
     }
 
     @Transactional
-    public Cart updateProductQuantity(Long userId, Long productId, int newQuantity) {
+    public CartItem updateProductQuantity(Long userId, Long productId, int newQuantity) {
         Cart cart = getOrCreateCartForUser(userId);
         Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
@@ -106,18 +106,25 @@ public class CartService {
             if (newQuantity <= 0) {
                 cart.getItems().remove(item);
                 item.setCart(null);
-            } else {
-                item.setQuantity(newQuantity);
+                return null;
             }
-        } else if (newQuantity > 0) {
+            item.setQuantity(newQuantity);
+            return item;
+
+        } else {
+            if (newQuantity <= 0) {
+                throw new IllegalArgumentException("Cantidad inválida");
+            }
+
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + productId));
+
             CartItem newItem = new CartItem(product);
             newItem.setQuantity(newQuantity);
             newItem.setCart(cart);
             cart.getItems().add(newItem);
+            return newItem;
         }
-        return cart;
     }
 
     
@@ -153,7 +160,6 @@ public class CartService {
                     .mapToInt(CartItem::getQuantity)
                     .sum();
         }
-        
         return 0; 
     }
 
@@ -167,7 +173,7 @@ public class CartService {
 
     public CartItem getCartItem(long userId, long prodId){
         return getCartItems(userId).stream()
-                .filter(item -> item.getId() == prodId)
+                .filter(item -> item.getProduct().getId().equals(prodId))
                 .findFirst()
                 .orElse(null);
     }

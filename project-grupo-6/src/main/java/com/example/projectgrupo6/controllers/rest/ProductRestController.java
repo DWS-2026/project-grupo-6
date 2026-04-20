@@ -42,7 +42,7 @@ public class ProductRestController {
     public ResponseEntity<ProductBasicDTO> createProduct (@RequestBody ProductBasicDTO productBasicDTO){
         Product prod = productMapper.toDomainFromBasic(productBasicDTO);
         productService.save(prod);
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();;
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();
         return ResponseEntity.created(location).body(productMapper.toBasicDTO(prod));
     }
 
