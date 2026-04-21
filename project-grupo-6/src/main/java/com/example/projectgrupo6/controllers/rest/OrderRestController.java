@@ -6,6 +6,7 @@ import com.example.projectgrupo6.domain.OrderItem;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.dto.CartDTO;
 import com.example.projectgrupo6.dto.OrderDTO;
+import com.example.projectgrupo6.dto.basicDtos.OrderBasicDTO;
 import com.example.projectgrupo6.dto.basicDtos.OrderItemBasicDTO;
 import com.example.projectgrupo6.dto.mappers.CartMapper;
 import com.example.projectgrupo6.dto.mappers.OrderItemMapper;
@@ -87,12 +88,25 @@ public class OrderRestController {
     }
 
     //PUT
-    //Item from order
+    //Order
     @PutMapping("/{ordId}/user/{id}")
-    public OrderItemBasicDTO updateOrder(@PathVariable long ordId, @PathVariable long id, @RequestBody OrderItemBasicDTO orderItemBasicDTO){
+    public OrderBasicDTO updateOrder(@PathVariable long ordId, @PathVariable long id, @RequestBody OrderBasicDTO orderBasicDTO){
+        if (!userService.getById(id).isPresent()) {
+            throw new NoSuchElementException();
+        }
+
+        Order newOrder = orderMapper.toDomainFromBasic(orderBasicDTO);
+        Order updated = orderService.updateOrder(ordId, newOrder);
+        return orderMapper.toBasicDTO(updated);
+    }
+
+    //Item from order
+    //change
+    @PutMapping("/{ordId}/user/{id}/item/{itemId}")
+    public OrderItemBasicDTO updateOrderItem(@PathVariable long ordId, @PathVariable long id,@PathVariable long itemId, @RequestBody OrderItemBasicDTO orderItemBasicDTO){
         if(userService.getById(id).isPresent()) {
             OrderItem item = orderItemMapper.toDomainFromBasic(orderItemBasicDTO);
-            OrderItem updated = orderService.updateOrderItem(ordId, item.getId(), item);
+            OrderItem updated = orderService.updateOrderItem(ordId, itemId, item);
             return orderItemMapper.toBasicDTO(updated);
         } else {
             throw new NoSuchElementException();

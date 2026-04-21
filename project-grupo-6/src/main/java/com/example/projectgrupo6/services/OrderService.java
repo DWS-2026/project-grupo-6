@@ -1,6 +1,7 @@
 package com.example.projectgrupo6.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.example.projectgrupo6.domain.CartItem;
@@ -117,5 +118,16 @@ public class OrderService {
         
         // When saving Order, thanks to CascadeType.ALL, saves all OrderItems by themselves
         return orderRepository.save(order);
+    }
+
+    public Order updateOrder(long ordId, Order newOrd){
+        Order order = findById(ordId)
+                .orElseThrow(NoSuchElementException::new);
+
+        order.setTotalAmount(newOrd.getTotalAmount());
+        order.setStatus(newOrd.getStatus());
+        order.setOrderDate(newOrd.getOrderDate());
+        save(order);
+        return order;
     }
 }
