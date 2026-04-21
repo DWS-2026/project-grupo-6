@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.repositories.OrderItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,10 @@ import jakarta.transaction.Transactional;
 @Service
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -46,7 +51,7 @@ public class OrderService {
     }
 
     public Optional<OrderItem> findItemById (Long ordId, Long itemId){
-        return orderRepository.findByIdAndOrderId(itemId, ordId);
+        return orderItemRepository.findByIdAndOrderId(itemId, ordId);
     }
 
     // Delete an order

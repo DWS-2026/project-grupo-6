@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "shop_orders") // Le pongo 'shop_orders' para que SQL no de errores con la palabra 'orders'
+@Table(name = "shop_orders") //To not have SQL errors
 public class Order {
 
     @Id
