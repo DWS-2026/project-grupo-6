@@ -54,12 +54,21 @@
           "response": []
         },
         {
-          "name": "DeleteById",
+          "name": "NewProduct",
           "request": {
-            "method": "DELETE",
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Raptor Roar\",\r\n    \"description\": \"Muajaja\",\r\n    \"price\": 676.7,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft Guns\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"Umarex\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 50,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"Whaaaat??\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "https://localhost:8443/api/v1/products/5",
+              "raw": "https://localhost:8443/api/v1/products/",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -69,7 +78,7 @@
                 "api",
                 "v1",
                 "products",
-                "5"
+                ""
               ]
             }
           },
@@ -107,21 +116,12 @@
           "response": []
         },
         {
-          "name": "NewProduct",
+          "name": "DeleteById",
           "request": {
-            "method": "POST",
+            "method": "DELETE",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Raptor Roar\",\r\n    \"description\": \"Muajaja\",\r\n    \"price\": 676.7,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft Guns\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"Umarex\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 50,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"Whaaaat??\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
-              "raw": "https://localhost:8443/api/v1/products/",
+              "raw": "https://localhost:8443/api/v1/products/5",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -131,7 +131,7 @@
                 "api",
                 "v1",
                 "products",
-                ""
+                "5"
               ]
             }
           },
@@ -142,6 +142,28 @@
     {
       "name": "Cart",
       "item": [
+        {
+          "name": "GetAllCarts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/carts/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "carts",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
         {
           "name": "GetCartByUser",
           "request": {
@@ -166,12 +188,21 @@
           "response": []
         },
         {
-          "name": "GetAllCarts",
+          "name": "AddItemToCart",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "https://localhost:8443/api/v1/carts/",
+              "raw": "https://localhost:8443/api/v1/carts/user/1/item",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -181,7 +212,42 @@
                 "api",
                 "v1",
                 "carts",
-                ""
+                "user",
+                "1",
+                "item"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ChangeCartItem",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 2,\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 555\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/carts/user/1/item",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "carts",
+                "user",
+                "1",
+                "item"
               ]
             }
           },
@@ -202,7 +268,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/carts/user/1/product/2",
+              "raw": "https://localhost:8443/api/v1/carts/user/1/item/1",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -214,8 +280,8 @@
                 "carts",
                 "user",
                 "1",
-                "product",
-                "2"
+                "item",
+                "1"
               ]
             }
           },
@@ -227,7 +293,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "https://localhost:8443/api/v1/carts/user/2",
+              "raw": "https://localhost:8443/api/v1/carts/user/1",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -238,73 +304,7 @@
                 "v1",
                 "carts",
                 "user",
-                "2"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "AddItemToCart",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"id\": 3,\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 3\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/carts/user/1/cart",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "carts",
-                "user",
-                "1",
-                "cart"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "ChangeCartItem",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"id\": 3,\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 555\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/carts/user/1/cart",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "carts",
-                "user",
-                "1",
-                "cart"
+                "1"
               ]
             }
           },
@@ -525,6 +525,38 @@
           "response": []
         },
         {
+          "name": "NewOrder",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"orderDate\": \"2099-04-21T11:23:53.142765\",\r\n    \"totalAmount\": 676.7,\r\n    \"status\": \"DELIVERED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/orders/user/2",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "orders",
+                "user",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "EditOrder",
           "request": {
             "method": "PUT",
@@ -552,6 +584,30 @@
                 "1",
                 "user",
                 "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteOrder",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/orders/2/user/2",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "orders",
+                "2",
+                "user",
+                "2"
               ]
             }
           },

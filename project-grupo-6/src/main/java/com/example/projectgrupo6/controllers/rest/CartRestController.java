@@ -66,7 +66,7 @@ public class CartRestController {
 
     //POST
     //Add product to cart
-    @PostMapping("/user/{id}/cart")
+    @PostMapping("/user/{id}/item")
     public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
         cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
@@ -76,7 +76,7 @@ public class CartRestController {
 
     //PUT
     //Change product in cart
-    @PutMapping("/user/{id}/cart")
+    @PutMapping("/user/{id}/item")
     public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
         cartService.updateProductQuantity(id, item.getProduct().getId(), item.getQuantity());
@@ -96,7 +96,7 @@ public class CartRestController {
         }
     }
 
-    //Delete Product From Cart
+    //Delete Item From Cart
     @DeleteMapping("/user/{id}/item/{itemId}")
     public ResponseEntity<CartItemBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long itemId) {
         if(userService.getById(id).isPresent()) {

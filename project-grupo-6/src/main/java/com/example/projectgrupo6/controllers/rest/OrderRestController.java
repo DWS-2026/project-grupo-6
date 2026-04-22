@@ -72,7 +72,23 @@ public class OrderRestController {
 
     //POST
     //Order
+    //Should be creating order from cart(??)
     @PostMapping("/user/{id}")
+    public ResponseEntity<OrderBasicDTO> createOrder(@PathVariable long id, @RequestBody OrderBasicDTO orderBasicDTO){
+        if(userService.getById(id).isPresent()){
+            Order order = orderMapper.toDomainFromBasic(orderBasicDTO);
+            orderService.save(order);
+
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();;
+            return ResponseEntity.ok(orderMapper.toBasicDTO(order));
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
+    //Item (?) -> wouldn't be necessary(?)
+    /*
+    @PostMapping("/user/{id}/item")
     public ResponseEntity<CartDTO> newOrder(@PathVariable long id, @RequestBody CartDTO cartDTO){
         if(userService.getById(id).isPresent()){
             User user = userService.getById(id).get();
@@ -86,6 +102,7 @@ public class OrderRestController {
             throw new NoSuchElementException();
         }
     }
+    */
 
     //PUT
     //Order
@@ -100,8 +117,9 @@ public class OrderRestController {
         return orderMapper.toBasicDTO(updated);
     }
 
-    //Item from order
+    //Item from order (?) -> wouldn't be necessary(?)
     //change
+    /*
     @PutMapping("/{ordId}/user/{id}/item/{itemId}")
     public OrderItemBasicDTO updateOrderItem(@PathVariable long ordId, @PathVariable long id,@PathVariable long itemId, @RequestBody OrderItemBasicDTO orderItemBasicDTO){
         if(userService.getById(id).isPresent()) {
@@ -112,6 +130,7 @@ public class OrderRestController {
             throw new NoSuchElementException();
         }
     }
+    */
 
     //DELETE
     //Order
@@ -127,6 +146,7 @@ public class OrderRestController {
     }
 
     //Item from Order
+    /*
     @DeleteMapping("/{ordId}/user/{id}/item/{itemId}")
     public ResponseEntity<OrderItemBasicDTO> removeFromOrder(@PathVariable long ordId, @PathVariable long id, @PathVariable long itemId){
         if(userService.getById(id).isPresent() && orderService.findById(ordId).isPresent()){
@@ -137,5 +157,6 @@ public class OrderRestController {
             throw new NoSuchElementException();
         }
     }
+    */
 
 }

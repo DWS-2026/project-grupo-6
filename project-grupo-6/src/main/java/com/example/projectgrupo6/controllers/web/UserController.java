@@ -182,10 +182,12 @@ public class UserController {
             // IMPORTANT: If email changes, Spring's login becomes invalid
             // We force to log out and login again with the new email
             if (emailChanged) {
+                /*
                 System.out.println("DEBUG PROFILE UPDATE:");
-            System.out.println("Email en DB: [" + userToUpdate.getEmail() + "]");
-            System.out.println("Email del Form: [" + email + "]");
-            System.out.println("¿Detecta cambio?: " + emailChanged);
+                System.out.println("Email en DB: [" + userToUpdate.getEmail() + "]");
+                System.out.println("Email del Form: [" + email + "]");
+                System.out.println("¿Detecta cambio?: " + emailChanged);
+                */
                 try {
                     request.logout();
                 } catch (ServletException e) {
