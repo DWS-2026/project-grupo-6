@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
@@ -88,5 +89,43 @@ public class ImageService {
     public Resource getImageResources(List<Blob> images, int index) throws SQLException{
         Blob imageBlob = images.get(index);
         return new InputStreamResource(imageBlob.getBinaryStream());
+    }
+
+    //REST part:
+    public Image getImage(long id) {
+        return imageRepository.findById(id).orElseThrow();
+    }
+
+    public Image createImage(InputStream inputStream) throws IOException {
+        Image image = new Image();
+        try {
+            image.setImageFile(new SerialBlob(inputStream.readAllBytes()));
+        } catch (Exception e) {
+            throw new IOException("Failed to create image", e);
+        }
+
+        imageRepository.save(image);
+        return image;
+    }
+
+    public void replaceImageFile(long id, InputStream inputStream) throws IOException {
+        Image image = imageRepository.findById(id).orElseThrow();
+
+        try {
+            image.setImageFile(new SerialBlob(inputStream.readAllBytes()));
+        } catch (Exception e) {
+            throw new IOException("Failed to create image", e);
+        }
+        imageRepository.save(image);
+    }
+
+    public Image deleteImage(long id) {
+        Image image = imageRepository.findById(id).orElseThrow();
+        imageRepository.deleteById(id);
+        return image;
+    }
+
+    public Image getFromUser(long userId){
+        return imageRepository.findByUser(userId).orElseThrow();
     }
 }

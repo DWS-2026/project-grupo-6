@@ -1,11 +1,13 @@
 package com.example.projectgrupo6.services;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.projectgrupo6.domain.Comment;
+import com.example.projectgrupo6.domain.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -94,6 +96,23 @@ public class ProductService {
             }
         }
         return error;
+    }
+
+    //REST part:
+    public Product addImageToProduct(long id, Image image) {
+        Product prod = repository.findById(id).orElseThrow();
+        prod.getImages().add((Blob) image);
+        repository.save(prod);
+
+        return prod;
+    }
+
+    public Product removeImageProduct(long postId, Image image) {
+        Product prod = repository.findById(postId).orElseThrow();
+        prod.getImages().remove(image);
+        repository.save(prod);
+
+        return prod;
     }
 
 }

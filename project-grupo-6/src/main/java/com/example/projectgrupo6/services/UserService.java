@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.security.Principal;
+import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
 
@@ -165,5 +166,20 @@ public class UserService {
         return findByEmail(principal.getName()).orElse(null);
     }
 
+    //REST part
+    public User addImageToUser(long id, Image image) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setProfileImage(image.getImageFile());
+        userRepository.save(user);
 
+        return user;
+    }
+
+    public User removeImageUser(long userId, Image image) {
+        User user = userRepository.findById(userId).orElseThrow();
+        user.setProfileImage(null);
+        userRepository.save(user);
+
+        return user;
+    }
 }
