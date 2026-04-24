@@ -2,8 +2,11 @@ package com.example.projectgrupo6.services;
 
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Product;
+import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.repositories.ImageRepository;
 import com.example.projectgrupo6.repositories.ProductRepository;
+import com.example.projectgrupo6.repositories.UserRepository;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class ImageService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Image createImage(MultipartFile imageFile) throws IOException { //save
         Image image = new Image();
@@ -125,7 +131,16 @@ public class ImageService {
         return image;
     }
 
-    public Image getFromUser(long userId){
-        return imageRepository.findByUser(userId).orElseThrow();
+   public Blob getFromUser(long userId) {
+        
+        User user = userRepository.findById(userId).orElseThrow();
+        
+        Blob avatar = user.getProfileImage();
+        
+        if (avatar == null) {
+            throw new RuntimeException("El usuario no tiene foto de perfil");
+ }
+        
+        return avatar;
     }
 }

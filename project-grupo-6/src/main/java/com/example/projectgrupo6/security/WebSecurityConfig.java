@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,16 +16,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.projectgrupo6.security.jwt.JwtRequestFilter;
+import com.example.projectgrupo6.security.jwt.JwtTokenProvider;
+import com.example.projectgrupo6.security.jwt.UnauthorizedHandlerJwt;
+
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+	private JwtTokenProvider jwtTokenProvider;
+
 	@Autowired
     public RepositoryUserDetailsService userDetailService;
+
+    @Autowired
+  	private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+    @Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
 	}
 
 	@Bean
@@ -41,8 +59,8 @@ public class WebSecurityConfig {
 		http.authenticationProvider(authenticationProvider());
 		
 		http
-			.securityMatcher("/api/**");
-			//.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+			.securityMatcher("/api/**")
+			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
 		
 		http
 			.authorizeHttpRequests(authorize -> authorize
@@ -67,7 +85,7 @@ public class WebSecurityConfig {
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		// Add JWT Token filter
-		//http.addFilterBefore(new JwtRequestFilter(userDetailService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new JwtRequestFilter(userDetailService, jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

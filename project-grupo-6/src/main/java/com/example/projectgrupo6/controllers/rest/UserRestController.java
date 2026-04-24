@@ -100,13 +100,19 @@ public class UserRestController {
     }
 
     //Image
-    @DeleteMapping("/{id}/image")
+    // ////////////////////////////////
+    /// 
+    /// NEED TO FIX FIX FIX FIX
+    /// 
+    ////////////////////////////////
+    /*@DeleteMapping("/{id}/image")
+    
     public ImageDTO deleteProfileImage(@PathVariable long id) throws IOException {
-        Image image = imageService.getFromUser(id);
+        //Image image = imageService.getFromUser(id);
         userService.removeImageUser(id, image);
         imageService.deleteImage(image.getId());
 
         return imageMapper.toDTO(image);
-    }
+    }*/
 }
 
