@@ -12,6 +12,7 @@ import com.example.projectgrupo6.dto.mappers.UserMapper;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Blob;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -79,12 +80,12 @@ public class UserRestController {
 
     //PUT
     @PutMapping("/{id}")
-    public UserBasicDTO updateUser(@PathVariable Long id, @RequestBody UserBasicDTO userDTO) {
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
        if(userService.getById(id).isPresent()){
-           User updatedUser = userMapper.toDomainFromBasic(userDTO);
+           User updatedUser = userMapper.toDomain(userDTO);
            updatedUser.setId(id);
            userService.save(updatedUser);
-           return userMapper.toBasicDTO(updatedUser);
+           return userMapper.toDTO(updatedUser);
        } else {
            throw new NoSuchElementException();
        }
@@ -100,19 +101,20 @@ public class UserRestController {
     }
 
     //Image
-    // ////////////////////////////////
-    /// 
-    /// NEED TO FIX FIX FIX FIX
-    /// 
-    ////////////////////////////////
-    /*@DeleteMapping("/{id}/image")
-    
+    @DeleteMapping("/{id}/image")
     public ImageDTO deleteProfileImage(@PathVariable long id) throws IOException {
-        //Image image = imageService.getFromUser(id);
-        userService.removeImageUser(id, image);
-        imageService.deleteImage(image.getId());
+        User user = userService.findById(id).orElseThrow();
+        Blob avatar = user.getProfileImage();
+        if (avatar == null) {
+            throw new RuntimeException("El usuario no tiene foto de perfil");
+        }
 
+        user.setProfileImage(null);
+        userService.save(user);
+
+        Image image = new Image();
+        image.setImageFile(avatar);
         return imageMapper.toDTO(image);
-    }*/
+    }
 }
 
