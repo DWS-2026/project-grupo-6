@@ -43,14 +43,13 @@ public class ImageRestController {
                 .body(imageFile);
     }
 
-    //Changes not seen in Web, because we don't use Image at the Entities, make individual methods
-    //CHANGE THIS
+
     //
-    @PutMapping("/{id}/media")
-    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
-                                                   @RequestParam MultipartFile imageFile) throws IOException {
-        imageService.replaceImageFile(id, imageFile.getInputStream());
-        return ResponseEntity.noContent().build();
-    }
+//    @PutMapping("/{id}/media")
+//    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
+//                                                   @RequestParam MultipartFile imageFile) throws IOException {
+//        imageService.replaceImageFile(id, imageFile.getInputStream());
+//        return ResponseEntity.noContent().build();
+//    }
     //
 }

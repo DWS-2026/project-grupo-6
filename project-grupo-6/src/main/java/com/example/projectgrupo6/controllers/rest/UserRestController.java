@@ -15,11 +15,8 @@ import com.example.projectgrupo6.dto.mappers.UserMapper;
 
 import java.io.IOException;
 import java.net.URI;
-<<<<<<< HEAD
 import java.security.Principal;
-=======
 import java.sql.Blob;
->>>>>>> e740d603f4ba436956cde84f3de61b750c799a54
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -80,7 +77,7 @@ public class UserRestController {
     }
 
     //Image
-    @PostMapping("/{id}/images")
+    @PostMapping("/{id}/image")
     public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException{
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
@@ -96,6 +93,7 @@ public class UserRestController {
     }
 
     //PUT
+    //User
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
        if(userService.getById(id).isPresent()){
@@ -106,6 +104,15 @@ public class UserRestController {
        } else {
            throw new NoSuchElementException();
        }
+    }
+
+    //Image
+    @PutMapping("/{id}/image")
+    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
+                                                   @RequestParam MultipartFile imageFile) throws IOException {
+        //imageService.replaceImageFile(id, imageFile.getInputStream());
+        userService.save(userService.findById(id).orElseThrow(), imageFile);
+        return ResponseEntity.noContent().build();
     }
 
     //DELETE
