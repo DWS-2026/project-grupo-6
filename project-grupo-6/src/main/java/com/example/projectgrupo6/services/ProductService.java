@@ -107,12 +107,23 @@ public class ProductService {
         return prod;
     }
 
-    public Product removeImageProduct(long postId, Image image) {
-        Product prod = repository.findById(postId).orElseThrow();
-        prod.getImages().remove(image);
-        repository.save(prod);
+//    public Product removeImageProduct(long postId, Image image) {
+//        Product prod = repository.findById(postId).orElseThrow();
+//        prod.getImages().remove(image);
+//        repository.save(prod);
+//
+//        return prod;
+//    }
 
-        return prod;
+    public void deleteImage(long productId, long index) {
+        Product product = repository.findById(productId).orElseThrow();
+
+        List<Blob> images = product.getImages();
+        if (index < 0 || index >= images.size()) {
+            throw new IllegalArgumentException("Índice inválido");
+        }
+        images.remove(index);
+        repository.save(product);
     }
 
 }

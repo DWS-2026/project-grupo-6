@@ -74,7 +74,6 @@ public class UserService {
             cartRepository.delete(deleteCart);
         }
 
-
         userRepository.delete(user);
     }
 

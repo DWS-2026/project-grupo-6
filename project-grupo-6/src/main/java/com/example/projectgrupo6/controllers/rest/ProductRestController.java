@@ -59,30 +59,30 @@ public class ProductRestController {
     }
 
     //Image
-    @PostMapping("/{id}/images")
-    public ResponseEntity<ImageDTO> createImage (@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException{
-        if (imageFile.isEmpty()) {
-            throw new IllegalArgumentException("Image file cannot be empty");
-        }
-
-        Image image = imageService.createImage(imageFile);
-        productService.addImageToProduct(id, image);
-        URI location = fromCurrentContextPath()
-                .path("/images/{imageId}/media")
-                .buildAndExpand(image.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
-    }
+//    @PostMapping("/{id}/images")
+//    public ResponseEntity<ImageDTO> createImage (@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException{
+//        if (imageFile.isEmpty()) {
+//            throw new IllegalArgumentException("Image file cannot be empty");
+//        }
+//
+//        Image image = imageService.createImage(imageFile);
+//        productService.addImageToProduct(id, image);
+//        URI location = fromCurrentContextPath()
+//                .path("/images/{imageId}/media")
+//                .buildAndExpand(image.getId())
+//                .toUri();
+//
+//        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+//    }
 
     //PUT
     @PutMapping("/{id}")
-    public ProductBasicDTO changeProduct (@PathVariable long id, @RequestBody ProductBasicDTO updateBasicDTO){
+    public ProductDTO changeProduct (@PathVariable long id, @RequestBody ProductDTO updateDTO){
         if(productService.getById(id).isPresent()){
-            Product updatedProd = productMapper.toDomainFromBasic(updateBasicDTO);
+            Product updatedProd = productMapper.toDomain(updateDTO);
             updatedProd.setId(id);
             productService.save(updatedProd);
-            return productMapper.toBasicDTO(updatedProd);
+            return productMapper.toDTO(updatedProd);
         } else {
             throw new NoSuchElementException();
         }
@@ -98,12 +98,16 @@ public class ProductRestController {
     }
 
     //Image
+    //Changes not shown in Web -> CORRECT
+    //
     @DeleteMapping("/{id}/image/{imageId}")
     public ImageDTO deleteImage (@PathVariable long id, @PathVariable long imageId) throws IOException {
-        Image image = imageService.getImage(imageId);
-        productService.removeImageProduct(id, image);
-        imageService.deleteImage(imageId);
+        Product prod = productService.getById(id).orElseThrow();
+        productService.deleteImage(id, imageId);
 
+        Image image = new Image();
+        image.setImageFile(prod.getImages().get((int)imageId));
         return imageMapper.toDTO(image);
     }
+    //
 }

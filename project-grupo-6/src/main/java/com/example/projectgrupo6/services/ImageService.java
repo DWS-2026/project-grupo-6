@@ -11,6 +11,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,10 +80,10 @@ public class ImageService {
     public Blob loadImage(String fileName) { //Image by default
     try {
         // Route starts directly from what's inside 'resources'
-        org.springframework.core.io.Resource resource = new org.springframework.core.io.ClassPathResource("static/css/img/" + fileName);
+        Resource resource = new ClassPathResource("static/css/img/" + fileName);
         if (resource.exists()) {
             byte[] bytes = resource.getInputStream().readAllBytes();
-            return new javax.sql.rowset.serial.SerialBlob(bytes);
+            return new SerialBlob(bytes);
         } else {
             System.err.println("⚠️ No se encontró el archivo en el classpath: static/css/img/" + fileName);
         }
@@ -131,16 +133,4 @@ public class ImageService {
         return image;
     }
 
-   public Blob getFromUser(long userId) {
-        
-        User user = userRepository.findById(userId).orElseThrow();
-        
-        Blob avatar = user.getProfileImage();
-        
-        if (avatar == null) {
-            throw new RuntimeException("El usuario no tiene foto de perfil");
- }
-        
-        return avatar;
-    }
 }

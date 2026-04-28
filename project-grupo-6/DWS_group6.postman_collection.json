@@ -1,10 +1,9 @@
 {
   "info": {
-    "_postman_id": "a81b9d59-a025-41e1-ae71-ccd37635ae72",
+    "_postman_id": "ffdb8849-c037-4016-b850-28a7c111477d",
     "name": "DWS_group6",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "33475164",
-    "_collection_link": "https://go.postman.co/collection/33475164-a81b9d59-a025-41e1-ae71-ccd37635ae72?source=collection_link"
+    "_exporter_id": "46198652"
   },
   "item": [
     {
@@ -92,7 +91,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"BTS\",\r\n    \"description\": \"BTS.\",\r\n    \"price\": 777.7,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"Army\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 7,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"I purple u\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"name\": \"BTS\",\r\n    \"description\": \"Purple is the best color\",\r\n    \"price\": 130.6,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft Guns\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"ARMY\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 35,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"Realistic recoil and very reliable sidearm in the field.\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -100,7 +99,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/products/5",
+              "raw": "https://localhost:8443/api/v1/products/4",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -110,7 +109,7 @@
                 "api",
                 "v1",
                 "products",
-                "5"
+                "4"
               ]
             }
           },
@@ -133,6 +132,30 @@
                 "v1",
                 "products",
                 "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteImageFromProduct",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/products/1/image/2",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "1",
+                "image",
+                "2"
               ]
             }
           },
@@ -392,21 +415,23 @@
           "response": []
         },
         {
-          "name": "ChangeUser",
+          "name": "AddProfileImage",
           "request": {
-            "method": "PUT",
+            "method": "POST",
             "header": [],
             "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"id\": 2,\r\n    \"firstname\": \"Alex\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"aAAA@pew.com\",\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imageFile",
+                  "type": "file",
+                  "uuid": "9d51d65c-6878-4a97-8f5d-7d71bdd6801c",
+                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
                 }
-              }
+              ]
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/users/2",
+              "raw": "https://localhost:8443/api/v1/users/2/images",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -416,7 +441,39 @@
                 "api",
                 "v1",
                 "users",
-                "2"
+                "2",
+                "images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ChangeUser",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"Miau\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"miau@roar.com\",\r\n    \"profileImage\": null,\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ],\r\n    \"review\": null,\r\n    \"orders\": [],\r\n    \"cart\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                ""
               ]
             }
           },
@@ -443,6 +500,29 @@
                 "v1",
                 "users",
                 "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteUserImage",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/2/image",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "2",
+                "image"
               ]
             }
           },
@@ -656,7 +736,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"asd@asd\",\n    \"password\": \"asd\"\n}",
+              "raw": "{\n    \"username\": \"charlie.brown@mailcute.com\",\n    \"password\": \"5678\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -746,6 +826,90 @@
                 "api",
                 "auth",
                 "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "GetImage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/images/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "images",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetImageFile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/images/1/media",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "images",
+                "1",
+                "media"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ChangeImageFile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imageFile",
+                  "type": "file",
+                  "uuid": "c5d1da36-2ecf-4a42-b8ed-d59fa363a573",
+                  "src": "/C:/Users/Elena/Downloads/images/answer-concept-teaser-cool-bts-laptop-blx48htfxitggmdw.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/images/1/media",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "images",
+                "1",
+                "media"
               ]
             }
           },
