@@ -6,12 +6,16 @@ import com.example.projectgrupo6.dto.ImageDTO;
 import com.example.projectgrupo6.dto.mappers.ImageMapper;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.example.projectgrupo6.dto.UserDTO;
 import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
 import com.example.projectgrupo6.dto.mappers.UserMapper;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -37,6 +41,16 @@ public class UserRestController {
     private UserMapper userMapper;
     @Autowired
     private ImageMapper imageMapper;
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(HttpServletRequest request){
+        Principal principal = request.getUserPrincipal();
+        if (principal != null) {
+            return ResponseEntity.ok(userMapper.toDTO(userService.getSessionUser(request)));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     //GET
     //All
