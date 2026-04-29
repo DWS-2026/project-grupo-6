@@ -22,6 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "content", columnDefinition = "MEDIUMTEXT")
     private String content;
 
     private String author;

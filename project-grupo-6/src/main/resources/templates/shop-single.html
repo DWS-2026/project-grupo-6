@@ -91,7 +91,7 @@
                                     {{#isMine}}<span class="badge bg-secondary ms-2">You</span>{{/isMine}}
                                     
                                     {{^isMine}}
-                                        <p class="mb-0 mt-2">{{content}}</p>
+                                        <p class="mb-0 mt-2">{{{content}}}</p>
                                     {{/isMine}}
 
                                     {{#isMine}}
@@ -99,7 +99,12 @@
                                         <form action="/shop/{{productId}}/comment/edit/{{id}}" method="POST" id="update-form-{{id}}" class="mt-2">
                                             <input type="hidden" name="_csrf" value="{{token}}"/>
                                             <input type="hidden" name="productId" value="{{productId}}">
-                                            <textarea name="newContent" class="form-control mb-2" rows="2" required>{{content}}</textarea>
+                                            <!-- Real hidden field -->
+                                            <input type="hidden" name="newContent" id="hidden-content-{{id}}">
+                                            <!-- Visual editor -->
+                                            <div id="editor-{{id}}" class="quill-editor mb-2">
+                                                {{{content}}}
+                                            </div>
                                         </form>
                                         
                                         <form action="/shop/{{productId}}/comment/delete/{{id}}" method="POST" id="delete-form-{{id}}">
@@ -133,7 +138,8 @@
                     {{#loggedUser}}
                         <form action="/shop/{{product.id}}/comment" method="post">
                             <input type="hidden" name="_csrf" value="{{token}}"/>
-                            <textarea class="form-control" name="content" placeholder="Escribe tu review..." required></textarea>
+                            <textarea class="form-control d-none" id="description-textarea" name="content" placeholder="Escribe tu review..." required></textarea>
+                            <div id="editor"></div>
                             <button type="submit" class="btn btn-success mt-2">Enviar Comentario</button>
                         </form>
                     {{/loggedUser}}
@@ -149,5 +155,57 @@
         </div>
     </section>
 
-    </body>
+    <!-- Include the Quill library -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
+    <!-- Clean Quill Editor -->
+    <script>
+        function cleanQuillHTML(html) {
+            if (!html) return '';
+            html = html.replace(/<p><br><\/p>/g, '');
+            html = html.replace(/(<p>\s*<\/p>)+/g, '');
+            html = html.trim();
+            return html;
+        }
+    </script>
+
+    <!-- Initialize Quill editor -->
+    <script>
+        const quillMain = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        quillMain.on('text-change', function () {
+            let html = quillMain.root.innerHTML;
+            if (html === '<p><br></p>') {
+                html = '';
+            }
+            html = cleanQuillHTML(html);
+            document.getElementById('description-textarea').value = html;
+        });
+
+        const editors = document.querySelectorAll('.quill-editor');
+        editors.forEach((editor) => {
+            const id = editor.id.split('-')[1];
+            const initialHTML = editor.innerHTML;
+            editor.innerHTML = '';
+
+            const quill = new Quill('#' + editor.id, {
+                theme: 'snow'
+            });
+            quill.root.innerHTML = initialHTML;
+            let cleanInitial = initialHTML === '<p><br></p>' ? '' : initialHTML;
+            document.getElementById('hidden-content-' + id).value = cleanInitial;
+
+            quill.on('text-change', function () {
+                let html = quill.root.innerHTML;
+                if (html === '<p><br></p>') {
+                    html = '';
+                }
+                html = cleanQuillHTML(html);
+                document.getElementById('hidden-content-' + id).value = html;
+            });
+        });
+    </script>
+
+</body>
 </html>

@@ -1,5 +1,7 @@
 package com.example.projectgrupo6.services;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,6 +9,26 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidationService {
+
+    //Whitelist for HTML
+    private static final Safelist safelist = Safelist.none()
+            .addTags("p", "br")
+            .addTags("b", "strong", "i", "em", "u")
+            .addTags("ul", "ol", "li")
+            .addTags("a")
+            .addAttributes("a", "href")
+            .addProtocols("a", "href", "http", "https");
+
+    //Sanitizing method using JSoup library
+    public static String cleanAndSanitize(String html) {
+        if (html == null) return "";
+        html = html
+                .replaceAll("<p><br></p>", "")
+                .replaceAll("(<p>\\s*</p>)+", "")
+                .trim();
+        return Jsoup.clean(html, safelist);
+    }
+
     public void validateProduct(String name,String description, Double price, MultipartFile image){
         if(name == null || name.trim().isEmpty()){
             throw new IllegalArgumentException("Product name cannot be empty");
@@ -21,7 +43,8 @@ public class ValidationService {
             throw new IllegalArgumentException("Product price must be greater than zero");
         }  
         validateImage(image);
-    }    
+    }
+
     public void validateUser(String username,String email,String password){
         if(username == null || username.trim().isEmpty()){
             throw new IllegalArgumentException("Username cannot be empty");
@@ -36,6 +59,7 @@ public class ValidationService {
             throw new IllegalArgumentException("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number");
         }
     }
+
     private void validateImage(MultipartFile image){
         if(image == null || image.isEmpty()){
             throw new IllegalArgumentException("Product image cannot be empty");
@@ -49,11 +73,13 @@ public class ValidationService {
             throw new IllegalArgumentException("Image size must be less than 5MB");
         }
     }
+
     private boolean isValidEmail(String email){
         if(email == null)            return false;
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         return Pattern.matches(emailRegex, email);
     }
+
     private boolean isValidPassword(String password){
         if(password == null)            return false;
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";

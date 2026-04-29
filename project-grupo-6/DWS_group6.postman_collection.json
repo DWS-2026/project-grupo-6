@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "ffdb8849-c037-4016-b850-28a7c111477d",
+    "_postman_id": "731a499a-0f99-429b-9c4a-968f2f2a73f6",
     "name": "DWS_group6",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "46198652"
@@ -132,30 +132,6 @@
                 "v1",
                 "products",
                 "5"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "DeleteImageFromProduct",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/products/1/image/2",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "1",
-                "image",
-                "2"
               ]
             }
           },
@@ -415,40 +391,6 @@
           "response": []
         },
         {
-          "name": "AddProfileImage",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "imageFile",
-                  "type": "file",
-                  "uuid": "9d51d65c-6878-4a97-8f5d-7d71bdd6801c",
-                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/users/2/images",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "2",
-                "images"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
           "name": "ChangeUser",
           "request": {
             "method": "PUT",
@@ -500,29 +442,6 @@
                 "v1",
                 "users",
                 "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "DeleteUserImage",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/users/2/image",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "2",
-                "image"
               ]
             }
           },
@@ -882,7 +801,41 @@
           "response": []
         },
         {
-          "name": "ChangeImageFile",
+          "name": "AddUserImage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imageFile",
+                  "type": "file",
+                  "uuid": "9d51d65c-6878-4a97-8f5d-7d71bdd6801c",
+                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/2/image",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "2",
+                "image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ChangeUserImage",
           "request": {
             "method": "PUT",
             "header": [],
@@ -892,13 +845,13 @@
                 {
                   "key": "imageFile",
                   "type": "file",
-                  "uuid": "c5d1da36-2ecf-4a42-b8ed-d59fa363a573",
-                  "src": "/C:/Users/Elena/Downloads/images/answer-concept-teaser-cool-bts-laptop-blx48htfxitggmdw.jpg"
+                  "uuid": "e14bd70c-adae-407b-a9ca-44b4c46a49e6",
+                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
                 }
               ]
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/images/1/media",
+              "raw": "https://localhost:8443/api/v1/users/1/image",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -907,9 +860,95 @@
               "path": [
                 "api",
                 "v1",
-                "images",
+                "users",
                 "1",
-                "media"
+                "image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ChangeProductImages",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imageFile",
+                  "type": "file",
+                  "uuid": "9efa5016-256f-49b3-800f-febd7d29231a",
+                  "src": [
+                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM - copia - copia.jpeg",
+                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM - copia.jpeg",
+                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM.jpeg",
+                    "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/products/1/images",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "1",
+                "images"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteUserImage",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/2/image",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "2",
+                "image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteImageFromProduct",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/products/1/image/2",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "1",
+                "image",
+                "2"
               ]
             }
           },

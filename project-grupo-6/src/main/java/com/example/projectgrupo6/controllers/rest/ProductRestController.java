@@ -59,6 +59,7 @@ public class ProductRestController {
     }
 
     //Image
+    //Only put needed ? It changes the images either there's prior images or not.
 //    @PostMapping("/{id}/images")
 //    public ResponseEntity<ImageDTO> createImage (@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException{
 //        if (imageFile.isEmpty()) {
@@ -74,8 +75,10 @@ public class ProductRestController {
 //
 //        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
 //    }
+    //
 
     //PUT
+    //Product
     @PutMapping("/{id}")
     public ProductDTO changeProduct (@PathVariable long id, @RequestBody ProductDTO updateDTO){
         if(productService.getById(id).isPresent()){
@@ -88,8 +91,19 @@ public class ProductRestController {
         }
     }
 
+    //Image or images of the product
+    //Doesn't change in web
+    //
+    @PutMapping("/{id}/images")
+    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
+                                                   @RequestParam MultipartFile[] imageFile) throws IOException {
+        productService.setProductImages(productService.getById(id).orElseThrow(), imageFile);
+        return ResponseEntity.noContent().build();
+    }
+    //
+
     //DELETE
-    //Post
+    //Product
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductBasicDTO> deleteProduct (@PathVariable long id){
         ProductBasicDTO prod = productMapper.toBasicDTO(productService.getById(id).orElseThrow());
@@ -98,7 +112,8 @@ public class ProductRestController {
     }
 
     //Image
-    //Changes not shown in Web -> CORRECT
+    // Changes not shown in Web -> CORRECT this
+    // Only delete one image or all, one or two methods ?
     //
     @DeleteMapping("/{id}/image/{imageId}")
     public ImageDTO deleteImage (@PathVariable long id, @PathVariable long imageId) throws IOException {

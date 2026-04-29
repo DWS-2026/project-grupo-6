@@ -5,12 +5,7 @@ import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
-import com.example.projectgrupo6.services.CartService;
-import com.example.projectgrupo6.services.CommentService;
-import com.example.projectgrupo6.services.ImageService;
-import com.example.projectgrupo6.services.OrderService;
-import com.example.projectgrupo6.services.ProductService;
-import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +43,8 @@ public class AdminController {
     private CommentService commentService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ValidationService validationService;
 
     @GetMapping("/users")
     public String listUsers(Model model, HttpServletRequest request) {
