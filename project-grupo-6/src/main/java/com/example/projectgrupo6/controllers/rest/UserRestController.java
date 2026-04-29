@@ -15,11 +15,8 @@ import com.example.projectgrupo6.dto.mappers.UserMapper;
 
 import java.io.IOException;
 import java.net.URI;
-<<<<<<< HEAD
 import java.security.Principal;
-=======
 import java.sql.Blob;
->>>>>>> e740d603f4ba436956cde84f3de61b750c799a54
 import java.util.List;
 import java.util.NoSuchElementException;
 

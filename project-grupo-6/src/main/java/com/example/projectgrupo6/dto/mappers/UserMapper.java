@@ -13,23 +13,25 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ProductMapper.class})
 public interface UserMapper {
-    @Mapping(target = "profileImage", ignore = true)
+
+
+    @Mapping(target = "profileImage", expression = "java(mapProfileImage(user))")
     UserDTO toDTO(User user);
     UserBasicDTO toBasicDTO (User user);
 
-    @Mapping(target = "profileImage", ignore = true)
     List<UserDTO> toDTOs (Collection<User> users);
     List<UserBasicDTO> toBasicDTOs (Collection<User> users);
 
     @Mapping(target = "profileImage", ignore = true)
     User toDomain (UserDTO userDTO);
+
     User toDomainFromBasic (UserBasicDTO userBasicDTO);
 
-//    // Solution (?)
-//    default ImageDTO map(Blob blob) {
-//        if (blob == null) return null;
-//
-//        // Adjust this depending on your logic
-//        return new ImageDTO(null);
-//    }
+    // 3. LA LÓGICA DE MAPEO PERSONALIZADA
+    default ImageDTO mapProfileImage(User user) {
+        if (user == null || user.getProfileImage() == null) {
+            return null;
+        }
+        return new ImageDTO(user.getId());
+    }
 }
