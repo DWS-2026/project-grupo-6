@@ -1,26 +1,17 @@
 package com.example.projectgrupo6.controllers.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.multipart.MultipartException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.services.CartService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.Principal;
-import java.util.Optional;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {

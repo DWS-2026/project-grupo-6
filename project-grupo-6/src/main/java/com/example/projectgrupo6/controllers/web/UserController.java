@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import com.example.projectgrupo6.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,10 +29,6 @@ import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
-import com.example.projectgrupo6.services.CommentService;
-import com.example.projectgrupo6.services.ImageService;
-import com.example.projectgrupo6.services.OrderService;
-import com.example.projectgrupo6.services.UserService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -109,11 +106,12 @@ public class UserController {
         public String updateCommentFromProfile(@PathVariable Long commentId, 
                                             @RequestParam String newContent, 
                                             HttpServletRequest request) {
-            
+
+            String sanitizedContent = ValidationService.cleanAndSanitize(newContent);
             User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
-            commentService.editComment(commentId, sessionUser.getId(), newContent);
+            commentService.editComment(commentId, sessionUser.getId(), sanitizedContent);
             return "redirect:/user/comments";
         }
 
@@ -153,17 +151,21 @@ public class UserController {
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
 
+            List<String> sanitized = ValidationService.sanitizeAll(
+                    firstname, lastname, username, email
+            );
+
             User userToUpdate = userService.getSessionUser(request);
             if (userToUpdate == null) return "redirect:/login";
             
-            String newEmail = email.trim();    
+            String newEmail = sanitized.get(3).trim();
 
             // Check if user has changed its email
             boolean emailChanged = !userToUpdate.getEmail().equalsIgnoreCase(newEmail);
 
-            userToUpdate.setFirstname(firstname);
-            userToUpdate.setLastname(lastname);
-            userToUpdate.setUsername(username);
+            userToUpdate.setFirstname(sanitized.get(0));
+            userToUpdate.setLastname(sanitized.get(1));
+            userToUpdate.setUsername(sanitized.get(2));
             userToUpdate.setEmail(newEmail);
 
             if (imageFile != null && !imageFile.isEmpty()) {

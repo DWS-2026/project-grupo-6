@@ -1,12 +1,9 @@
 package com.example.projectgrupo6.controllers.web;
 
-import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.repositories.ProductRepository;
 import com.example.projectgrupo6.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;

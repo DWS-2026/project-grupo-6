@@ -5,6 +5,8 @@ import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -27,6 +29,13 @@ public class ValidationService {
                 .replaceAll("(<p>\\s*</p>)+", "")
                 .trim();
         return Jsoup.clean(html, safelist);
+    }
+
+    //Method to simplify sanitization of strings, use this one
+    public static List<String> sanitizeAll(String... inputs) {
+        return Arrays.stream(inputs)
+                .map(ValidationService::cleanAndSanitize)
+                .toList();
     }
 
     public void validateProduct(String name,String description, Double price, MultipartFile image){
@@ -84,5 +93,17 @@ public class ValidationService {
         if(password == null)            return false;
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         return Pattern.matches(passwordRegex, password);
+    }
+
+    public boolean isValidQuantity(int quantity){
+        return quantity>0 && quantity<10000;
+    }
+
+    public boolean isValidStock(int stock){
+        return stock>0 && stock<10000;
+    }
+
+    public boolean isValidPrice(double prize){
+        return prize>0.0 && prize<100000.0;
     }
 }

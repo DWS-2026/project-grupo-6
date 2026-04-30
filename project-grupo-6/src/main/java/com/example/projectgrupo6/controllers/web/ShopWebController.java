@@ -1,20 +1,14 @@
 package com.example.projectgrupo6.controllers.web;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.example.projectgrupo6.services.ImageService;
-import jakarta.servlet.http.HttpSession;
+import com.example.projectgrupo6.services.*;
 
-import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,19 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpServletRequest;
 import com.example.projectgrupo6.domain.Product;
-import com.example.projectgrupo6.domain.CartItem;
-import com.example.projectgrupo6.domain.Comment;
-import com.example.projectgrupo6.services.CartService;
-import com.example.projectgrupo6.services.CommentService;
-import com.example.projectgrupo6.services.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.core.io.Resource;
-
-import java.security.Principal;
 import java.sql.Blob;
 import org.springframework.http.MediaType;
 
@@ -58,6 +44,9 @@ public class ShopWebController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ValidationService validationService;
 
     @GetMapping("/shop") 
     public String showshop(Model model) {
@@ -110,9 +99,9 @@ public class ShopWebController {
 
     @PostMapping("/shop/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam String content, HttpServletRequest request) {
-        
+        String sanitizedContent = ValidationService.cleanAndSanitize(content);
         User user = userService.getSessionUser(request);
-        commentService.addComment(user.getId(), id, content);
+        commentService.addComment(user.getId(), id, sanitizedContent);
         return "redirect:/shop/" + id;
     }
 
@@ -121,9 +110,10 @@ public class ShopWebController {
                             @PathVariable Long commentId, 
                             @RequestParam String newContent, 
                             HttpServletRequest request) {
-        
+
+        String sanitizedContent = ValidationService.cleanAndSanitize(newContent);
         User user = userService.getSessionUser(request);
-        commentService.editComment(commentId, user.getId(), newContent);
+        commentService.editComment(commentId, user.getId(), sanitizedContent);
         return "redirect:/shop/" + productId;
     }
 
@@ -143,6 +133,8 @@ public class ShopWebController {
         
         User user = userService.getSessionUser(request);
         try {
+            if(!validationService.isValidQuantity(quantity)) quantity = 0;
+
             cartService.addProductToCart(user.getId(), productId, quantity);
             redirectAttributes.addFlashAttribute("successMessage", "Product added successfully to cart.");        
         } catch (Exception e) {
