@@ -6,7 +6,6 @@ import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
 public record CommentDTO (
         Long id,
         String content,
-        String author,
         UserBasicDTO owner,
         ProductBasicDTO product
 ){}

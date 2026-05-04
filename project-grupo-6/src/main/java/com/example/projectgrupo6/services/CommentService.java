@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.enterprise.inject.Any;
-
 import com.example.projectgrupo6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.projectgrupo6.domain.Comment;
@@ -32,8 +32,9 @@ public class CommentService {
     @Autowired
     private UserRepository userRepository;
 
-    public void save(Comment comment) {
+    public Comment save(Comment comment) {
         repository.save(comment);
+        return comment;
     }
 
     public void delete(Long id) {
@@ -149,6 +150,9 @@ public class CommentService {
         }
     }
 
+    public Page<Comment> getAllPaged(Pageable pageable){
+        return repository.findAll(pageable);
+    }
     public List<Comment> findAllByProductId (Long productId){
         return repository.findByProductId(productId);
     }

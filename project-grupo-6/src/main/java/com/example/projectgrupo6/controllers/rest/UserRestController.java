@@ -73,7 +73,7 @@ public class UserRestController {
     //User
     @PostMapping("/")
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody UserBasicDTO userDTO) {
-        validationService.validateUser(userDTO.firstname(), userDTO.lastname(), userDTO.username(), userDTO.email());
+        //validationService.validateUser(userDTO.firstname(), userDTO.lastname(), userDTO.username(), userDTO.email());
         User user = userMapper.toDomainFromBasic(userDTO);
         User savedUser = userService.save(user);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();

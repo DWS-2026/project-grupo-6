@@ -1,5 +1,7 @@
 package com.example.projectgrupo6.services;
 
+import com.example.projectgrupo6.domain.Product;
+import com.example.projectgrupo6.domain.User;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
@@ -78,6 +80,17 @@ public class ValidationService {
         }
         if (!isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email format");
+        }
+    }
+
+    //How do we do this(?)
+    public void ValidateComment(String content, String author, User owner, Product prod){
+        List<String> sanitized = ValidationService.sanitizeAll(content, author, owner.getUsername(), owner.toString(), prod.toString());
+        if(sanitized.get(0).isEmpty()){
+            throw new IllegalArgumentException("Empty comment");
+        }
+        if(sanitized.get(1).equals(sanitized.get(2))){
+            throw new IllegalArgumentException("Incorrect user");
         }
     }
 
