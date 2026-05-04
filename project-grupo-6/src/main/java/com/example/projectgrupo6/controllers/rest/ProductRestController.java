@@ -92,6 +92,8 @@ public class ProductRestController {
     @PutMapping("/{id}")
     public ProductDTO changeProduct (@PathVariable long id, @RequestBody ProductDTO updateDTO){
         if(productService.getById(id).isPresent()){
+            validationService.validateProduct(updateDTO.name(), updateDTO.description(), updateDTO.price(), null);
+            
             Product updatedProd = productMapper.toDomain(updateDTO);
             updatedProd.setId(id);
             productService.save(updatedProd);

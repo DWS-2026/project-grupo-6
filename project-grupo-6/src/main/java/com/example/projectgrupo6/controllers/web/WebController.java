@@ -42,6 +42,9 @@ public class WebController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ValidationService validationService;
+
     //change
     @GetMapping("/") 
     public String greeting(Model model, HttpServletRequest session){
@@ -106,6 +109,8 @@ public class WebController {
 
         //if (userService.findByEmail(user.getEmail()).isPresent() || userService.findByUsername(user.getUsername()).isPresent()) {
         // An user can be registered with same username? In case not, uncomment the line above and add the username check
+        validationService.validateUser(user.getFirstname(), user.getLastname(), user.getUsername(), user.getEmail());
+        
         List<String> sanitized = ValidationService.sanitizeAll(
                 confirmPassword, user.getEmail()
         );

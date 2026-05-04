@@ -77,6 +77,9 @@ public class AdminController {
         Optional<User> userOptional = userService.getById(id);
         
         if (userOptional.isPresent()) {
+
+            validationService.validateUser(firstname, lastname, username, email);
+
             List<String> sanitized = ValidationService.sanitizeAll(
                     firstname, lastname, email, username, rol
             );
@@ -188,6 +191,9 @@ public class AdminController {
 
         Optional<Product> op = productService.getById(productId);
         if(op.isPresent()){
+            
+            validationService.validateProduct(name, description, price, images);
+
             List<String> sanitized = ValidationService.sanitizeAll(
                     name, brand, category, description, specification, powerSource, colors.toString()
             );

@@ -33,14 +33,14 @@
 | Aspecto Técnico | Requisito del Proyecto | Penalización si falla | Estado |
 | :--- | :--- | :--- | :---: |
 | **Vulnerabilidades** | Sin fallos de seguridad vistos en clase | ❌ Si tiene (-5.5) | [ ] |
-| **Reutilización** | Servicios compartidos (Rest/Web Controllers) | ❌ No compartidos (-2) | [ ] |
+| **Reutilización** | Servicios compartidos (Rest/Web Controllers) | ❌ No compartidos (-2) | [X] |
 | **Diseño REST** | Plurales, Inglés, Métodos y Estados HTTP | ⚠️ Deficiencias (-0.5 a -2) | [ ] |
-| **Prefijo API** | Todas las URLs comienzan con `/api/v1/` | ❌ No cumple (-0.5) | [ ] |
-| **Uso de DTOs** | No usar entidades en entrada/salida | ❌ No usa DTOs (-2) | [ ] |
+| **Prefijo API** | Todas las URLs comienzan con `/api/v1/` | ❌ No cumple (-0.5) | [X] |
+| **Uso de DTOs** | No usar entidades en entrada/salida | ❌ No usa DTOs (-2) | [X] |
 | **Seguridad Pass** | No devolver contraseña en listados | ⚠️ Cifrada (-3) / ❌ En claro (-5) | [ ] |
-| **Protección CSRF** | OFF en API REST / ON en Web | ❌ Config. incorrecta (-1) | [ ] |
-| **Idioma** | Código y comentarios 100% en Inglés | ⚠️ Castellano (-0.5 a -1) | [ ] |
-| **Estilo** | Formato de código adecuado y limpio | ⚠️ Fallos estilo (-0.5 a -1.5) | [ ] |
+| **Protección CSRF** | OFF en API REST / ON en Web | ❌ Config. incorrecta (-1) | [X] |
+| **Idioma** | Código y comentarios 100% en Inglés | ⚠️ Castellano (-0.5 a -1) | [X] |
+| **Estilo** | Formato de código adecuado y limpio | ⚠️ Fallos estilo (-0.5 a -1.5) | [X] |
 
 ---
 

@@ -6,6 +6,7 @@ import com.example.projectgrupo6.dto.ImageDTO;
 import com.example.projectgrupo6.dto.mappers.ImageMapper;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -42,6 +43,8 @@ public class UserRestController {
     private UserMapper userMapper;
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private ValidationService validationService;
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(HttpServletRequest request){
@@ -70,6 +73,7 @@ public class UserRestController {
     //User
     @PostMapping("/")
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody UserBasicDTO userDTO) {
+        validationService.validateUser(userDTO.firstname(), userDTO.lastname(), userDTO.username(), userDTO.email());
         User user = userMapper.toDomainFromBasic(userDTO);
         User savedUser = userService.save(user);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();

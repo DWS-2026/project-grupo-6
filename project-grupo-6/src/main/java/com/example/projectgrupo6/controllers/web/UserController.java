@@ -49,6 +49,9 @@ public class UserController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private ValidationService validationService;
+
         //change
         @GetMapping("/profile")
         public String profile(HttpServletRequest request, Model model) {
@@ -150,6 +153,8 @@ public class UserController {
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, 
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
+            
+            validationService.validateUser(firstname, lastname, username, email); 
 
             List<String> sanitized = ValidationService.sanitizeAll(
                     firstname, lastname, username, email

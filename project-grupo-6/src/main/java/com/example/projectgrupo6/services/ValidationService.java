@@ -63,8 +63,13 @@ public class ValidationService {
 
     }
 
-
-    public void validateUser(String username,String email,String password){
+    public void validateUser(String firstname, String lastname, String username, String email) {
+         if(firstname == null || firstname.trim().isEmpty()){
+            throw new IllegalArgumentException("First name cannot be empty");
+        }
+        if(lastname == null || lastname.trim().isEmpty()){
+            throw new IllegalArgumentException("Last name cannot be empty");
+        }
         if(username == null || username.trim().isEmpty()){
             throw new IllegalArgumentException("Username cannot be empty");
         }
@@ -73,9 +78,6 @@ public class ValidationService {
         }
         if (!isValidEmail(email)){
             throw new IllegalArgumentException("Invalid email format");
-        }
-        if(!isValidPassword(password)){
-            throw new IllegalArgumentException("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number");
         }
     }
 
@@ -97,12 +99,6 @@ public class ValidationService {
         if(email == null)            return false;
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         return Pattern.matches(emailRegex, email);
-    }
-
-    private boolean isValidPassword(String password){
-        if(password == null)            return false;
-        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
-        return Pattern.matches(passwordRegex, password);
     }
 
     public boolean isValidQuantity(int quantity){
