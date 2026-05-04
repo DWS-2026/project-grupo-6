@@ -31,8 +31,6 @@ public class ValidationService {
         return Jsoup.clean(html, safelist);
     }
 
-    public void validateProduct(String name,String description, Double price, MultipartFile[] images){
-    //Method to simplify sanitization of strings, use this one
     public static List<String> sanitizeAll(String... inputs) {
         return Arrays.stream(inputs)
                 .map(ValidationService::cleanAndSanitize)
@@ -62,7 +60,7 @@ public class ValidationService {
                 }
             }
         }
-        
+
     }
 
 
