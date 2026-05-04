@@ -10,7 +10,7 @@
 | Funcionalidad | Subtítulo Obligatorio | Opciones de Penalización | Estado |
 | :--- | :--- | :--- | :---: |
 | **Login** | `"Endpoint de login"` | ✅ Si / ❌ No (-3) | [X] |
-| **Registro** | `"Endpoint de registro"` | ✅ Si / ❌ No (-3) | [ ] |
+| **Registro** | `"Endpoint de registro"` | ✅ Si / ❌ No (-3) | [X] |
 | **Listados Paginados** | `"Endpoint listado de X"` | ✅ Si / ⚠️ Faltan datos (-2) / ❌ No (-10) | [ ] |
 | **Detalle Individual** | `"Endpoint detalle de X"` | ✅ Si / ❌ No (-2) | [ ] |
 | **Creación Entidades** | `"Endpoint creación de X"` | ✅ Si / ⚠️ Faltan cosas (-1 a -3) / ❌ No (-10) | [ ] |

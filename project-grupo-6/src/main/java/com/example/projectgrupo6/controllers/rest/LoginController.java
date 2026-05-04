@@ -79,12 +79,11 @@ public class LoginController {
         newUser.setProfileImage(imageService.loadImage("defaultUserImage.png"));
 
             
-        userService.saveAndFlush(newUser);
+        userService.save(newUser);
 
-		LoginRequest autoLogin = new LoginRequest();
-		autoLogin.setUsername(newUser.getUsername()); 
-		autoLogin.setPassword(request.getPassword()); 
+		String mensajeExito = "El usuario con correo " + request.getEmail() + " se ha creado correctamente. Por favor, inicia sesión en la ruta: /api/auth/login";
 
-		return userLoginService.login(response, autoLogin);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new AuthResponse(AuthResponse.Status.SUCCESS, mensajeExito));
 	}
 }

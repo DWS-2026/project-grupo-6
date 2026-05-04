@@ -9,6 +9,8 @@ import com.example.projectgrupo6.dto.mappers.ImageMapper;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.ValidationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,21 +23,26 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RequestMapping("/api/v1/products")
 @RestController
 public class ProductRestController {
-    @Autowired
-    private ProductMapper productMapper;
-    @Autowired
-    private ImageMapper imageMapper;
 
     @Autowired
+    private ProductMapper productMapper;
+    
+    @Autowired
+    private ImageMapper imageMapper;
+    
+    @Autowired
     private ProductService productService;
+    
     @Autowired
     private ImageService imageService;
+    
+    @Autowired
+    private ValidationService validationService;
 
     //GET
     @GetMapping("/")
@@ -52,8 +59,11 @@ public class ProductRestController {
     //Product
     @PostMapping("/")
     public ResponseEntity<ProductBasicDTO> createProduct (@RequestBody ProductBasicDTO productBasicDTO){
+        validationService.validateProduct(productBasicDTO.name(), productBasicDTO.description(), productBasicDTO.price(), null);
+        
         Product prod = productMapper.toDomainFromBasic(productBasicDTO);
         productService.save(prod);
+        
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();
         return ResponseEntity.created(location).body(productMapper.toBasicDTO(prod));
     }

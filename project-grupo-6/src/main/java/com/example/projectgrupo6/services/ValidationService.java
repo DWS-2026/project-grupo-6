@@ -29,7 +29,7 @@ public class ValidationService {
         return Jsoup.clean(html, safelist);
     }
 
-    public void validateProduct(String name,String description, Double price, MultipartFile image){
+    public void validateProduct(String name,String description, Double price, MultipartFile[] images){
         if(name == null || name.trim().isEmpty()){
             throw new IllegalArgumentException("Product name cannot be empty");
         }
@@ -42,8 +42,18 @@ public class ValidationService {
         if(price == null || price <= 0){
             throw new IllegalArgumentException("Product price must be greater than zero");
         }  
-        validateImage(image);
+        if (images != null && (images.length < 0 || images.length > 4)) {
+            throw new IllegalArgumentException("You must upload between 0 and 4 images");
+        }
+        if(images != null){ 
+            for (MultipartFile img : images) {
+                if (img != null && !img.isEmpty()) {
+                    validateImage(img); 
+                }
+            }
+        }
     }
+
 
     public void validateUser(String username,String email,String password){
         if(username == null || username.trim().isEmpty()){

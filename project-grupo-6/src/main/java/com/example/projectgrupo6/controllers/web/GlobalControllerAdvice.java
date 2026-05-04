@@ -1,6 +1,8 @@
 package com.example.projectgrupo6.controllers.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,48 +33,66 @@ public class GlobalControllerAdvice {
     @Autowired
     private CartService cartService;
 
-    @ModelAttribute
-    public void addGlobalAttributes(Model model, HttpServletRequest request) {
-        
+    private void populateGlobalAttributes(Model model, HttpServletRequest request) {
         Principal principal = request.getUserPrincipal();
-
         if (principal != null) {
-            // Logged user!
             model.addAttribute("loggedUser", true);
-            
-            // Search by username in DB (using its email)
             String email = principal.getName();
             User user = userService.findByEmail(email).orElse(null);
             
             if (user != null) {
-                // Send username to Mustache {{username}}
                 model.addAttribute("username", user.getUsername()); 
-                
-                // EXTRA: Method to count its CartItems
                 model.addAttribute("cartCount", cartService.getCartItemCount(user.getId())); 
             } else {
-                //IMPORTANT: consistent fallback
                 model.addAttribute("loggedUser", false);
                 model.addAttribute("cartCount", 0);
             }
         } else {
-            // Anonymous user (visitor)
             model.addAttribute("loggedUser", false);
             model.addAttribute("cartCount", 0);
         }
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public String handleError() {
-//        return "error";
-//    }
-//    @ExceptionHandler(MultipartException.class)
-//    public String handleMultipartException(MultipartException exc, RedirectAttributes redirectAttributes) {
-//
-//        // Broken message to form
-//        redirectAttributes.addFlashAttribute("errorMessage", "Error: The uploaded files are too large or invalid. Maximum 15MB per file.");
-//
-//        // Return to addProduct page
-//        return "redirect:/product/add";
-//    }
+    @ModelAttribute
+    public void addGlobalAttributes(Model model, HttpServletRequest request) {
+        populateGlobalAttributes(model, request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Object handleValidation(IllegalArgumentException ex, Model model, HttpServletRequest request) {
+        
+        if (request.getRequestURI().startsWith("/api")) {
+            return ResponseEntity.badRequest().body(new ErrorDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "Error de Validación",
+                ex.getMessage()
+            ));
+        }
+
+        populateGlobalAttributes(model, request);
+        model.addAttribute("status", HttpStatus.BAD_REQUEST.value()); 
+        model.addAttribute("error", "Error de Validación");
+        model.addAttribute("message", ex.getMessage()); 
+        return "error"; 
+    }
+
+    @ExceptionHandler(Exception.class)
+    public Object handleAll(Exception ex, Model model, HttpServletRequest request) {
+        
+        if (request.getRequestURI().startsWith("/api")) {
+            return ResponseEntity.status(500).body(new ErrorDTO(
+                500,
+                "Internal Server Error",
+                "Algo salió mal en nuestros servidores."
+            ));
+        }
+
+        populateGlobalAttributes(model, request);
+        model.addAttribute("status", 500);
+        model.addAttribute("error", "Internal Server Error");
+        model.addAttribute("message", "Algo salió mal en nuestros servidores.");
+        return "error";
+    }
+
+    public record ErrorDTO(int status, String error, String message) {}
 }

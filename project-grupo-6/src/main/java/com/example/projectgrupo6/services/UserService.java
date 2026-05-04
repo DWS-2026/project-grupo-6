@@ -49,11 +49,6 @@ public class UserService {
         return user;
     }
 
-    public User saveAndFlush(User user){
-        userRepository.saveAndFlush(user);
-        return user;
-    }
-
     public void save(User user, MultipartFile imageFile) throws IOException {
         if(!imageFile.isEmpty()) {
             try {

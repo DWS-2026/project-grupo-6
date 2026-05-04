@@ -28,6 +28,7 @@ import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.ProductService;
 import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
 
 import jakarta.servlet.http.HttpSession; 
 
@@ -43,6 +44,9 @@ public class ProductController {
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ValidationService validationService;
 
     @GetMapping("/add")
     public String renderProductForm(HttpSession session, Model model) {
@@ -72,14 +76,9 @@ public class ProductController {
             RedirectAttributes attributes 
     ) {
         
-        // --- SECURITY VALIDATION OF BACKEND ---
-        long validImagesCount = productService.checkNumberImages(imageFiles);
+        validationService.validateProduct(name, description, price, imageFiles);
+            
         
-        if (validImagesCount > 4) {
-            attributes.addFlashAttribute("errorMessage", "Security Error: Maximum 4 images allowed.");
-            return "redirect:/product/add";
-        }
-
         Product p = new Product();
         productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
         p.setColors(colors != null ? colors : new ArrayList<>());
