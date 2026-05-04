@@ -1,6 +1,26 @@
 # 🚀 Dashboard de Seguimiento: API REST y Seguridad (URJC)
 > **Proyecto:** Desarrollo Web Seguro (2025-2026)
 > **Calificación Inicial:** 10.0 | **Estado de la Entrega:** 🟡 En Desarrollo
+---
+## TO DO, los puntos que deberiamos tener, los mas relevantes
+Los puntos negros son las cosas que deberian
+* Funcionalidad de la api, que esten los metodos get,post,delete y put en las entidades. Eso corresponde dentro de la rubrica a lo de: [ ]
+    * listados paginados [ ]
+    * detalle individual [ ]
+    * creacion entidades [ ]
+    * Borrado de entidades [ ]
+* Acceso por Rol en la api y web
+    * web [X] (en principio ya esta)
+    * api [ ] (faltan cositas)
+* Texto enriquecido, ya esta, lo unico que diria es una comprobacion con ia con algun ataque asi mas complejo [ ]
+* Fichero en disco
+    * Implementacion [ ]
+    * Seguridad del ataque [ ]
+
+Cosas extra, o mas secundarias, o que si no nos da tiempo, no suspendemos.
+* Imagenes en la api []
+* Error en la web, en donde al iniciar sesion en https://localhost:8433/ en el header sale el id del usuario pero en otras ubicaciones sale el nombre
+
 
 ---
 
