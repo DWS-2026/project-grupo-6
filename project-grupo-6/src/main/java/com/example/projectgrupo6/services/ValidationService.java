@@ -5,6 +5,8 @@ import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -30,6 +32,14 @@ public class ValidationService {
     }
 
     public void validateProduct(String name,String description, Double price, MultipartFile[] images){
+    //Method to simplify sanitization of strings, use this one
+    public static List<String> sanitizeAll(String... inputs) {
+        return Arrays.stream(inputs)
+                .map(ValidationService::cleanAndSanitize)
+                .toList();
+    }
+
+    public void validateProduct(String name,String description, Double price, MultipartFile[] images){
         if(name == null || name.trim().isEmpty()){
             throw new IllegalArgumentException("Product name cannot be empty");
         }
@@ -52,6 +62,7 @@ public class ValidationService {
                 }
             }
         }
+        
     }
 
 
@@ -94,5 +105,17 @@ public class ValidationService {
         if(password == null)            return false;
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         return Pattern.matches(passwordRegex, password);
+    }
+
+    public boolean isValidQuantity(int quantity){
+        return quantity>0 && quantity<10000;
+    }
+
+    public boolean isValidStock(int stock){
+        return stock>0 && stock<10000;
+    }
+
+    public boolean isValidPrice(double prize){
+        return prize>0.0 && prize<100000.0;
     }
 }

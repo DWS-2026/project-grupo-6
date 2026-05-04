@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.*;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
-import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Image;
 import com.example.projectgrupo6.domain.Product;
-import com.example.projectgrupo6.services.CartService;
-import com.example.projectgrupo6.services.ProductService;
 
 
 @Controller
@@ -110,12 +105,16 @@ public class WebController {
                                                 @RequestParam(value = "image", required = false) MultipartFile image) throws Exception {
 
         //if (userService.findByEmail(user.getEmail()).isPresent() || userService.findByUsername(user.getUsername()).isPresent()) {
-        // An user can be regsitred with same username? In case not, uncomment the line above and add the username check
-        if (userService.findByEmail(user.getEmail()).isPresent()) {
+        // An user can be registered with same username? In case not, uncomment the line above and add the username check
+        List<String> sanitized = ValidationService.sanitizeAll(
+                confirmPassword, user.getEmail()
+        );
+
+        if (userService.findByEmail(sanitized.getLast()).isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with those credentials already exists");
         }
 
-        if (!user.getEncodedPassword().equals(confirmPassword)) {
+        if (!user.getEncodedPassword().equals(sanitized.getFirst())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords don't match");
         }
 

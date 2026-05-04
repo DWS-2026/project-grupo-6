@@ -7,13 +7,7 @@ import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.services.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.http.MediaTypeFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,13 +77,16 @@ public class AdminController {
         Optional<User> userOptional = userService.getById(id);
         
         if (userOptional.isPresent()) {
+            List<String> sanitized = ValidationService.sanitizeAll(
+                    firstname, lastname, email, username, rol
+            );
             User userToUpdate = userOptional.get();
             
-            userToUpdate.setFirstname(firstname);
-            userToUpdate.setLastname(lastname);
-            userToUpdate.setEmail(email);
-            userToUpdate.setUsername(username);
-            userToUpdate.setRol(rol);
+            userToUpdate.setFirstname(sanitized.get(0));
+            userToUpdate.setLastname(sanitized.get(1));
+            userToUpdate.setEmail(sanitized.get(2));
+            userToUpdate.setUsername(sanitized.get(3));
+            userToUpdate.setRol(sanitized.get(4));
 
             if (image != null && !image.isEmpty()) {
                 try {
@@ -192,11 +188,16 @@ public class AdminController {
 
         Optional<Product> op = productService.getById(productId);
         if(op.isPresent()){
+            List<String> sanitized = ValidationService.sanitizeAll(
+                    name, brand, category, description, specification, powerSource, colors.toString()
+            );
             Product p = op.get();
 
-            productService.setAttbProduct(p, name, brand, price, category, powerSource, description, specification);
-            p.setColors(colors != null ? colors : new ArrayList<>());
-            //p.setReviewCount(0);
+            if(!validationService.isValidPrice(price)) price=0.0;
+            productService.setAttbProduct(p, sanitized.get(0), sanitized.get(1), price, sanitized.get(2), sanitized.get(5), sanitized.get(3), sanitized.get(4));
+            p.setColors(sanitized.get(6) != null ? colors : new ArrayList<>());
+
+            if(!validationService.isValidStock(stock)) stock=0;
             p.setStock(stock);
 
 
@@ -259,11 +260,15 @@ public class AdminController {
                                      RedirectAttributes redirectAttributes) {
         
         try {
+            List<String> sanitized = ValidationService.sanitizeAll(
+                    newContent
+            );
+
             // Get the ID of the admin doing the edition
             String adminEmail = request.getUserPrincipal().getName();
             User adminUser = userService.findByEmail(adminEmail).orElseThrow();
             
-            commentService.editComment(commentId, adminUser.getId(), newContent);
+            commentService.editComment(commentId, adminUser.getId(), sanitized.getFirst());
             redirectAttributes.addFlashAttribute("successMessage", "Review updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error updating the review.");
@@ -323,8 +328,9 @@ public class AdminController {
         try {
             Optional<Order> orderOpt = orderService.findById(orderId);
             if(orderOpt.isPresent()) {
+                String sanitizedStatus = ValidationService.cleanAndSanitize(newStatus);
                 Order order = orderOpt.get();
-                order.setStatus(newStatus);
+                order.setStatus(sanitizedStatus);
                 orderService.save(order);
                 redirectAttributes.addFlashAttribute("successMessage", "Order #" + orderId + " status updated to " + newStatus);
             }
