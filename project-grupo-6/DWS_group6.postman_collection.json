@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "731a499a-0f99-429b-9c4a-968f2f2a73f6",
+    "_postman_id": "a81b9d59-a025-41e1-ae71-ccd37635ae72",
     "name": "DWS_group6",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "46198652"
+    "_exporter_id": "33475164",
+    "_collection_link": "https://go.postman.co/collection/33475164-a81b9d59-a025-41e1-ae71-ccd37635ae72?source=collection_link"
   },
   "item": [
     {
@@ -91,7 +92,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"BTS\",\r\n    \"description\": \"Purple is the best color\",\r\n    \"price\": 130.6,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft Guns\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"ARMY\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 35,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"Realistic recoil and very reliable sidearm in the field.\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"name\": \"BTS\",\r\n    \"description\": \"BTS.\",\r\n    \"price\": 777.7,\r\n    \"images\": null,\r\n    \"category\": \"Airsoft\",\r\n    \"powerSource\": \"GBB\",\r\n    \"brand\": \"Army\",\r\n    \"colors\": [\r\n        \"Black\"\r\n    ],\r\n    \"reviewCount\": 1,\r\n    \"stock\": 7,\r\n    \"specification\": null,\r\n    \"comments\": [\r\n        {\r\n            \"id\": 2,\r\n            \"content\": \"I purple u\",\r\n            \"author\": \"puppycharlie\"\r\n        }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -99,7 +100,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/products/4",
+              "raw": "https://localhost:8443/api/v1/products/5",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -109,7 +110,7 @@
                 "api",
                 "v1",
                 "products",
-                "4"
+                "5"
               ]
             }
           },
@@ -132,6 +133,37 @@
                 "v1",
                 "products",
                 "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "NewBadProduct",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"\",\n    \"description\": \"Muajaja\",\n    \"price\": 676.7,\n    \"images\": null,\n    \"category\": \"Airsoft Guns\",\n    \"powerSource\": \"GBB\",\n    \"brand\": \"Umarex\",\n    \"colors\": [\n        \"Black\"\n    ],\n    \"reviewCount\": 1,\n    \"stock\": 50,\n    \"specification\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/products/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "products",
+                ""
               ]
             }
           },
@@ -397,7 +429,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"firstname\": \"Miau\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"miau@roar.com\",\r\n    \"profileImage\": null,\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ],\r\n    \"review\": null,\r\n    \"orders\": [],\r\n    \"cart\": null\r\n}",
+              "raw": "{\r\n    \"id\": 2,\r\n    \"firstname\": \"Alex\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"aAAA@pew.com\",\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -405,7 +437,7 @@
               }
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/users/",
+              "raw": "https://localhost:8443/api/v1/users/2",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -415,7 +447,7 @@
                 "api",
                 "v1",
                 "users",
-                ""
+                "2"
               ]
             }
           },
@@ -442,6 +474,37 @@
                 "v1",
                 "users",
                 "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User profile",
+      "item": [
+        {
+          "name": "GetProfile",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"lex_murph@airsoft.com\",\n    \"password\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/me",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "me"
               ]
             }
           },
@@ -655,7 +718,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"charlie.brown@mailcute.com\",\n    \"password\": \"5678\"\n}",
+              "raw": "{\n    \"username\": \"asd@asd\",\n    \"password\": \"asd\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -749,208 +812,12 @@
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Images",
-      "item": [
+        },
         {
-          "name": "GetImage",
+          "name": "Register",
           "request": {
             "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/images/1",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "images",
-                "1"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetImageFile",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/images/1/media",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "images",
-                "1",
-                "media"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "AddUserImage",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "imageFile",
-                  "type": "file",
-                  "uuid": "9d51d65c-6878-4a97-8f5d-7d71bdd6801c",
-                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/users/2/image",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "2",
-                "image"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "ChangeUserImage",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "imageFile",
-                  "type": "file",
-                  "uuid": "e14bd70c-adae-407b-a9ca-44b4c46a49e6",
-                  "src": "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
-                }
-              ]
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/users/1/image",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "1",
-                "image"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "ChangeProductImages",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "imageFile",
-                  "type": "file",
-                  "uuid": "9efa5016-256f-49b3-800f-febd7d29231a",
-                  "src": [
-                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM - copia - copia.jpeg",
-                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM - copia.jpeg",
-                    "/C:/Users/Elena/Downloads/images/WhatsApp Image 2026-03-17 at 10.05.02 AM.jpeg",
-                    "/C:/Users/Elena/Downloads/images/potted-city-plants-aesthetic-purple-neon-computer-ppqrxdxiuic1km9p.jpg"
-                  ]
-                }
-              ]
-            },
-            "url": {
-              "raw": "https://localhost:8443/api/v1/products/1/images",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "1",
-                "images"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "DeleteUserImage",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/users/2/image",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "2",
-                "image"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "DeleteImageFromProduct",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "https://localhost:8443/api/v1/products/1/image/2",
-              "protocol": "https",
-              "host": [
-                "localhost"
-              ],
-              "port": "8443",
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "1",
-                "image",
-                "2"
-              ]
-            }
+            "header": []
           },
           "response": []
         }
