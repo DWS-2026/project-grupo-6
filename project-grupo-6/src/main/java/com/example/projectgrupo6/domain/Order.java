@@ -16,6 +16,8 @@ public class Order {
     private LocalDateTime orderDate;
     private Double totalAmount;
     private String status;
+    private String fileName;
+    private String filePath;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,6 +51,12 @@ public class Order {
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
     
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+
     // Helpful method to add items and link
     public void addOrderItem(OrderItem item) {
         this.items.add(item);

@@ -1,5 +1,8 @@
 package com.example.projectgrupo6.services;
 
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -12,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.OrderItem;
 import com.example.projectgrupo6.repositories.OrderRepository;
 
+import java.io.IOException;
 import jakarta.transaction.Transactional;
 
 
@@ -129,5 +134,23 @@ public class OrderService {
         order.setOrderDate(newOrd.getOrderDate());
         save(order);
         return order;
+    }
+    public Order addFileToOrder(Long orderId, MultipartFile file) throws IOException {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        String uploadDir = "uploads/";
+
+        String originalName = file.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + originalName;
+
+        Path path = Paths.get(uploadDir + fileName);
+
+        Files.createDirectories(path.getParent());
+        Files.write(path,file.getBytes());
+
+        order.setFileName(originalName);
+        order.setFilePath(path.toString());
+
+        return orderRepository.save(order);
     }
 }

@@ -21,6 +21,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.net.URI;
 import java.util.NoSuchElementException;
 
@@ -158,5 +167,36 @@ public class OrderRestController {
         }
     }
     */
+    @PostMapping("/{ordId}/file")
+    public ResponseEntity<Void> uploadFile(@PathVariable long ordId,
+                                       @RequestParam MultipartFile file) throws IOException {
 
+    orderService.addFileToOrder(ordId, file);
+
+    return ResponseEntity.ok().build();
+    }
+    @GetMapping("/{ordId}/file")
+    public ResponseEntity<Resource> getFile(@PathVariable long ordId) throws IOException {
+
+    Order order = orderService.findById(ordId)
+            .orElseThrow();
+
+    if (order.getFilePath() == null) {
+        return ResponseEntity.notFound().build();
+    }
+
+    Path path = Paths.get(order.getFilePath());
+
+    if (!Files.exists(path)) {
+        return ResponseEntity.notFound().build();
+    }
+
+    Resource resource = new UrlResource(path.toUri());
+
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION,
+                    "inline; filename=\"" + order.getFileName() + "\"")
+            .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
+            .body(resource);
+    }
 }

@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: 1de193de-bfcc-436d-83d6-a53f80be0bd1
+
+localResources:
+  collections:
+    - ..\project-grupo-6\DWS_group6.postman_collection.json
