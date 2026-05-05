@@ -18,8 +18,9 @@ Los puntos negros son las cosas que deberian
     * Seguridad del ataque [ ]
 
 Cosas extra, o mas secundarias, o que si no nos da tiempo, no suspendemos.
-* Imagenes en la api []
-* Error en la web, en donde al iniciar sesion en https://localhost:8433/ en el header sale el id del usuario pero en otras ubicaciones sale el nombre
+* Imagenes en la api [ ]
+* Error en la web, en donde al iniciar sesion en https://localhost:8433/ en el header sale el id del usuario pero en otras ubicaciones sale el nombre [ ]
+* Cambiar gestion de DTO en la creacion y edicion de users, no se usa mappers para la api en dichos metodos, sino que se usa Request la cual no tiene mappers. [ ]
 
 
 ---

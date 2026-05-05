@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import com.example.projectgrupo6.dto.UserDTO;
 import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
 import com.example.projectgrupo6.dto.mappers.UserMapper;
+import com.example.projectgrupo6.security.jwt.AuthResponse;
+import com.example.projectgrupo6.security.jwt.RegisterRequest;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +48,8 @@ public class UserRestController {
     private ImageMapper imageMapper;
     @Autowired
     private ValidationService validationService;
+    @Autowired
+	private PasswordEncoder passwordEncoder;
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(HttpServletRequest request){
@@ -72,10 +77,32 @@ public class UserRestController {
     //POST
     //User
     @PostMapping("/")
-    public ResponseEntity<UserBasicDTO> createUser(@RequestBody UserBasicDTO userDTO) {
-        //validationService.validateUser(userDTO.firstname(), userDTO.lastname(), userDTO.email());
-        User user = userMapper.toDomainFromBasic(userDTO);
-        User savedUser = userService.save(user);
+    public ResponseEntity<UserBasicDTO> createUser(@RequestBody RegisterRequest userDTO) {
+        validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
+        if(userService.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("El usuario con ese email ya existe");
+        }
+        
+        if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("Las contraseñas no coinciden");
+        }
+        User newUser = new User();
+        newUser.setUsername(userDTO.getUsername());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setEncodedPassword(passwordEncoder.encode(userDTO.getPassword()));
+        
+        String assignedRole = (userDTO.getRole() != null && !userDTO.getRole().isEmpty()) 
+                              ? userDTO.getRole() 
+                              : "USER";
+        newUser.setRol(assignedRole);
+        
+        newUser.setFirstname(userDTO.getFirstName());
+        newUser.setLastname(userDTO.getLastName());
+
+        newUser.setProfileImage(imageService.loadImage("defaultUserImage.png"));
+        
+        User savedUser = userService.save(newUser);
+        
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
         return ResponseEntity.created(location).body(userMapper.toBasicDTO(savedUser));
     }
@@ -99,15 +126,39 @@ public class UserRestController {
     //PUT
     //User
     @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-       if(userService.getById(id).isPresent()){
-           User updatedUser = userMapper.toDomain(userDTO);
-           updatedUser.setId(id);
-           userService.save(updatedUser);
-           return userMapper.toDTO(updatedUser);
-       } else {
-           throw new NoSuchElementException();
-       }
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO) {
+
+        User existingUser = userService.getById(id)
+                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + id));
+
+
+        validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
+
+
+        if (!existingUser.getEmail().equals(userDTO.getEmail()) && 
+            userService.findByEmail(userDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("El nuevo email ya está en uso por otro usuario");
+        }
+
+        existingUser.setUsername(userDTO.getUsername());
+        existingUser.setEmail(userDTO.getEmail());
+        existingUser.setFirstname(userDTO.getFirstName());
+        existingUser.setLastname(userDTO.getLastName());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+                throw new IllegalArgumentException("Las contraseñas no coinciden");
+            }
+            existingUser.setEncodedPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
+        if (userDTO.getRole() != null && !userDTO.getRole().isEmpty()) {
+            existingUser.setRol(userDTO.getRole());
+        }
+
+        userService.save(existingUser);
+
+        return userMapper.toDTO(existingUser);
     }
 
     //Image
