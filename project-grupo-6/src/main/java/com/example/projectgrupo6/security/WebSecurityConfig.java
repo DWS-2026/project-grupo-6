@@ -20,6 +20,8 @@ import com.example.projectgrupo6.security.jwt.JwtRequestFilter;
 import com.example.projectgrupo6.security.jwt.JwtTokenProvider;
 import com.example.projectgrupo6.security.jwt.UnauthorizedHandlerJwt;
 
+import org.springframework.http.HttpMethod;
+
 
 @Configuration
 @EnableWebSecurity
@@ -64,12 +66,25 @@ public class WebSecurityConfig {
 		
 		http
 			.authorizeHttpRequests(authorize -> authorize
-                    /*// PRIVATE ENDPOINTS
-                    .requestMatchers(HttpMethod.POST,"/api/books/").hasRole("USER")
-                    .requestMatchers(HttpMethod.PUT,"/api/books/**").hasRole("USER")
-                    .requestMatchers(HttpMethod.DELETE,"/api/books/**").hasRole("ADMIN")
-					// PUBLIC ENDPOINTS*/
-					.anyRequest().permitAll()
+                    // Public API endpoints
+                    .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/images/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").permitAll()
+					
+                    // Admin API endpoints
+                    // - Products: Create, update and delete products
+                    .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
+                    // - Users: List all and create admins
+                    .requestMatchers(HttpMethod.GET, "/api/v1/users/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/users/").hasRole("ADMIN")
+                    // - Carts and Orders (list all)
+                    .requestMatchers(HttpMethod.GET, "/api/v1/carts/").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/api/v1/orders/").hasRole("ADMIN")
+                    // Else API endpoints require authentication
+                    .anyRequest().authenticated()
 			);
 	
         // Disable Form login Authentication

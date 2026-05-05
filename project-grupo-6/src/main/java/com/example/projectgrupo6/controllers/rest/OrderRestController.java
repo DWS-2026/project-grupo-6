@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
@@ -63,8 +64,15 @@ public class OrderRestController {
 
     //Order by User
     @GetMapping("/{ordId}/user/{id}")
-    public OrderDTO getOrderFromUser(@PathVariable long ordId, @PathVariable long id) {
-        if (userService.getById(id).isPresent()) {
+    public OrderDTO getOrderFromUser(@PathVariable long ordId, @PathVariable long id, HttpServletRequest request) {
+        
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No puedes acceder a la orden de otro usuario");
+        }
+
+        long currentUserId = userService.getCurrentUserId(request);
+
+        if (userService.ownsOrder(currentUserId, ordId)) {
             return orderMapper.toDTO(orderService.findById(ordId).orElseThrow());
         } else {
             throw new NoSuchElementException();
@@ -73,9 +81,20 @@ public class OrderRestController {
 
     //Item from order
     @GetMapping("/{ordId}/user/{id}/item/{itemId}")
-    public OrderItemBasicDTO getItemFromOrder(@PathVariable long ordId, @PathVariable long id, @PathVariable long itemId) {
-        if (userService.getById(id).isPresent() && orderService.findById(ordId).isPresent()) {
-            return orderItemMapper.toBasicDTO(orderService.findItemById(ordId, itemId).orElseThrow());
+    public OrderItemBasicDTO getItemFromOrder(@PathVariable long ordId, @PathVariable long id, @PathVariable long itemId, HttpServletRequest request) {
+        
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No puedes acceder al item de la orden de otro usuario");
+        }
+
+        long currentUserId = userService.getCurrentUserId(request);
+
+        if (userService.ownsOrder(currentUserId, ordId)) {
+            if (orderService.findById(ordId).isPresent()) {
+                return orderItemMapper.toBasicDTO(orderService.findItemById(ordId, itemId).orElseThrow());
+            } else {
+                throw new NoSuchElementException();
+            }
         } else {
             throw new NoSuchElementException();
         }
@@ -85,18 +104,20 @@ public class OrderRestController {
     //Order
     //Add validation (??)
     @PostMapping("/user/{id}")
-    public ResponseEntity<OrderBasicDTO> createOrder(@PathVariable long id, @RequestBody List<CartItemBasicDTO> itemBasicDTOS) {
-        if (userService.getById(id).isPresent()) {
+    public ResponseEntity<OrderBasicDTO> createOrder(@PathVariable long id, @RequestBody List<CartItemBasicDTO> itemBasicDTOS, HttpServletRequest request) {
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No puedes acceder al item de la orden de otro usuario");
+        }
+        
+        long currentUserId = userService.getCurrentUserId(request);
+        
+        if (userService.getById(currentUserId).isPresent()) {
             List<CartItem> items = cartItemMapper.toDomainFromBasics(itemBasicDTOS);
-
-            if (userService.findById(id).isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
             //creates order
-            Order order = orderService.createOrderFromCart(userService.findById(id).get(), items, cartService.getCartTotal(id));
+            Order order = orderService.createOrderFromCart(userService.findById(currentUserId).get(), items, cartService.getCartTotal(currentUserId));
             //deletes cart
             for (CartItem item : items) {
-                cartService.removeItemFromCart(id, item.getId());
+                cartService.removeItemFromCart(currentUserId, item.getId());
             }
 
             URI location = fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();;
@@ -110,7 +131,11 @@ public class OrderRestController {
     //Order
     //Add validation (???) -> so the user can't set the price to less (?)
     @PutMapping("/{ordId}/user/{id}")
-    public OrderBasicDTO updateOrder(@PathVariable long ordId, @PathVariable long id, @RequestBody OrderBasicDTO orderBasicDTO) {
+    public OrderBasicDTO updateOrder(@PathVariable long ordId, @PathVariable long id, @RequestBody OrderBasicDTO orderBasicDTO, HttpServletRequest request) {
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No puedes acceder a la orden de otro usuario");
+        }
+        
         if (!userService.getById(id).isPresent()) {
             throw new NoSuchElementException();
         }

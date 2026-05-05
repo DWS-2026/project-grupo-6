@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URI;
 
@@ -48,9 +49,16 @@ public class CommentRestController {
 
     //POST
     @PostMapping("/product/{productId}/user/{userId}")
-    public ResponseEntity<CommentBasicDTO> createComment(@PathVariable long productId, @PathVariable long userId, @RequestBody CommentBasicDTO commentDTO){
+    public ResponseEntity<CommentBasicDTO> createComment(@PathVariable long productId, @PathVariable long userId, @RequestBody CommentBasicDTO commentDTO, HttpServletRequest request){
+        
+        if(!userService.isAuthorized(userId, request)){
+            throw new IllegalArgumentException("Acceso denegado: No puedes crear un comentario en nombre de otro usuario");
+        }
+
+        long currentUserId = userService.getCurrentUserId(request);
+        
         Comment comment = commentMapper.toDomainFromBasic(commentDTO);
-        if(userService.findById(userId).isEmpty()){
+        if(userService.findById(currentUserId).isEmpty()){
             return ResponseEntity.ofNullable(commentDTO); //
         }
         if(productService.getById(productId).isEmpty()){
@@ -59,7 +67,7 @@ public class CommentRestController {
 
         String cleanContent = validationService.cleanAndSanitize(comment.getContent());
 
-        Comment savedComment = commentService.addComment(userId, productId, cleanContent);
+        Comment savedComment = commentService.addComment(currentUserId, productId, cleanContent);
 
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.getId()).toUri();
         return ResponseEntity.created(location).body(commentMapper.toBasicDTO(savedComment));
@@ -67,16 +75,28 @@ public class CommentRestController {
 
     //PUT
     @PutMapping("/{id}/user/{userId}")
-    public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO){
+    public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO, HttpServletRequest request){
+        
+        if (!userService.isAuthorized(userId, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes editar el comentario de otro usuario");
+        }
+
+        long currentUserId = userService.getCurrentUserId(request);
+        
         Comment comment = commentMapper.toDomainFromBasic(commentBasicDTO);
         String newContent = validationService.cleanAndSanitize(comment.getContent());
-        Comment saved = commentService.editComment(id, userId, newContent);
+        Comment saved = commentService.editComment(id, currentUserId, newContent);
         return commentMapper.toBasicDTO(saved);
     }
 
     //DELETE
     @DeleteMapping("/{id}/user/{userId}")
-    public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id, @PathVariable long userId){
+    public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id, @PathVariable long userId, HttpServletRequest request){
+        
+        if (!userService.isAuthorized(userId, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes eliminar el comentario de otro usuario");
+        }
+        
         CommentBasicDTO commentBasicDTO = commentMapper.toBasicDTO(commentService.getById(id));
         commentService.deleteComment(id, userId);
         return ResponseEntity.ok(commentBasicDTO);

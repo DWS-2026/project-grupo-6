@@ -118,6 +118,12 @@ public class UserService {
     public boolean checkCreatePassword (String password, String confirmPassword){
         return password.equals(confirmPassword);
     }
+    public boolean ownsOrder(long userId, long orderId) {
+        Optional<Order> orderOpt = orderService.findById(orderId);
+        if (orderOpt.isEmpty()) return false;
+        Order order = orderOpt.get();
+        return order.getUser().getId().equals(userId);
+    }
 
     public User updateUser(User user, String firstName,String lastName, String email, String password, MultipartFile imageFile) throws IOException {
         if (!firstName.isEmpty()) {
@@ -180,5 +186,25 @@ public class UserService {
         userRepository.save(user);
 
         return user;
+    }
+
+    public boolean isAuthorized(Long targetUserId, HttpServletRequest request) {
+        
+        Principal principal = request.getUserPrincipal();
+        if (principal == null) return false; 
+
+        String email = principal.getName();
+        Optional<User> currentUserOpt = findByEmail(email);
+
+        if (currentUserOpt.isEmpty()) return false;
+
+        User currentUser = currentUserOpt.get();
+        
+        boolean isAdmin = currentUser.getRoles() != null && 
+                          currentUser.getRoles().stream().anyMatch(r -> r.equalsIgnoreCase("ADMIN"));
+        
+        boolean isOwner = currentUser.getId().equals(targetUserId);
+
+        return isAdmin || isOwner;
     }
 }

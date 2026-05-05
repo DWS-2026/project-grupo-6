@@ -8,6 +8,7 @@ import com.example.projectgrupo6.dto.mappers.CartItemMapper;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -52,13 +53,16 @@ public class CartRestController {
     //GET
     //Get all
     @GetMapping("/")
-    public Page<CartDTO> getCarts(Pageable pageable){
+    public Page<CartDTO> getCarts(Pageable pageable,HttpServletRequest request) {
         return cartService.getCartPage(pageable).map(cartMapper::toDTO);
     }
 
     //Get by user
     @GetMapping("/user/{id}")
-    public ResponseEntity<CartDTO> getCart(@PathVariable long id){
+    public ResponseEntity<CartDTO> getCart(@PathVariable long id, HttpServletRequest request) {
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
+        }
         Cart cart = cartService.getCartByUserId(id);
         if(cart == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cartMapper.toDTO(cart));
@@ -67,17 +71,24 @@ public class CartRestController {
     //POST
     //Add product to cart
     @PostMapping("/user/{id}/item")
-    public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
+    public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO, HttpServletRequest request) {
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
+        }
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
         cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getProduct().getId()).toUri();;
         return ResponseEntity.created(location).body(cartItemMapper.toBasicDTO(item));
+        
     }
 
     //PUT
     //Change product in cart
     @PutMapping("/user/{id}/item")
-    public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
+    public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO, HttpServletRequest request) {
+        if(!userService.isAuthorized(id, request)){
+            throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
+        }
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
         cartService.updateProductQuantity(id, item.getProduct().getId(), item.getQuantity());
         return cartItemMapper.toBasicDTO(item);
@@ -86,7 +97,11 @@ public class CartRestController {
     //DELETE
     //Delete Cart
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<CartDTO> clearCart(@PathVariable long id) {
+    public ResponseEntity<CartDTO> clearCart(@PathVariable long id, HttpServletRequest request) {
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
+        }
+
         if(userService.getById(id).isPresent()) {
             CartDTO cart = cartMapper.toDTO(cartService.getCartByUserId(id));
             cartService.clearCart(id);
@@ -98,7 +113,10 @@ public class CartRestController {
 
     //Delete Item From Cart
     @DeleteMapping("/user/{id}/item/{itemId}")
-    public ResponseEntity<CartItemBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long itemId) {
+    public ResponseEntity<CartItemBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long itemId, HttpServletRequest request) {
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
+        }
         if(userService.getById(id).isPresent()) {
             CartItemBasicDTO item = cartItemMapper.toBasicDTO(cartService.getCartItem(id, itemId));
             cartService.removeItemFromCart(id, itemId);
