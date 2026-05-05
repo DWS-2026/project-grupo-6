@@ -31,16 +31,13 @@ public class ProductRestController {
 
     @Autowired
     private ProductMapper productMapper;
-    
     @Autowired
     private ImageMapper imageMapper;
     
     @Autowired
     private ProductService productService;
-    
     @Autowired
     private ImageService imageService;
-    
     @Autowired
     private ValidationService validationService;
 

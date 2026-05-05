@@ -19,4 +19,6 @@ public interface CartItemMapper {
     CartItem toDomain (CartItemDTO cartItemDTO);
     CartItem toDomainFromBasic (CartItemBasicDTO cartItemBasicDTO);
 
+    List<CartItem> toDomainFromBasics(List<CartItemBasicDTO> itemBasicDTOS);
+
 }
