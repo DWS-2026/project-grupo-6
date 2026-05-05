@@ -3,6 +3,7 @@ package com.example.projectgrupo6.services;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
 import com.example.projectgrupo6.repositories.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.OrderItem;
+import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.repositories.OrderRepository;
 
 import java.io.IOException;
@@ -32,6 +35,10 @@ public class OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ValidationService validationService;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -98,6 +105,35 @@ public class OrderService {
 
     public void deleteList (List<Order> orders){
         orderRepository.deleteAll(orders);
+    }
+
+    @Transactional
+    public Order createSecureOrder(User user, List<CartItemBasicDTO> itemBasicDTOS) {
+        
+        List<CartItem> secureItems = new ArrayList<>();
+        double secureTotalAmount = 0.0;
+
+        for (CartItemBasicDTO dtoItem : itemBasicDTOS) {
+            // Search for the real product in the database to get its price and validate its existence
+            Product realProduct = productService.getById(dtoItem.product().id())
+                    .orElseThrow(() -> new NoSuchElementException("El producto con ID " + dtoItem.product().id() + " ya no existe."));
+
+            // Validate the quantity
+            int quantity = dtoItem.quantity();
+            if (!validationService.isValidQuantity(quantity)) {
+                throw new IllegalArgumentException("Cantidad inválida para el producto " + realProduct.getName());
+            }
+
+            // Create a secure CartItem with the real product and validated quantity
+            CartItem secureCartItem = new CartItem(realProduct, quantity);
+            secureItems.add(secureCartItem);
+
+            // Calculate the total amount using the real product price
+            secureTotalAmount += realProduct.getPrice() * quantity;
+        }
+
+        // Create the order using the secure items and total amount
+        return createOrderFromCart(user, secureItems, secureTotalAmount);
     }
 
     @Transactional

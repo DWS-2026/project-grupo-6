@@ -71,19 +71,30 @@ public class WebSecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/images/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").permitAll()
-					
-                    // Admin API endpoints
-                    // - Products: Create, update and delete products
+
+                    // ==========================================
+                    // ADMIN API ENDPOINTS 
+                    // ==========================================
+                    // - Products: Create, Update and Delete
                     .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasRole("ADMIN")
-                    // - Users: List all and create admins
+                    
+                    // - Users: Get all and Create with admin role
                     .requestMatchers(HttpMethod.GET, "/api/v1/users/").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.POST, "/api/v1/users/").hasRole("ADMIN")
-                    // - Carts and Orders (list all)
+                    
+                    // - Carts: Get all
                     .requestMatchers(HttpMethod.GET, "/api/v1/carts/").hasRole("ADMIN")
+                    
+                    // - Orders: Get all, Update and Add file
                     .requestMatchers(HttpMethod.GET, "/api/v1/orders/").hasRole("ADMIN")
-                    // Else API endpoints require authentication
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/orders/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/orders/*/file").hasRole("ADMIN")
+
+                    // ==========================================
+                    // Rest of authenticated API endpoints (for both USER and ADMIN)
+                    // ==========================================
                     .anyRequest().authenticated()
 			);
 	
@@ -152,7 +163,7 @@ public class WebSecurityConfig {
             );
         
         // Disable CSRF at the moment
-        //http.csrf(csrf -> csrf.disable());
+        http.csrf(csrf -> csrf.disable());
         
         return http.build();
     }

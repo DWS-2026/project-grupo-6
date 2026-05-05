@@ -70,7 +70,10 @@ public class UserRestController {
 
     //By id
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
+    public UserDTO getUserById(@PathVariable Long id, HttpServletRequest request) {
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado a este perfil");
+        }
         return userMapper.toDTO(userService.findById(id).orElseThrow());
     }
 
@@ -109,7 +112,12 @@ public class UserRestController {
 
     //Image
     @PostMapping("/{id}/image")
-    public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException{
+    public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
+        
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes añadir una imagen a otro usuario");
+        }
+        
         if (imageFile.isEmpty()) {
             throw new IllegalArgumentException("Image file cannot be empty");
         }
@@ -126,7 +134,11 @@ public class UserRestController {
     //PUT
     //User
     @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO) {
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO, HttpServletRequest request) {
+
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes editar el perfil de otro usuario");
+        }
 
         User existingUser = userService.getById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + id));
@@ -164,8 +176,12 @@ public class UserRestController {
     //Image
     @PutMapping("/{id}/image")
     public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
-                                                   @RequestParam MultipartFile imageFile) throws IOException {
+                                                   @RequestParam MultipartFile imageFile,
+                                                   HttpServletRequest request) throws IOException {
         //imageService.replaceImageFile(id, imageFile.getInputStream());
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado");
+        }
         userService.save(userService.findById(id).orElseThrow(), imageFile);
         return ResponseEntity.noContent().build();
     }
@@ -173,7 +189,12 @@ public class UserRestController {
     //DELETE
     //User
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserBasicDTO> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<UserBasicDTO> deleteUser(@PathVariable Long id, HttpServletRequest request) {
+        
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes borrar la cuenta de otro usuario");
+        }
+
         UserBasicDTO user = userMapper.toBasicDTO(userService.findById(id).orElseThrow());
         userService.deleteById(id);
         return ResponseEntity.ok(user);
@@ -181,7 +202,11 @@ public class UserRestController {
 
     //Image
     @DeleteMapping("/{id}/image")
-    public ImageDTO deleteProfileImage(@PathVariable long id) throws IOException {
+    public ImageDTO deleteProfileImage(@PathVariable long id, HttpServletRequest request) throws IOException {
+        
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado");
+        }
         User user = userService.findById(id).orElseThrow();
         Blob avatar = user.getProfileImage();
         if (avatar == null) {
