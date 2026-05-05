@@ -7,6 +7,7 @@ import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
 import com.example.projectgrupo6.dto.mappers.CartItemMapper;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,8 @@ public class CartRestController {
     private UserService userService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ValidationService validationService;
 
     @Autowired
     private CartMapper cartMapper;
@@ -69,6 +72,9 @@ public class CartRestController {
     @PostMapping("/user/{id}/item")
     public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        if(!validationService.isValidQuantity(item.getQuantity())){
+            item.setQuantity(1);
+        }
         cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getProduct().getId()).toUri();;
         return ResponseEntity.created(location).body(cartItemMapper.toBasicDTO(item));
@@ -79,6 +85,9 @@ public class CartRestController {
     @PutMapping("/user/{id}/item")
     public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO) {
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        if(!validationService.isValidQuantity(item.getQuantity())){
+            item.setQuantity(1);
+        }
         cartService.updateProductQuantity(id, item.getProduct().getId(), item.getQuantity());
         return cartItemMapper.toBasicDTO(item);
     }
