@@ -20,6 +20,7 @@ import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -75,14 +76,16 @@ public class AdminController {
         RedirectAttributes redirectAttributes) {
         
         Optional<User> userOptional = userService.getById(id);
-        
+    
         if (userOptional.isPresent()) {
+             validationService.validateUser(firstname, lastname, username, email);
 
-            validationService.validateUser(firstname, lastname, username, email);
+            Optional<User> userWithSameEmail = userService.findByEmail(email);
+            if (userWithSameEmail.isPresent() && !userWithSameEmail.get().getId().equals(id)) {
+                throw new IllegalArgumentException("El email ya está siendo usado por otro usuario");
+            }
 
-            List<String> sanitized = ValidationService.sanitizeAll(
-                    firstname, lastname, email, username, rol
-            );
+            List<String> sanitized = ValidationService.sanitizeAll(firstname, lastname, email, username, rol);
             User userToUpdate = userOptional.get();
             
             userToUpdate.setFirstname(sanitized.get(0));
@@ -91,21 +94,21 @@ public class AdminController {
             userToUpdate.setUsername(sanitized.get(3));
             userToUpdate.setRol(sanitized.get(4));
 
-            if (image != null && !image.isEmpty()) {
-                try {
-                    Image saved = imageService.createImage(image);
-                    userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
-                } catch (Exception e) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Error updating the profile image.");
-                    return "redirect:/admin/users/edit/" + id;
-                }
+        if (image != null && !image.isEmpty()) {
+            try {
+                byte[] bytes = image.getBytes();
+                userToUpdate.setProfileImage(new javax.sql.rowset.serial.SerialBlob(bytes));
+            } catch (Exception e) {
+                throw new RuntimeException("Error al procesar la imagen");
             }
+        }
 
             userService.save(userToUpdate);
-            redirectAttributes.addFlashAttribute("successMessage", "User profile updated successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "¡Usuario actualizado!");
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "User cannot be updated.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Usuario no encontrado.");
         }
+        
         return "redirect:/admin/users/edit/" + id;
     }
 

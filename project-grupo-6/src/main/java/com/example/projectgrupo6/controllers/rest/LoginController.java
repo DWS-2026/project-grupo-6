@@ -15,6 +15,7 @@ import com.example.projectgrupo6.security.jwt.AuthResponse;
 import com.example.projectgrupo6.security.jwt.AuthResponse.Status;
 import com.example.projectgrupo6.services.ImageService;
 import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
 import com.example.projectgrupo6.security.jwt.LoginRequest;
 import com.example.projectgrupo6.security.jwt.RegisterRequest;
 import com.example.projectgrupo6.security.jwt.UserLoginService;
@@ -34,6 +35,9 @@ public class LoginController {
 
 	@Autowired
 	private ImageService imageService;
+
+	@Autowired
+	private ValidationService validationService;
 
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(
@@ -58,6 +62,8 @@ public class LoginController {
 	@PostMapping("/register")
 	public ResponseEntity<AuthResponse> register(
 			@RequestBody RegisterRequest request, HttpServletResponse response) {
+
+		validationService.validateUser(request.getFirstName(), request.getLastName(), request.getUsername(), request.getEmail());
 		
 		if(userService.findByEmail(request.getEmail()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
