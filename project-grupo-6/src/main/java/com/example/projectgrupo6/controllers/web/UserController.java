@@ -111,6 +111,11 @@ public class UserController {
                                             HttpServletRequest request) {
 
             String sanitizedContent = ValidationService.cleanAndSanitize(newContent);
+            
+            if (sanitizedContent == null || sanitizedContent.trim().isEmpty()) {
+                throw new IllegalArgumentException("El comentario no puede estar vacío.");
+            }
+            
             User sessionUser = userService.getSessionUser(request);
             if (sessionUser == null) return "redirect:/login";
 
@@ -154,19 +159,18 @@ public class UserController {
             HttpServletRequest request,
             RedirectAttributes redirectAttributes) {
             
-            validationService.validateUser(firstname, lastname, username, email); 
-
-            List<String> sanitized = ValidationService.sanitizeAll(
-                    firstname, lastname, username, email
-            );
-
             User userToUpdate = userService.getSessionUser(request);
             if (userToUpdate == null) return "redirect:/login";
-            
+
+            validationService.validateUser(firstname, lastname, username, email);
+
+            List<String> sanitized = ValidationService.sanitizeAll(firstname, lastname, username, email);
             String newEmail = sanitized.get(3).trim();
 
-            // Check if user has changed its email
             boolean emailChanged = !userToUpdate.getEmail().equalsIgnoreCase(newEmail);
+            if (emailChanged && userService.findByEmail(newEmail).isPresent()) {
+                throw new IllegalArgumentException("El email '" + newEmail + "' ya está registrado por otro usuario.");
+            }
 
             userToUpdate.setFirstname(sanitized.get(0));
             userToUpdate.setLastname(sanitized.get(1));
@@ -175,37 +179,27 @@ public class UserController {
 
             if (imageFile != null && !imageFile.isEmpty()) {
                 try {
-                    Image saved = imageService.createImage(imageFile);
-                    userToUpdate.setProfileImage(new SerialBlob(saved.getImageFile()));
+                    byte[] bytes = imageFile.getBytes();
+                    userToUpdate.setProfileImage(new javax.sql.rowset.serial.SerialBlob(bytes));
                 } catch (Exception e) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Error updating your profile image.");
-                    return "redirect:/user/profile"; 
+                    throw new RuntimeException("Error al procesar la imagen de perfil.");
                 }
             }
 
             userService.save(userToUpdate);
-            redirectAttributes.addFlashAttribute("successMessage", "Your profile has been updated successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "¡Perfil actualizado con éxito!");
 
-            // IMPORTANT: If email changes, Spring's login becomes invalid
-            // We force to log out and login again with the new email
             if (emailChanged) {
-                /*
-                System.out.println("DEBUG PROFILE UPDATE:");
-                System.out.println("Email en DB: [" + userToUpdate.getEmail() + "]");
-                System.out.println("Email del Form: [" + email + "]");
-                System.out.println("¿Detecta cambio?: " + emailChanged);
-                */
                 try {
                     request.logout();
                 } catch (ServletException e) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Error logging out after email change. Please log in again.");
+                    // Manejo silencioso o log
                 }
-
                 SecurityContextHolder.clearContext();
-
                 redirectAttributes.addFlashAttribute("successMessage", "Email actualizado. Por favor, inicia sesión de nuevo.");
                 return "redirect:/login";
             }
+
             return "redirect:/user/profile";
         }
 
