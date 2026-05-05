@@ -79,10 +79,9 @@ public class CartRestController {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
         }
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
-        if(!validationService.isValidQuantity(item.getQuantity())){
-            item.setQuantity(1);
-        }
+        validationService.validateCart(item);
         cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
+
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getProduct().getId()).toUri();;
         return ResponseEntity.created(location).body(cartItemMapper.toBasicDTO(item));
         

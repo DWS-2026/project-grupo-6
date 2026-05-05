@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "0660fbbd-ca08-45f5-9fa0-8df47ea8f2b1",
+    "_postman_id": "44b7a80b-2290-4041-b2ba-e1420aad3c51",
     "name": "DWS_group6",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "46198652"
@@ -369,12 +369,12 @@
           "response": []
         },
         {
-          "name": "GetById",
+          "name": "CurrentUser",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "https://localhost:8443/api/v1/users/1",
+              "raw": "https://localhost:8443/api/v1/users/me",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -384,7 +384,29 @@
                 "api",
                 "v1",
                 "users",
-                "1"
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:8443/api/v1/users/3",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "3"
               ]
             }
           },
@@ -397,7 +419,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"firstname\": \"Yoshi\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"yashi@mario.com\",\r\n    \"roles\": [\r\n        \"User\"\r\n    ]\r\n}",
+              "raw": "{\r\n    \"username\": \"Dinoss\",\r\n    \"firstname\": \"klsajdpoas\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"yashi@mario.com\",\r\n    \"roles\": [\r\n        \"User\"\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -428,7 +450,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id\": 2,\r\n    \"firstname\": \"Alex\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"aAAA@pew.com\",\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ]\r\n}",
+              "raw": "{\r\n    \"id\": 2,\r\n    \"username\": \"aDino\",\r\n    \"firstname\": \"Alex\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"aAAA@pew.com\",\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -459,10 +481,10 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id\": 1,\r\n    \"firstname\": \"Alex\",\r\n    \"lastname\": \"Dinosaur\",\r\n    \"email\": \"yashi@mario.com\",\r\n    \"roles\": [\r\n        \"Admin\"\r\n    ]\r\n}"
+              "raw": ""
             },
             "url": {
-              "raw": "https://localhost:8443/api/v1/users/1",
+              "raw": "https://localhost:8443/api/v1/users/2",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -472,7 +494,7 @@
                 "api",
                 "v1",
                 "users",
-                "1"
+                "2"
               ]
             }
           },

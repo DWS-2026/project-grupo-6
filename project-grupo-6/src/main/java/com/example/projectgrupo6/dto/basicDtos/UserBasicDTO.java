@@ -4,6 +4,7 @@ import java.util.List;
 
 public record UserBasicDTO (
         Long id,
+        String username,
         String firstname,
         String lastname,
         String email,

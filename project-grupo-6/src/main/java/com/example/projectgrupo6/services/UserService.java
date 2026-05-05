@@ -4,10 +4,7 @@ import com.example.projectgrupo6.domain.*;
 import com.example.projectgrupo6.repositories.CartRepository;
 import com.example.projectgrupo6.repositories.UserRepository;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.security.Principal;
-import java.sql.Blob;
 import java.util.List;
 import java.util.Optional;
 
@@ -189,7 +185,6 @@ public class UserService {
     }
 
     public boolean isAuthorized(Long targetUserId, HttpServletRequest request) {
-        
         Principal principal = request.getUserPrincipal();
         if (principal == null) return false; 
 
@@ -197,14 +192,11 @@ public class UserService {
         Optional<User> currentUserOpt = findByEmail(email);
 
         if (currentUserOpt.isEmpty()) return false;
-
         User currentUser = currentUserOpt.get();
-        
         boolean isAdmin = currentUser.getRoles() != null && 
                           currentUser.getRoles().stream().anyMatch(r -> r.equalsIgnoreCase("ADMIN"));
         
         boolean isOwner = currentUser.getId().equals(targetUserId);
-
         return isAdmin || isOwner;
     }
 }
