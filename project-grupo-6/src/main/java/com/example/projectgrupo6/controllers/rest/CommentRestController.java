@@ -57,7 +57,8 @@ public class CommentRestController {
             return ResponseEntity.ofNullable(commentDTO); //
         }
 
-        String cleanContent = ValidationService.cleanAndSanitize(comment.getContent());
+        String cleanContent = validationService.cleanAndSanitize(comment.getContent());
+
         Comment savedComment = commentService.addComment(userId, productId, cleanContent);
 
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.getId()).toUri();
@@ -68,7 +69,7 @@ public class CommentRestController {
     @PutMapping("/{id}/user/{userId}")
     public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO){
         Comment comment = commentMapper.toDomainFromBasic(commentBasicDTO);
-        String newContent = ValidationService.cleanAndSanitize(comment.getContent());
+        String newContent = validationService.cleanAndSanitize(comment.getContent());
         Comment saved = commentService.editComment(id, userId, newContent);
         return commentMapper.toBasicDTO(saved);
     }
