@@ -7,6 +7,7 @@ import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
 import com.example.projectgrupo6.dto.mappers.CartItemMapper;
 import com.example.projectgrupo6.dto.mappers.ProductMapper;
 import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
 import org.springframework.data.domain.Page;
@@ -42,6 +43,8 @@ public class CartRestController {
     private UserService userService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ValidationService validationService;
 
     @Autowired
     private CartMapper cartMapper;
@@ -76,6 +79,9 @@ public class CartRestController {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
         }
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        if(!validationService.isValidQuantity(item.getQuantity())){
+            item.setQuantity(1);
+        }
         cartService.addProductToCart(id, item.getProduct().getId(), item.getQuantity());
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(item.getProduct().getId()).toUri();;
         return ResponseEntity.created(location).body(cartItemMapper.toBasicDTO(item));
@@ -90,6 +96,9 @@ public class CartRestController {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
         }
         CartItem item = cartItemMapper.toDomainFromBasic(cartItemBasicDTO);
+        if(!validationService.isValidQuantity(item.getQuantity())){
+            item.setQuantity(1);
+        }
         cartService.updateProductQuantity(id, item.getProduct().getId(), item.getQuantity());
         return cartItemMapper.toBasicDTO(item);
     }

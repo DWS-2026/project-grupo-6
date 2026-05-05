@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -42,11 +44,13 @@ public class ProductRestController {
     private ValidationService validationService;
 
     //GET
+    //All
     @GetMapping("/")
     public Page<ProductBasicDTO> getAllBasicProducts (Pageable pageable){
         return (productService.getAll(pageable).map(productMapper::toBasicDTO));
     }
 
+    //By Id
     @GetMapping("/{id}")
     public ProductDTO getProduct (@PathVariable long id){
         return productMapper.toDTO(productService.getById(id).orElseThrow());
@@ -57,8 +61,12 @@ public class ProductRestController {
     @PostMapping("/")
     public ResponseEntity<ProductBasicDTO> createProduct (@RequestBody ProductBasicDTO productBasicDTO){
         validationService.validateProduct(productBasicDTO.name(), productBasicDTO.description(), productBasicDTO.price(), null);
-        
         Product prod = productMapper.toDomainFromBasic(productBasicDTO);
+
+        List<String> clean = ValidationService.sanitizeAll(prod.getName(), prod.getBrand(), prod.getCategory(), prod.getDescription(), prod.getPowerSource(), prod.getColors().toString(), prod.getSpecification());
+        productService.setAttbProduct(prod, clean.get(0), clean.get(1), prod.getPrice(), clean.get(2), clean.get(4), clean.get(3), clean.get(6));
+        prod.setColors(clean.get(5)!= null ? prod.getColors() : new ArrayList<>());
+        if(!validationService.isValidStock(prod.getStock())) prod.setStock(1);
         productService.save(prod);
         
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(prod.getId()).toUri();
@@ -93,6 +101,13 @@ public class ProductRestController {
             
             Product updatedProd = productMapper.toDomain(updateDTO);
             updatedProd.setId(id);
+
+            List<String> clean = ValidationService.sanitizeAll(updatedProd.getName(), updatedProd.getBrand(), updatedProd.getCategory(), updatedProd.getDescription(), updatedProd.getPowerSource(), updatedProd.getColors().toString(), updatedProd.getSpecification());
+            productService.setAttbProduct(updatedProd, clean.get(0), clean.get(1), updatedProd.getPrice(), clean.get(2), clean.get(4), clean.get(3), clean.get(6));
+            updatedProd.setColors(clean.get(5)!= null ? updatedProd.getColors() : new ArrayList<>());
+            if(!validationService.isValidStock(updatedProd.getStock())) updatedProd.setStock(1);
+            productService.save(updatedProd);
+
             productService.save(updatedProd);
             return productMapper.toDTO(updatedProd);
         } else {

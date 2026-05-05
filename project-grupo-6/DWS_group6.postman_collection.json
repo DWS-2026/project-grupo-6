@@ -258,7 +258,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id\": 2,\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 555\r\n}",
+              "raw": "{\r\n    \"product\": {\r\n        \"id\": 1,\r\n        \"name\": \"HX416 Assault AEG\",\r\n        \"price\": 249.0\r\n    },\r\n    \"quantity\": 777\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
