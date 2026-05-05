@@ -46,7 +46,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void addComment(Long userid, Long productid, String content) {
+    public Comment addComment(Long userid, Long productid, String content) {
         
         Optional <Product> productOpt = productService.getById(productid);
         Optional <User> userOpt = userRepository.findById(userid);
@@ -64,11 +64,13 @@ public class CommentService {
             user.addReview(comment);
 
             repository.save(comment);
+            return comment;
         }
+        return null;
     }
 
     @Transactional
-    public void editComment(Long commentId, Long userId, String newContent){
+    public Comment editComment(Long commentId, Long userId, String newContent){
         Optional<Comment> commentOpt = repository.findById(commentId);
         Optional<User> userOpt = userRepository.findById(userId);
 
@@ -81,9 +83,29 @@ public class CommentService {
                         .anyMatch(r -> r.equalsIgnoreCase("ADMIN")))){
                 comment.setContent(newContent);
                 repository.save(comment);
+                return comment;
             }
         }
+        return null;
     }
+
+   /* public boolean validateAuthorInComment(long commentId, long userId){
+        Optional<Comment> commentOptional = repository.findById(commentId);
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (commentOptional.isPresent() && userOptional.isPresent()){
+            User user = userOptional.get();
+            Comment comment = commentOptional.get();
+
+            if (comment.getOwner() != null && (comment.getOwner().getId().equals(user.getId()) || user.getRoles().stream()
+                    .anyMatch(r -> r.equalsIgnoreCase("ADMIN")))){
+                return true;
+            }
+        } else {
+            return false;
+        }
+        return false;
+    }*/
 
     @Transactional
     public void deleteComment(Long commentId, Long userId){

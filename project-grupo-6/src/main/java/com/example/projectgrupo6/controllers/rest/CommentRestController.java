@@ -5,6 +5,8 @@ import com.example.projectgrupo6.dto.CommentDTO;
 import com.example.projectgrupo6.dto.basicDtos.CommentBasicDTO;
 import com.example.projectgrupo6.dto.mappers.CommentMapper;
 import com.example.projectgrupo6.services.CommentService;
+import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,10 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 public class CommentRestController {
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private CommentMapper commentMapper;
 
@@ -41,29 +47,37 @@ public class CommentRestController {
     }
 
     //POST
-    // // // // // // // //
-    // Uncompleted:
     @PostMapping("/product/{productId}/user/{userId}")
     public ResponseEntity<CommentBasicDTO> createComment(@PathVariable long productId, @PathVariable long userId, @RequestBody CommentBasicDTO commentDTO){
         Comment comment = commentMapper.toDomainFromBasic(commentDTO);
+        if(userService.findById(userId).isEmpty()){
+            return ResponseEntity.ofNullable(commentDTO); //
+        }
+        if(productService.getById(productId).isEmpty()){
+            return ResponseEntity.ofNullable(commentDTO); //
+        }
+
         String cleanContent = ValidationService.cleanAndSanitize(comment.getContent());
-        comment.setContent(cleanContent);
-        //add more validation/cleaning (?)
-        Comment savedComment = commentService.save(comment);
+        Comment savedComment = commentService.addComment(userId, productId, cleanContent);
 
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.getId()).toUri();
         return ResponseEntity.created(location).body(commentMapper.toBasicDTO(savedComment));
     }
 
     //PUT
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/user/{userId}")
+    public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO){
+        Comment comment = commentMapper.toDomainFromBasic(commentBasicDTO);
+        String newContent = ValidationService.cleanAndSanitize(comment.getContent());
+        Comment saved = commentService.editComment(id, userId, newContent);
+        return commentMapper.toBasicDTO(saved);
+    }
 
     //DELETE
-    //Error
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id){
+    @DeleteMapping("/{id}/user/{userId}")
+    public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id, @PathVariable long userId){
         CommentBasicDTO commentBasicDTO = commentMapper.toBasicDTO(commentService.getById(id));
-        commentService.delete(id);
+        commentService.deleteComment(id, userId);
         return ResponseEntity.ok(commentBasicDTO);
     }
 }

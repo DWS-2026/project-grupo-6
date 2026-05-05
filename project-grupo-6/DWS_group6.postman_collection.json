@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "0cb32849-7cf5-4621-8e5d-00394509e000",
+    "_postman_id": "0660fbbd-ca08-45f5-9fa0-8df47ea8f2b1",
     "name": "DWS_group6",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "46198652"
@@ -873,12 +873,12 @@
           "response": []
         },
         {
-          "name": "New Request",
+          "name": "DeleteById",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "https://localhost:8443/api/v1/comments/3",
+              "raw": "https://localhost:8443/api/v1/comments/1/user/2",
               "protocol": "https",
               "host": [
                 "localhost"
@@ -888,7 +888,76 @@
                 "api",
                 "v1",
                 "comments",
-                "3"
+                "1",
+                "user",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EditComment",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"MUAJAJAJAJAJJAJAJAJAJAJ\",\r\n    \"author\": \"puppycharlie\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/comments/2/user/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "2",
+                "user",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "NewComment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Helloooo World :3\",\r\n    \"author\": \"a.murph$\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:8443/api/v1/comments/product/1/user/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "8443",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "product",
+                "1",
+                "user",
+                "1"
               ]
             }
           },
