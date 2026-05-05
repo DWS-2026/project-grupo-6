@@ -129,9 +129,7 @@ public class OrderService {
         Order order = findById(ordId)
                 .orElseThrow(NoSuchElementException::new);
 
-        order.setTotalAmount(newOrd.getTotalAmount());
         order.setStatus(newOrd.getStatus());
-        order.setOrderDate(newOrd.getOrderDate());
         save(order);
         return order;
     }

@@ -27,7 +27,7 @@ public interface UserMapper {
 
     User toDomainFromBasic (UserBasicDTO userBasicDTO);
 
-    // 3. LA LÓGICA DE MAPEO PERSONALIZADA
+    // Personalized mapping logic
     default ImageDTO mapProfileImage(User user) {
         if (user == null || user.getProfileImage() == null) {
             return null;

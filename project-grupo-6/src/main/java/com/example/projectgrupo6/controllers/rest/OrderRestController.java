@@ -13,6 +13,7 @@ import com.example.projectgrupo6.dto.mappers.OrderMapper;
 import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
 import org.hibernate.type.ConvertedBasicArrayType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,8 @@ public class OrderRestController {
     private UserService userService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private ValidationService validationService;
 
     @Autowired
     private OrderMapper orderMapper;
@@ -69,7 +72,6 @@ public class OrderRestController {
         if(!userService.isAuthorized(id, request)){
             throw new IllegalArgumentException("Acceso denegado: No puedes acceder a la orden de otro usuario");
         }
-
         long currentUserId = userService.getCurrentUserId(request);
 
         if (userService.ownsOrder(currentUserId, ordId)) {
@@ -86,7 +88,6 @@ public class OrderRestController {
         if(!userService.isAuthorized(id, request)){
             throw new IllegalArgumentException("Acceso denegado: No puedes acceder al item de la orden de otro usuario");
         }
-
         long currentUserId = userService.getCurrentUserId(request);
 
         if (userService.ownsOrder(currentUserId, ordId)) {
@@ -102,13 +103,11 @@ public class OrderRestController {
 
     //POST
     //Order
-    //Add validation (??)
     @PostMapping("/user/{id}")
     public ResponseEntity<OrderBasicDTO> createOrder(@PathVariable long id, @RequestBody List<CartItemBasicDTO> itemBasicDTOS, HttpServletRequest request) {
         if(!userService.isAuthorized(id, request)){
             throw new IllegalArgumentException("Acceso denegado: No puedes acceder al item de la orden de otro usuario");
         }
-        
         long currentUserId = userService.getCurrentUserId(request);
         
         if (userService.getById(currentUserId).isPresent()) {
@@ -129,7 +128,6 @@ public class OrderRestController {
 
     //PUT
     //Order
-    //Add validation (???) -> so the user can't set the price to less (?)
     @PutMapping("/{ordId}/user/{id}")
     public OrderBasicDTO updateOrder(@PathVariable long ordId, @PathVariable long id, @RequestBody OrderBasicDTO orderBasicDTO, HttpServletRequest request) {
         if(!userService.isAuthorized(id, request)){
@@ -140,7 +138,10 @@ public class OrderRestController {
             throw new NoSuchElementException();
         }
 
+        validationService.validateOrderStatus(orderBasicDTO.status());
         Order newOrder = orderMapper.toDomainFromBasic(orderBasicDTO);
+        newOrder.setStatus(ValidationService.cleanAndSanitize(newOrder.getStatus()));
+
         Order updated = orderService.updateOrder(ordId, newOrder);
         return orderMapper.toBasicDTO(updated);
     }
@@ -159,7 +160,7 @@ public class OrderRestController {
     }
 
     //ORDER FILE
-    //Create
+    //Create file
     @PostMapping("/{ordId}/file")
     public ResponseEntity<Void> uploadFile(@PathVariable long ordId,
                                            @RequestParam MultipartFile file) throws IOException {
@@ -168,7 +169,7 @@ public class OrderRestController {
         return ResponseEntity.ok().build();
     }
 
-    //Get
+    //Get file back
     @GetMapping("/{ordId}/file")
     public ResponseEntity<Resource> getFile(@PathVariable long ordId) throws IOException {
         Order order = orderService.findById(ordId)

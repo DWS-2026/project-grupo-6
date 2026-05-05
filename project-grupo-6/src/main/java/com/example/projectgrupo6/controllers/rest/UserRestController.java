@@ -51,6 +51,8 @@ public class UserRestController {
     @Autowired
 	private PasswordEncoder passwordEncoder;
 
+    //GET
+    //Actual user
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(HttpServletRequest request){
         Principal principal = request.getUserPrincipal();
@@ -61,7 +63,6 @@ public class UserRestController {
         }
     }
 
-    //GET
     //All
     @GetMapping("/")
     public Page<UserBasicDTO> getAllUsers(Pageable pageable) {
@@ -76,6 +77,7 @@ public class UserRestController {
 
     //POST
     //User
+    //Add sanitization
     @PostMapping("/")
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody RegisterRequest userDTO) {
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
@@ -100,7 +102,6 @@ public class UserRestController {
         newUser.setLastname(userDTO.getLastName());
 
         newUser.setProfileImage(imageService.loadImage("defaultUserImage.png"));
-        
         User savedUser = userService.save(newUser);
         
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
@@ -125,6 +126,7 @@ public class UserRestController {
 
     //PUT
     //User
+    //Add sanitization
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO) {
 
@@ -157,7 +159,6 @@ public class UserRestController {
         }
 
         userService.save(existingUser);
-
         return userMapper.toDTO(existingUser);
     }
 

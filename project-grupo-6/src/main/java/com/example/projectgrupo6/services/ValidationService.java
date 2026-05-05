@@ -1,10 +1,12 @@
 package com.example.projectgrupo6.services;
 
+import com.example.projectgrupo6.domain.CartItem;
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.domain.User;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +17,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidationService {
+    @Autowired
+    private ProductService productService;
 
     //Whitelist for HTML
     private static final Safelist safelist = Safelist.none()
@@ -97,6 +101,23 @@ public class ValidationService {
         if (image.getSize() > maxSize){
             throw new IllegalArgumentException("Image size must be less than 5MB");
         }
+    }
+
+    public void validateOrderStatus(String status){
+        List<String> valid = List.of("DELIVERED", "CANCELLED", "SHIPPED", "PENDING");
+        if(status.isEmpty()){
+            throw new IllegalArgumentException("Update the status of the order");
+        }
+        if (!valid.contains(status)) {
+            throw new IllegalArgumentException("Invalid status: " + status);
+        }
+    }
+
+    public void validateCart(CartItem item){
+        if(productService.getById(item.getProduct().getId()).isEmpty()){
+            throw new IllegalArgumentException("Invalid product");
+        }
+        if(!isValidQuantity(item.getQuantity())) item.setQuantity(1);
     }
 
     private boolean isValidEmail(String email){
