@@ -1,46 +1,48 @@
 package com.example.projectgrupo6.controllers.rest;
 
-import com.example.projectgrupo6.domain.Image;
-import com.example.projectgrupo6.domain.User;
-import com.example.projectgrupo6.dto.ImageDTO;
-import com.example.projectgrupo6.dto.mappers.ImageMapper;
-import com.example.projectgrupo6.services.ImageService;
-import com.example.projectgrupo6.services.UserService;
-import com.example.projectgrupo6.services.ValidationService;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-import com.example.projectgrupo6.dto.UserDTO;
-import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
-import com.example.projectgrupo6.dto.mappers.UserMapper;
-import com.example.projectgrupo6.security.jwt.AuthResponse;
-import com.example.projectgrupo6.security.jwt.RegisterRequest;
-
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-
-
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
+import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.dto.ImageDTO;
+import com.example.projectgrupo6.dto.UserDTO;
+import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
+import com.example.projectgrupo6.dto.mappers.ImageMapper;
+import com.example.projectgrupo6.dto.mappers.UserMapper;
+import com.example.projectgrupo6.security.jwt.RegisterRequest;
+import com.example.projectgrupo6.services.ImageService;
+import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RequestMapping("/api/v1/users")
 @RestController
@@ -120,7 +122,7 @@ public class UserRestController {
 
     //image
     //get
-    @GetMapping("/{id}/image")
+    @GetMapping("/{id}/images")
     public ResponseEntity<Object> getProfileImage(@PathVariable long id, HttpServletRequest request) throws SQLException {
         
         if(!userService.isAuthorized(id, request)) {
@@ -148,7 +150,7 @@ public class UserRestController {
         }
     }
     //Image
-    @PostMapping("/{id}/image")
+    @PostMapping("/{id}/images")
     public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
         
         if (!userService.isAuthorized(id, request)) {
@@ -211,7 +213,7 @@ public class UserRestController {
     }
 
     //Image
-    @PutMapping("/{id}/image")
+    @PutMapping("/{id}/images")
     public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
                                                    @RequestParam MultipartFile imageFile,
                                                    HttpServletRequest request) throws IOException {
@@ -238,7 +240,7 @@ public class UserRestController {
     }
 
     //Image
-    @DeleteMapping("/{id}/image")
+    @DeleteMapping("/{id}/images")
     public ImageDTO deleteProfileImage(@PathVariable long id, HttpServletRequest request) throws IOException {
         
         if (!userService.isAuthorized(id, request)) {
