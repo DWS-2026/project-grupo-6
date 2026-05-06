@@ -1,37 +1,35 @@
 package com.example.projectgrupo6.controllers.rest;
 
-import com.example.projectgrupo6.domain.CartItem;
-import com.example.projectgrupo6.domain.Product;
-import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
-import com.example.projectgrupo6.dto.basicDtos.ProductBasicDTO;
-import com.example.projectgrupo6.dto.mappers.CartItemMapper;
-import com.example.projectgrupo6.dto.mappers.ProductMapper;
-import com.example.projectgrupo6.services.ProductService;
-import com.example.projectgrupo6.services.ValidationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.micrometer.observation.autoconfigure.ObservationProperties.Http;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
-
-import com.example.projectgrupo6.services.CartService;
-import com.example.projectgrupo6.services.UserService;
-import com.example.projectgrupo6.domain.User;
-import com.example.projectgrupo6.dto.CartDTO;
-import com.example.projectgrupo6.dto.mappers.CartMapper;
-import com.example.projectgrupo6.domain.Cart;
-import jakarta.servlet.http.HttpServletRequest;
-
 import java.net.URI;
-import java.security.Principal;
 import java.util.NoSuchElementException;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-
-import javax.ws.rs.Path;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
+import com.example.projectgrupo6.domain.Cart;
+import com.example.projectgrupo6.domain.CartItem;
+import com.example.projectgrupo6.dto.CartDTO;
+import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
+import com.example.projectgrupo6.dto.mappers.CartItemMapper;
+import com.example.projectgrupo6.dto.mappers.CartMapper;
+import com.example.projectgrupo6.dto.mappers.ProductMapper;
+import com.example.projectgrupo6.services.CartService;
+import com.example.projectgrupo6.services.ProductService;
+import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -61,7 +59,7 @@ public class CartRestController {
     }
 
     //Get by user
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<CartDTO> getCart(@PathVariable long id, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
@@ -73,7 +71,7 @@ public class CartRestController {
 
     //POST
     //Add product to cart
-    @PostMapping("/user/{id}/item")
+    @PostMapping("/users/{id}/item")
     public ResponseEntity<CartItemBasicDTO> addToCart(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO, HttpServletRequest request) {
         if(!userService.isAuthorized(id, request)){
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
@@ -89,7 +87,7 @@ public class CartRestController {
 
     //PUT
     //Change product in cart
-    @PutMapping("/user/{id}/item")
+    @PutMapping("/users/{id}/item")
     public CartItemBasicDTO updateCartItem(@PathVariable long id, @RequestBody CartItemBasicDTO cartItemBasicDTO, HttpServletRequest request) {
         if(!userService.isAuthorized(id, request)){
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
@@ -104,7 +102,7 @@ public class CartRestController {
 
     //DELETE
     //Delete Cart
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<CartDTO> clearCart(@PathVariable long id, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
@@ -120,7 +118,7 @@ public class CartRestController {
     }
 
     //Delete Item From Cart
-    @DeleteMapping("/user/{id}/item/{itemId}")
+    @DeleteMapping("/users/{id}/item/{itemId}")
     public ResponseEntity<CartItemBasicDTO> removeFromCart(@PathVariable long id, @PathVariable Long itemId, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
             throw new IllegalArgumentException("Acceso denegado: No tienes permisos sobre este carrito");
