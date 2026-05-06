@@ -1,6 +1,31 @@
 package com.example.projectgrupo6.controllers.rest;
 
-import com.example.projectgrupo6.domain.CartItem;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.dto.OrderDTO;
@@ -15,27 +40,7 @@ import com.example.projectgrupo6.services.CartService;
 import com.example.projectgrupo6.services.OrderService;
 import com.example.projectgrupo6.services.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RequestMapping("/api/v1/orders")
 @RestController
@@ -69,7 +74,7 @@ public class OrderRestController {
     }
 
     // GET ORDER FROM USER
-    @GetMapping("/{ordId}/user/{id}")
+    @GetMapping("/{ordId}/users/{id}")
     public OrderDTO getOrderFromUser(
             @PathVariable long ordId,
             @PathVariable long id,
@@ -92,7 +97,7 @@ public class OrderRestController {
     }
 
     // GET ITEM FROM ORDER
-    @GetMapping("/{ordId}/user/{id}/item/{itemId}")
+    @GetMapping("/{ordId}/users/{id}/item/{itemId}")
     public OrderItemBasicDTO getItemFromOrder(
             @PathVariable long ordId,
             @PathVariable long id,
@@ -124,7 +129,7 @@ public class OrderRestController {
     }
 
     // CREATE ORDER
-    @PostMapping("/user/{id}")
+    @PostMapping("/users/{id}")
     public ResponseEntity<OrderBasicDTO> createOrder(
             @PathVariable long id,
             @RequestBody List<CartItemBasicDTO> itemBasicDTOS,
@@ -158,7 +163,7 @@ public class OrderRestController {
     }
 
     // UPDATE ORDER
-    @PutMapping("/{ordId}/user/{id}")
+    @PutMapping("/{ordId}/users/{id}")
     public OrderBasicDTO updateOrder(
             @PathVariable long ordId,
             @PathVariable long id,
@@ -177,7 +182,7 @@ public class OrderRestController {
     }
 
     // DELETE ORDER
-    @DeleteMapping("/{ordId}/user/{id}")
+    @DeleteMapping("/{ordId}/users/{id}")
     public ResponseEntity<OrderDTO> deleteOrder(
             @PathVariable long ordId,
             @PathVariable long id,
