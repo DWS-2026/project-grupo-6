@@ -16,8 +16,8 @@ public class Order {
     private LocalDateTime orderDate;
     private Double totalAmount;
     private String status;
-    private String fileName;
-    private String filePath;
+    private String invoiceFileName;
+    private String invoiceFilePath;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -51,11 +51,11 @@ public class Order {
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
     
-    public String getFileName() { return fileName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
+    public String getInvoiceFileName() { return invoiceFileName; }
+    public void setInvoiceFileName(String invoiceFileName) { this.invoiceFileName = invoiceFileName; }
 
-    public String getFilePath() { return filePath; }
-    public void setFilePath(String filePath) { this.filePath = filePath; }
+    public String getInvoiceFilePath() { return invoiceFilePath; }
+    public void setInvoiceFilePath(String invoiceFilePath) { this.invoiceFilePath = invoiceFilePath; }
 
     // Helpful method to add items and link
     public void addOrderItem(OrderItem item) {
@@ -67,7 +67,7 @@ public class Order {
         OrderItem item = this.items.stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Item no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Item not found in order"));
         item.setQuantity(quantity);
     }
 }

@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.FileOutputStream;
 import com.example.projectgrupo6.domain.CartItem;
-import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.dto.basicDtos.CartItemBasicDTO;
 import com.example.projectgrupo6.repositories.OrderItemRepository;
@@ -17,14 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.projectgrupo6.domain.Order;
 import com.example.projectgrupo6.domain.OrderItem;
 import com.example.projectgrupo6.domain.Product;
 import com.example.projectgrupo6.repositories.OrderRepository;
 
-import java.io.IOException;
+
 import jakarta.transaction.Transactional;
 
 
@@ -137,54 +139,53 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderFromCart(User user, List<CartItem> cartItems, double totalAmount) {
-        
+    public Order createOrderFromCart(User user, List<CartItem> cartItems, double totalAmount){
         Order order = new Order();
         order.setUser(user);
         order.setTotalAmount(totalAmount);
-        order.setStatus("COMPLETED"); 
-        
-        // Travel through the cart and create the "pinned image" for every thing
+        order.setStatus("COMPLETED");
         for (CartItem cartItem : cartItems) {
-            
             OrderItem orderItem = new OrderItem(
                 order, 
                 cartItem.getProduct(), 
                 cartItem.getQuantity(), 
                 cartItem.getProduct().getPrice() // Freeze the price
             );
-            
             order.addOrderItem(orderItem); 
         }
-        
-        // When saving Order, thanks to CascadeType.ALL, saves all OrderItems by themselves
-        return orderRepository.save(order);
-    }
+        order=orderRepository.save(order);
+        try{
+            String safeUsername = user.getUsername()
+                .replaceAll("[^a-zA-Z0-9]", "_");
+            Path uploadPath = Paths.get(System.getProperty("user.dir"),"uploads","invoices");
+            Files.createDirectories(uploadPath);
+            String fileName = "invoice_order_" + safeUsername + "_" + order.getId() + ".pdf";
+            Path pdfPath = uploadPath.resolve(fileName);
 
-    public Order updateOrder(long ordId, Order newOrd){
-        Order order = findById(ordId)
-                .orElseThrow(NoSuchElementException::new);
-
-        order.setStatus(newOrd.getStatus());
-        save(order);
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(pdfPath.toFile()));
+            document.open();
+                   document.add(new Paragraph("CROSSFIRE PURCHASE RECEIPT"));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Order ID: " + order.getId()));
+            document.add(new Paragraph("User: " + user.getUsername()));
+            document.add(new Paragraph("Date: " + order.getOrderDate()));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("PRODUCTS:"));
+            document.add(new Paragraph(" "));
+            for (OrderItem item : order.getItems()){
+                document.add(new Paragraph(item.getProduct().getName() + " x" + item.getQuantity() + " - $" + item.getPriceAtPurchase()));
+            }
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("TOTAL: $" + order.getTotalAmount()));
+            document.close();
+            order.setInvoiceFileName(fileName);
+            order.setInvoiceFilePath(pdfPath.toString());
+            order=orderRepository.save(order);
+        }catch (Exception e){
+            throw new RuntimeException("Error generating invoice PDF ", e);
+        }
         return order;
     }
-    public Order addFileToOrder(Long orderId, MultipartFile file) throws IOException {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-        String uploadDir = "uploads/";
-
-        String originalName = file.getOriginalFilename();
-        String fileName = System.currentTimeMillis() + "_" + originalName;
-
-        Path path = Paths.get(uploadDir + fileName);
-
-        Files.createDirectories(path.getParent());
-        Files.write(path,file.getBytes());
-
-        order.setFileName(originalName);
-        order.setFilePath(path.toString());
-
-        return orderRepository.save(order);
-    }
+        
 }
