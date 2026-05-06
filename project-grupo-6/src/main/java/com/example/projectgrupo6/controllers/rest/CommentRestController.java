@@ -1,5 +1,21 @@
 package com.example.projectgrupo6.controllers.rest;
 
+import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
 import com.example.projectgrupo6.domain.Comment;
 import com.example.projectgrupo6.dto.CommentDTO;
 import com.example.projectgrupo6.dto.basicDtos.CommentBasicDTO;
@@ -8,16 +24,8 @@ import com.example.projectgrupo6.services.CommentService;
 import com.example.projectgrupo6.services.ProductService;
 import com.example.projectgrupo6.services.UserService;
 import com.example.projectgrupo6.services.ValidationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.net.URI;
-
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RequestMapping("/api/v1/comments")
 @RestController
@@ -48,7 +56,7 @@ public class CommentRestController {
     }
 
     //POST
-    @PostMapping("/product/{productId}/user/{userId}")
+    @PostMapping("/products/{productId}/users/{userId}")
     public ResponseEntity<CommentBasicDTO> createComment(@PathVariable long productId, @PathVariable long userId, @RequestBody CommentBasicDTO commentDTO, HttpServletRequest request){
         
         if(!userService.isAuthorized(userId, request)){
@@ -74,7 +82,7 @@ public class CommentRestController {
     }
 
     //PUT
-    @PutMapping("/{id}/user/{userId}")
+    @PutMapping("/{id}/users/{userId}")
     public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO, HttpServletRequest request){
         
         if (!userService.isAuthorized(userId, request)) {
@@ -90,7 +98,7 @@ public class CommentRestController {
     }
 
     //DELETE
-    @DeleteMapping("/{id}/user/{userId}")
+    @DeleteMapping("/{id}/users/{userId}")
     public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id, @PathVariable long userId, HttpServletRequest request){
         
         if (!userService.isAuthorized(userId, request)) {
