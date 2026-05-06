@@ -1,46 +1,48 @@
 package com.example.projectgrupo6.controllers.rest;
 
-import com.example.projectgrupo6.domain.Image;
-import com.example.projectgrupo6.domain.User;
-import com.example.projectgrupo6.dto.ImageDTO;
-import com.example.projectgrupo6.dto.mappers.ImageMapper;
-import com.example.projectgrupo6.services.ImageService;
-import com.example.projectgrupo6.services.UserService;
-import com.example.projectgrupo6.services.ValidationService;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-import com.example.projectgrupo6.dto.UserDTO;
-import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
-import com.example.projectgrupo6.dto.mappers.UserMapper;
-import com.example.projectgrupo6.security.jwt.AuthResponse;
-import com.example.projectgrupo6.security.jwt.RegisterRequest;
-
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-
-
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
+
+import com.example.projectgrupo6.domain.Image;
+import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.dto.ImageDTO;
+import com.example.projectgrupo6.dto.UserDTO;
+import com.example.projectgrupo6.dto.basicDtos.UserBasicDTO;
+import com.example.projectgrupo6.dto.mappers.ImageMapper;
+import com.example.projectgrupo6.dto.mappers.UserMapper;
+import com.example.projectgrupo6.security.jwt.RegisterRequest;
+import com.example.projectgrupo6.services.ImageService;
+import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RequestMapping("/api/v1/users")
 @RestController
@@ -80,7 +82,7 @@ public class UserRestController {
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado a este perfil");
+            throw new IllegalArgumentException("Access denied to this profile");
         }
         return userMapper.toDTO(userService.findById(id).orElseThrow());
     }
@@ -90,11 +92,11 @@ public class UserRestController {
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody RegisterRequest userDTO) {
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
         if(userService.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("El usuario con ese email ya existe");
+            throw new IllegalArgumentException("The user with that email already exists");
         }
         
         if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-            throw new IllegalArgumentException("Las contraseñas no coinciden");
+            throw new IllegalArgumentException("Passwords don't match");
         }
         User newUser = new User();
         newUser.setUsername(userDTO.getUsername());
@@ -121,11 +123,11 @@ public class UserRestController {
     public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO, HttpServletRequest request) {
 
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes editar el perfil de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't edit another user's profile");
         }
 
         User existingUser = userService.getById(id)
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
 
 
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
@@ -133,7 +135,7 @@ public class UserRestController {
 
         if (!existingUser.getEmail().equals(userDTO.getEmail()) && 
             userService.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("El nuevo email ya está en uso por otro usuario");
+            throw new IllegalArgumentException("The new email is already in use by another user");
         }
 
         existingUser.setUsername(userDTO.getUsername());
@@ -143,7 +145,7 @@ public class UserRestController {
 
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-                throw new IllegalArgumentException("Las contraseñas no coinciden");
+                throw new IllegalArgumentException("Passwords don't match");
             }
             existingUser.setEncodedPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
@@ -160,7 +162,7 @@ public class UserRestController {
     public ResponseEntity<UserBasicDTO> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes borrar la cuenta de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't delete another user's account");
         }
 
         UserBasicDTO user = userMapper.toBasicDTO(userService.findById(id).orElseThrow());
@@ -251,12 +253,12 @@ public class UserRestController {
     public ImageDTO deleteProfileImage(@PathVariable long id, HttpServletRequest request) throws IOException {
         
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
+            throw new IllegalArgumentException("Access denied");
         }
         User user = userService.findById(id).orElseThrow();
         Blob avatar = user.getProfileImage();
         if (avatar == null) {
-            throw new RuntimeException("El usuario no tiene foto de perfil");
+            throw new RuntimeException("The user does not have a profile picture");
         }
 
         user.setProfileImage(null);

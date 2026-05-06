@@ -33,6 +33,14 @@ import com.example.projectgrupo6.domain.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import java.io.IOException;
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -234,6 +242,37 @@ public class UserController {
             } catch (RuntimeException e) {
                 return "redirect:/login";
             }
+        }
+        @GetMapping("/invoice/{fileName}")
+        public ResponseEntity<Resource> viewInvoice(@PathVariable String fileName,
+                                                    HttpServletRequest request)
+                throws IOException {
+
+            User currentUser = userService.getSessionUser(request);
+
+            if (currentUser == null) {
+                return ResponseEntity.status(401).build();
+            }
+
+            Path invoicePath = Paths.get(
+                    System.getProperty("user.dir"),
+                    "uploads",
+                    "invoices",
+                    fileName
+            );
+
+            if (!Files.exists(invoicePath)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Resource resource = new UrlResource(invoicePath.toUri());
+
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+                            "inline; filename=\"" + fileName + "\""
+                    )
+                    .body(resource);
         }
 
 }

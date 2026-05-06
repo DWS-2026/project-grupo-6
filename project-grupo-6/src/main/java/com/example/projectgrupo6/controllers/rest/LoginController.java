@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.servlet.http.HttpServletResponse;
 
+import com.example.projectgrupo6.domain.User;
 import com.example.projectgrupo6.security.jwt.AuthResponse;
 import com.example.projectgrupo6.security.jwt.AuthResponse.Status;
-import com.example.projectgrupo6.services.ImageService;
-import com.example.projectgrupo6.services.UserService;
-import com.example.projectgrupo6.services.ValidationService;
 import com.example.projectgrupo6.security.jwt.LoginRequest;
 import com.example.projectgrupo6.security.jwt.RegisterRequest;
 import com.example.projectgrupo6.security.jwt.UserLoginService;
-import com.example.projectgrupo6.domain.User;
+import com.example.projectgrupo6.services.ImageService;
+import com.example.projectgrupo6.services.UserService;
+import com.example.projectgrupo6.services.ValidationService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -67,11 +68,11 @@ public class LoginController {
 		
 		if(userService.findByEmail(request.getEmail()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new AuthResponse(Status.FAILURE, "El usuario con ese email ya existe"));
+					.body(new AuthResponse(Status.FAILURE, "The user with that email already exists"));
 		}
 		if(!request.getPassword().equals(request.getConfirmPassword())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new AuthResponse(Status.FAILURE, "Las contraseñas no coinciden"));
+					.body(new AuthResponse(Status.FAILURE, "Passwords don't match"));
 		}
 		
         User newUser = new User();
@@ -87,9 +88,9 @@ public class LoginController {
             
         userService.save(newUser);
 
-		String mensajeExito = "El usuario con correo " + request.getEmail() + " se ha creado correctamente. Por favor, inicia sesión en la ruta: /api/auth/login";
+		String messageSuccess = "The user with email " + request.getEmail() + " has been created correctly. Please log in to the route: /api/auth/login";
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(new AuthResponse(AuthResponse.Status.SUCCESS, mensajeExito));
+				.body(new AuthResponse(AuthResponse.Status.SUCCESS, messageSuccess));
 	}
 }
