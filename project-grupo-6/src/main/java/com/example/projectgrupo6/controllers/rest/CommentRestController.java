@@ -60,7 +60,7 @@ public class CommentRestController {
     public ResponseEntity<CommentBasicDTO> createComment(@PathVariable long productId, @PathVariable long userId, @RequestBody CommentBasicDTO commentDTO, HttpServletRequest request){
         
         if(!userService.isAuthorized(userId, request)){
-            throw new IllegalArgumentException("Acceso denegado: No puedes crear un comentario en nombre de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't create a comment on behalf of another user");
         }
 
         long currentUserId = userService.getCurrentUserId(request);
@@ -86,7 +86,7 @@ public class CommentRestController {
     public CommentBasicDTO editComment (@PathVariable long id, @PathVariable long userId, @RequestBody CommentBasicDTO commentBasicDTO, HttpServletRequest request){
         
         if (!userService.isAuthorized(userId, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes editar el comentario de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't edit another user's comment");
         }
 
         long currentUserId = userService.getCurrentUserId(request);
@@ -102,7 +102,7 @@ public class CommentRestController {
     public ResponseEntity<CommentBasicDTO> deleteComment (@PathVariable long id, @PathVariable long userId, HttpServletRequest request){
         
         if (!userService.isAuthorized(userId, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes eliminar el comentario de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't delete another user's comment");
         }
         
         CommentBasicDTO commentBasicDTO = commentMapper.toBasicDTO(commentService.getById(id));

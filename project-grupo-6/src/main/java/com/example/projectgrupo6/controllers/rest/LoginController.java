@@ -68,11 +68,11 @@ public class LoginController {
 		
 		if(userService.findByEmail(request.getEmail()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new AuthResponse(Status.FAILURE, "El usuario con ese email ya existe"));
+					.body(new AuthResponse(Status.FAILURE, "The user with that email already exists"));
 		}
 		if(!request.getPassword().equals(request.getConfirmPassword())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(new AuthResponse(Status.FAILURE, "Las contraseñas no coinciden"));
+					.body(new AuthResponse(Status.FAILURE, "Passwords don't match"));
 		}
 		
         User newUser = new User();
@@ -88,7 +88,7 @@ public class LoginController {
             
         userService.save(newUser);
 
-		String messageSuccess = "El usuario con correo " + request.getEmail() + " se ha creado correctamente. Por favor, inicia sesión en la ruta: /api/auth/login";
+		String messageSuccess = "The user with email " + request.getEmail() + " has been created correctly. Please log in to the route: /api/auth/login";
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(new AuthResponse(AuthResponse.Status.SUCCESS, messageSuccess));

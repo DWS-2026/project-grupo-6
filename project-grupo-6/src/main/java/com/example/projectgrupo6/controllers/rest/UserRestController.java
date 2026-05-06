@@ -82,7 +82,7 @@ public class UserRestController {
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado a este perfil");
+            throw new IllegalArgumentException("Access denied to this profile");
         }
         return userMapper.toDTO(userService.findById(id).orElseThrow());
     }
@@ -94,11 +94,11 @@ public class UserRestController {
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody RegisterRequest userDTO) {
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
         if(userService.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("El usuario con ese email ya existe");
+            throw new IllegalArgumentException("The user with that email already exists");
         }
         
         if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-            throw new IllegalArgumentException("Las contraseñas no coinciden");
+            throw new IllegalArgumentException("Passwords don't match");
         }
         User newUser = new User();
         newUser.setUsername(userDTO.getUsername());
@@ -126,7 +126,7 @@ public class UserRestController {
     public ResponseEntity<Object> getProfileImage(@PathVariable long id, HttpServletRequest request) throws SQLException {
         
         if(!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
+            throw new IllegalArgumentException("Access denied");
         }
 
         Optional<User> userOp = userService.findById(id);
@@ -154,7 +154,7 @@ public class UserRestController {
     public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
         
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes añadir una imagen a otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't add an image to another user");
         }
         
         if (imageFile.isEmpty()) {
@@ -177,11 +177,11 @@ public class UserRestController {
     public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO, HttpServletRequest request) {
 
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes editar el perfil de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't edit another user's profile");
         }
 
         User existingUser = userService.getById(id)
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
 
 
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
@@ -189,7 +189,7 @@ public class UserRestController {
 
         if (!existingUser.getEmail().equals(userDTO.getEmail()) && 
             userService.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("El nuevo email ya está en uso por otro usuario");
+            throw new IllegalArgumentException("The new email is already in use by another user");
         }
 
         existingUser.setUsername(userDTO.getUsername());
@@ -199,7 +199,7 @@ public class UserRestController {
 
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-                throw new IllegalArgumentException("Las contraseñas no coinciden");
+                throw new IllegalArgumentException("Passwords don't match");
             }
             existingUser.setEncodedPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
@@ -219,7 +219,7 @@ public class UserRestController {
                                                    HttpServletRequest request) throws IOException {
         //imageService.replaceImageFile(id, imageFile.getInputStream());
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
+            throw new IllegalArgumentException("Access denied");
         }
         userService.save(userService.findById(id).orElseThrow(), imageFile);
         return ResponseEntity.noContent().build();
@@ -231,7 +231,7 @@ public class UserRestController {
     public ResponseEntity<UserBasicDTO> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes borrar la cuenta de otro usuario");
+            throw new IllegalArgumentException("Access denied: You can't delete another user's account");
         }
 
         UserBasicDTO user = userMapper.toBasicDTO(userService.findById(id).orElseThrow());
@@ -244,12 +244,12 @@ public class UserRestController {
     public ImageDTO deleteProfileImage(@PathVariable long id, HttpServletRequest request) throws IOException {
         
         if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
+            throw new IllegalArgumentException("Access denied");
         }
         User user = userService.findById(id).orElseThrow();
         Blob avatar = user.getProfileImage();
         if (avatar == null) {
-            throw new RuntimeException("El usuario no tiene foto de perfil");
+            throw new RuntimeException("The user does not have a profile picture");
         }
 
         user.setProfileImage(null);
