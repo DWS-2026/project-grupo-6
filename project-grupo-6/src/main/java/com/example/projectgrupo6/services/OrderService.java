@@ -108,7 +108,14 @@ public class OrderService {
     public void deleteList (List<Order> orders){
         orderRepository.deleteAll(orders);
     }
+    public Order updateOrder(long ordId, Order newOrd) {
 
+        Order order = orderRepository.findById(ordId).orElseThrow(NoSuchElementException::new);
+
+        order.setStatus(newOrd.getStatus());
+
+        return orderRepository.save(order);
+    }
     @Transactional
     public Order createSecureOrder(User user, List<CartItemBasicDTO> itemBasicDTOS) {
         
