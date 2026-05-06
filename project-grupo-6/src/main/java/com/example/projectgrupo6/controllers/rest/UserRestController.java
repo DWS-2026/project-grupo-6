@@ -20,17 +20,24 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -111,6 +118,35 @@ public class UserRestController {
         return ResponseEntity.created(location).body(userMapper.toBasicDTO(savedUser));
     }
 
+    //image
+    //get
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Object> getProfileImage(@PathVariable long id, HttpServletRequest request) throws SQLException {
+        
+        if(!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado");
+        }
+
+        Optional<User> userOp = userService.findById(id);
+        
+        if (userOp.isPresent() && userOp.get().getProfileImage() != null) {
+            
+            Blob imageBlob = userOp.get().getProfileImage();
+            Resource imageResource = new InputStreamResource(imageBlob.getBinaryStream());
+            
+            
+            MediaType mediaType = MediaTypeFactory
+                    .getMediaType(imageResource)
+                    .orElse(MediaType.IMAGE_JPEG);
+                    
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .body(imageResource);
+        } else {
+            
+            throw new RuntimeException("Profile image for user " + id + " not found");
+        }
+    }
     //Image
     @PostMapping("/{id}/image")
     public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
