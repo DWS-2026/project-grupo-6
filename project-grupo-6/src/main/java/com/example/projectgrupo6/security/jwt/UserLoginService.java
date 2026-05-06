@@ -34,12 +34,12 @@ public class UserLoginService {
 	public ResponseEntity<AuthResponse> login(HttpServletResponse response, LoginRequest loginRequest) {
 		
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+				new UsernamePasswordAuthenticationToken(loginRequest.getemail(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		
-		String username = loginRequest.getUsername();
+		String username = loginRequest.getemail();
 		UserDetails user = userDetailsService.loadUserByUsername(username);
 
 		HttpHeaders responseHeaders = new HttpHeaders();

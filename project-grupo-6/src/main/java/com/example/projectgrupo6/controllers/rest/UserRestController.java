@@ -70,13 +70,13 @@ public class UserRestController {
         }
     }
 
-    //All
+    // Get All
     @GetMapping("/")
     public Page<UserBasicDTO> getAllUsers(Pageable pageable) {
         return (userService.getAllPaged(pageable)).map(userMapper::toBasicDTO);
     }
 
-    //By id
+    // Get by id
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Long id, HttpServletRequest request) {
         if (!userService.isAuthorized(id, request)) {
@@ -85,9 +85,7 @@ public class UserRestController {
         return userMapper.toDTO(userService.findById(id).orElseThrow());
     }
 
-    //POST
-    //User
-    //Add sanitization
+    // Post 
     @PostMapping("/")
     public ResponseEntity<UserBasicDTO> createUser(@RequestBody RegisterRequest userDTO) {
         validationService.validateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
@@ -118,59 +116,7 @@ public class UserRestController {
         return ResponseEntity.created(location).body(userMapper.toBasicDTO(savedUser));
     }
 
-    //image
-    //get
-    @GetMapping("/{id}/image")
-    public ResponseEntity<Object> getProfileImage(@PathVariable long id, HttpServletRequest request) throws SQLException {
-        
-        if(!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
-        }
-
-        Optional<User> userOp = userService.findById(id);
-        
-        if (userOp.isPresent() && userOp.get().getProfileImage() != null) {
-            
-            Blob imageBlob = userOp.get().getProfileImage();
-            Resource imageResource = new InputStreamResource(imageBlob.getBinaryStream());
-            
-            
-            MediaType mediaType = MediaTypeFactory
-                    .getMediaType(imageResource)
-                    .orElse(MediaType.IMAGE_JPEG);
-                    
-            return ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .body(imageResource);
-        } else {
-            
-            throw new RuntimeException("Profile image for user " + id + " not found");
-        }
-    }
-    //Image
-    @PostMapping("/{id}/image")
-    public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
-        
-        if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado: No puedes añadir una imagen a otro usuario");
-        }
-        
-        if (imageFile.isEmpty()) {
-            throw new IllegalArgumentException("Image file cannot be empty");
-        }
-
-        Image image = imageService.createImage(imageFile);
-        userService.addImageToUser(id, image);
-        URI location = fromCurrentContextPath()
-                .path("/images/{imageId}/media")
-                .buildAndExpand(image.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
-    }
-
-    //PUT
-    //User
-    //Add sanitization
+    // Put
     @PutMapping("/{id}")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody RegisterRequest userDTO, HttpServletRequest request) {
 
@@ -209,22 +155,7 @@ public class UserRestController {
         userService.save(existingUser);
         return userMapper.toDTO(existingUser);
     }
-
-    //Image
-    @PutMapping("/{id}/image")
-    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
-                                                   @RequestParam MultipartFile imageFile,
-                                                   HttpServletRequest request) throws IOException {
-        //imageService.replaceImageFile(id, imageFile.getInputStream());
-        if (!userService.isAuthorized(id, request)) {
-            throw new IllegalArgumentException("Acceso denegado");
-        }
-        userService.save(userService.findById(id).orElseThrow(), imageFile);
-        return ResponseEntity.noContent().build();
-    }
-
-    //DELETE
-    //User
+    // Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<UserBasicDTO> deleteUser(@PathVariable Long id, HttpServletRequest request) {
         
@@ -236,8 +167,86 @@ public class UserRestController {
         userService.deleteById(id);
         return ResponseEntity.ok(user);
     }
+    // Get Image
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Object> getProfileImage(@PathVariable long id, HttpServletRequest request) throws SQLException {
+        
+        if(!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado");
+        }
 
-    //Image
+        Optional<User> userOp = userService.findById(id);
+        
+        if (userOp.isPresent() && userOp.get().getProfileImage() != null) {
+            
+            Blob imageBlob = userOp.get().getProfileImage();
+            Resource imageResource = new InputStreamResource(imageBlob.getBinaryStream());
+            
+            
+            MediaType mediaType = MediaTypeFactory
+                    .getMediaType(imageResource)
+                    .orElse(MediaType.IMAGE_JPEG);
+                    
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .body(imageResource);
+        } else {
+            
+            throw new RuntimeException("Profile image for user " + id + " not found");
+        }
+    }
+    // Post Image
+    @PostMapping("/{id}/image")
+    public ResponseEntity<ImageDTO> createImage(@PathVariable long id, @RequestParam MultipartFile imageFile, HttpServletRequest request) throws IOException{
+        
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado: No puedes añadir una imagen a otro usuario");
+        }
+        
+        if (imageFile.isEmpty()) {
+            throw new IllegalArgumentException("Image file cannot be empty");
+        }
+
+        Image image = imageService.createImage(imageFile);
+        userService.addImageToUser(id, image);
+        URI location = fromCurrentContextPath()
+                .path("/images/{imageId}/media")
+                .buildAndExpand(image.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(imageMapper.toDTO(image));
+    }
+    // Put Image
+    @PutMapping("/{id}/image")
+    public ResponseEntity<Object> replaceImageFile(@PathVariable long id,
+                                                   @RequestParam MultipartFile imageFile,
+                                                   HttpServletRequest request) throws IOException, SQLException {
+        if (!userService.isAuthorized(id, request)) {
+            throw new IllegalArgumentException("Acceso denegado");
+        }
+        Optional<User> userOp = userService.findById(id);
+
+        if (userOp.isPresent() && userOp.get().getProfileImage() != null) {
+            
+            userService.save(userService.findById(id).orElseThrow(), imageFile);
+            
+            Blob imageBlob = userOp.get().getProfileImage();
+            Resource imageResource = new InputStreamResource(imageBlob.getBinaryStream());
+            
+            
+            MediaType mediaType = MediaTypeFactory
+                    .getMediaType(imageResource)
+                    .orElse(MediaType.IMAGE_JPEG);
+                    
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .body(imageResource);
+        } else {
+            
+            throw new RuntimeException("Profile image for user " + id + " not found");
+        }
+
+    }
+    // Delete Image
     @DeleteMapping("/{id}/image")
     public ImageDTO deleteProfileImage(@PathVariable long id, HttpServletRequest request) throws IOException {
         

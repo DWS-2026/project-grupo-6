@@ -22,7 +22,7 @@ import com.example.projectgrupo6.security.jwt.UserLoginService;
 import com.example.projectgrupo6.domain.User;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class LoginController {
     @Autowired
 	private UserLoginService userLoginService;

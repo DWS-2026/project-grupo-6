@@ -67,7 +67,7 @@ public class WebSecurityConfig {
 		http
 			.authorizeHttpRequests(authorize -> authorize
                     // Public API endpoints
-                    .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/refresh").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/images/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").permitAll()
